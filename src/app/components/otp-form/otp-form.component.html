@@ -1,0 +1,40 @@
+<div class="max-w-md w-full border border-gray-200 shadow-lg rounded-lg p-2 md:p-8 bg-slate-700">
+<h2 class="text-3xl text-[#2BAE66] font-bold font-serif text-center mb-6">Enter OTP</h2>
+<form [formGroup]="otpForm" (ngSubmit)="handleSubmit()">
+  <div class="mb-6 flex justify-between space-x-2">
+    <input
+      class="shadow appearance-none border rounded-lg w-12 h-12 text-center text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-[#2BAE66]"
+      id="otp1" type="text" pattern="[0-9]*" inputmode="numeric" maxlength="1" placeholder="" formControlName="otp1"
+      (input)="onInput($event,0)">
+    <input
+      class="shadow appearance-none border rounded-lg w-12 h-12 text-center text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-[#2BAE66]"
+      id="otp2" type="text" pattern="[0-9]*" inputmode="numeric" maxlength="1" placeholder="" formControlName="otp2"
+      (input)="onInput($event,1)">
+    <input
+      class="shadow appearance-none border rounded-lg w-12 h-12 text-center text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-[#2BAE66]"
+      id="otp3" type="text" pattern="[0-9]*" inputmode="numeric" maxlength="1" placeholder="" formControlName="otp3"
+      (input)="onInput($event,2)">
+    <input
+      class="shadow appearance-none border rounded-lg w-12 h-12 text-center text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-[#2BAE66]"
+      id="otp4" type="text" pattern="[0-9]*" inputmode="numeric" maxlength="1" placeholder="" formControlName="otp4"
+      (input)="onInput($event,3)">
+    <input
+      class="shadow appearance-none border rounded-lg w-12 h-12 text-center text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-[#2BAE66]"
+      id="otp5" type="text" pattern="[0-9]*" inputmode="numeric" maxlength="1" placeholder="" formControlName="otp5"
+      (input)="onInput($event,4)">
+    <input
+      class="shadow appearance-none border rounded-lg w-12 h-12 text-center text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-[#2BAE66]"
+      id="otp6" type="text" pattern="[0-9]*" inputmode="numeric" maxlength="1" placeholder="" formControlName="otp6"
+      (input)="onInput($event,5)">
+  </div>
+
+  <div class="flex items-center justify-between mt-6">
+    <button
+      class="bg-[#2BAE66] hover:bg-[#239F57] text-white font-bold py-3 px-6 rounded-lg focus:outline-none focus:shadow-outline w-full"
+      type="submit">
+      Verify
+    </button>
+  </div>
+
+</form>
+</div>

@@ -1,0 +1,55 @@
+<app-header-name subTitle="Seller"></app-header-name>
+<section class="flex items-center justify-evenly min-h-screen p-4 max-[700px]:flex-col ">
+  <div class="max-w-md w-full">
+    <h2 class="lg:text-5xl max-w-md text-4xl font-extrabold lg:leading-[55px] text-[#2BAE66]">
+      Log in to continue growing your business with us.
+    </h2>
+    <p class="text-sm mt-6 max-w-md text-gray-800 text-bold " >Manage your listings, connect with potential clients, and expand your reach. Your next opportunity to succeed starts here!</p>
+  </div>
+  <div class="max-w-md w-full">
+    <h2 class="text-[#2BAE66] text-2xl md:text-4xl font-bold font-serif text-center mb-4">Welcome Back!</h2>
+    <p class="text-[#2BAE66] text-base md:text-lg font-bold font-serif text-center mb-8"></p>
+
+    <div class="bg-white shadow-lg rounded-lg p-6 md:p-8">
+      <h2 class="text-3xl text-[#2BAE66] font-bold font-serif text-center mb-6">Login</h2>
+      <form class="space-y-6" [formGroup]="formdata" (ngSubmit)="onSubmit()">
+        <div class="mb-4">
+          <label class="block text-[#2BAE66] text-sm font-bold mb-2" for="Email">Enter Email</label>
+          <input
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="Email" type="text" placeholder="Email" formControlName="Email">
+            <div class="text-red-500" *ngIf="formdata.get('Email')?.invalid && (formdata.get('Email')?.dirty || formdata.get('Email')?.touched)">
+              <small class="text-red-500" *ngIf="formdata.get('Email')?.errors?.['required']">Email is required</small>
+              <small class="text-red-500" *ngIf="formdata.get('Email')?.errors?.['pattern']">Email is in wrong format</small>
+            </div>
+        </div>
+        <div class="mb-6">
+          <label class="block text-[#2BAE66] text-sm font-bold mb-2" for="password">Enter Password</label>
+          <input
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="password" type="password" placeholder="Password" formControlName="Password">
+            <div class="text-red-500" *ngIf="formdata.get('Password')?.invalid && (formdata.get('Password')?.dirty || formdata.get('Password')?.touched)">
+              <small class="text-red-500" *ngIf="formdata.get('Password')?.errors?.['required']">Password is required</small>
+              <small class="text-red-500" *ngIf="formdata.get('Password')?.errors?.['pattern']">Password must be at least 8 characters long and include at least one number and one special character.</small>
+            </div>
+           <div class="flex justify-end" >
+            <p class="text-blue-600 text-sm font-bold mb-2 align-middle hover:underline cursor-pointer" routerLink="/vendor/forgot-password">Forgot Password?</p>
+           </div>
+        </div>
+        <div class="">
+          <button
+            class="bg-[#2BAE66] hover:bg-[#239F57] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
+            type="submit" [disabled]="formdata.invalid&&formdata.touched">
+            Sign In
+          </button>
+          <p class="text-sm">Dont have an account?<a routerLink="/vendor/sign-up" class="text-blue-600 text-sm font-bold hover:underline cursor-pointer">Register</a></p>
+        </div>
+        <div class="space-x-6 flex justify-center mt-8 ">
+          <asl-google-signin-button type='standard' size='medium'>
+          </asl-google-signin-button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+<script src="https://accounts.google.com/gsi/client" async></script>

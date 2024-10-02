@@ -1,0 +1,46 @@
+<nav class="p-2 bg-[#273142] border-b-2 border-gray-600 ">
+  <h2 class="text-[#2BAE66] ps-6 text-xl md:text-3xl sm:text-2xl max-[500px]:text-start font-bold font-serif">
+    SecondHome
+  </h2>
+</nav>
+
+<section class="flex items-center justify-center min-h-screen bg-[#273142] max-[700px]:flex-col">
+  <div class="max-w-md w-full bg-[#1E2635] shadow-lg rounded-lg p-6 md:p-8">
+    <h2 class="text-3xl text-[#2BAE66] font-bold font-serif text-center mb-6">Welcome Admin!</h2>
+    <p class="text-white text-center mb-4">Enter your email and password</p>
+    <form class="space-y-6" [formGroup]="formdata" (ngSubmit)="onSubmit()">
+      <div class="mb-4">
+        <label class="block text-[#2BAE66] text-sm font-bold mb-2" for="Email">Enter Email</label>
+        <input
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          id="Email" type="text" placeholder="Email" formControlName="Email">
+          <div class="text-red-500" *ngIf="formdata.get('Email')?.invalid && (formdata.get('Email')?.dirty || formdata.get('Email')?.touched)">
+            <small class="text-red-500" *ngIf="formdata.get('Email')?.errors?.['required']">Email is required</small>
+            <small class="text-red-500" *ngIf="formdata.get('Email')?.errors?.['pattern']">Email is in wrong format</small>
+          </div>
+      </div>
+      <div class="mb-6">
+        <label class="block text-[#2BAE66] text-sm font-bold mb-2" for="password">Enter Password</label>
+        <input
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          id="password" type="password" placeholder="Password" formControlName="Password">
+          <div class="text-red-500" *ngIf="formdata.get('Password')?.invalid && (formdata.get('Password')?.dirty || formdata.get('Password')?.touched)">
+            <small class="text-red-500" *ngIf="formdata.get('Password')?.errors?.['required']">Password is required</small>
+            <small class="text-red-500" *ngIf="formdata.get('Password')?.errors?.['pattern']">Password must be at least 8 characters long and include at least one number and one special character.</small>
+          </div>
+
+         <div class="flex justify-end">
+          <p class="text-blue-600 text-sm font-bold mb-2 align-middle hover:underline">Forgot Password?</p>
+         </div>
+      </div>
+      <div class="">
+        <button
+          class="bg-[#2BAE66] hover:bg-[#239F57] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
+          type="submit" [disabled]="formdata.invalid&&formdata.touched">
+          Sign In
+        </button>
+      </div>
+    </form>
+  </div>
+</section>
+

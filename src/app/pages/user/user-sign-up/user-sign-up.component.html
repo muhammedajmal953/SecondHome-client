@@ -1,0 +1,116 @@
+<app-header-name></app-header-name>
+
+<section class="flex items-center justify-evenly min-h-screen p-4 max-[700px]:flex-col ">
+  <div class="max-w-md w-full">
+    <h2 class="lg:text-5xl max-w-md text-4xl font-extrabold lg:leading-[55px] text-[#2BAE66]">
+      Register for find the best Hostels
+    </h2>
+    <p class="text-sm mt-6 max-w-md text-gray-800 text-bold ">Immerse yourself in a hassle-free login journey with our
+      intuitively designed login form. Effortlessly access your account.</p>
+    <h6 class="text-[#2BAE66] pt-8">Want to List your Property? <a href=""
+        class="text-blue-600 font-bold hover:underline">click here</a></h6>
+  </div>
+
+  <div class="max-w-lg w-full">
+    <div class="bg-white shadow-lg rounded-lg p-6 md:p-8">
+      <h2 class="text-3xl text-[#2BAE66] font-bold font-serif text-center mb-6">Sign-Up</h2>
+      <form class="space-y-6" [formGroup]="formData" (ngSubmit)="onSubmit()">
+        <div class="mb-4">
+          <label class="block text-[#2BAE66] text-sm font-bold mb-2" for="Email">Email</label>
+          <input
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="Email" type="text" placeholder="Email" formControlName="Email">
+            <div class="text-red-500" *ngIf="formData.get('Email')?.invalid && formData.get('Email')?.touched">
+              <small class="text-red-500" *ngIf="formData.get('Email')?.errors?.['required']">Email is required</small>
+              <small class="text-red-500" *ngIf="formData.get('Email')?.errors?.['pattern']">Please enter a valid email address</small>
+            </div>
+        </div>
+        <div class="mb-4 flex w-full justify-between">
+          <div>
+            <label class="block text-[#2BAE66] text-sm font-bold mb-2" for="FirstName">FirstName</label>
+            <input
+              class="shadow appearance-none border rounded  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              id="FirstName" type="text" placeholder="FirstName" formControlName="First_name">
+              <div class="text-red-500" *ngIf="formData.get('First_name')?.invalid && formData.get('First_name')?.touched">
+                <small class="text-red-500" *ngIf="formData.get('First_name')?.errors?.['required']">First name is required</small>
+                <small class="text-red-500" *ngIf="formData.get('First_name')?.errors?.['pattern']">First name must be at least 5 characters long and contain only letters</small>
+              </div>
+          </div>
+          <div>
+            <label class="block text-[#2BAE66] text-sm font-bold mb-2" for="LastName">LastName</label>
+            <input
+              class="shadow appearance-none border rounded  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              id="LastName" type="text" placeholder="LastName" formControlName="Last_name">
+              <div class="text-red-500" *ngIf="formData.get('Last_name')?.invalid && formData.get('Last_name')?.touched">
+                <small class="text-red-500" *ngIf="formData.get('Last_name')?.errors?.['required']">Last name is required</small>
+                <small class="text-red-500" *ngIf="formData.get('Last_name')?.errors?.['pattern']">Last name must be at least 3 characters long and contain only letters</small>
+              </div>
+          </div>
+        </div>
+        <div class="mb-4 flex w-full justify-between">
+          <div>
+            <label class="block text-[#2BAE66] text-sm font-bold mb-2" for="Phone">Phone Number</label>
+            <input
+              class="shadow appearance-none border rounded  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              id="Phone Number" type="number" placeholder="Phone Number" formControlName="Phone">
+              <div class="text-red-500" *ngIf="formData.get('Phone')?.invalid && formData.get('Phone')?.touched">
+                <small class="text-red-500" *ngIf="formData.get('Phone')?.errors?.['required']">Phone number is required</small>
+                <small class="text-red-500" *ngIf="formData.get('Phone')?.errors?.['pattern']">Phone number must be 10 digits long and start with a digit between 5 and 9</small>
+              </div>
+          </div>
+          <div>
+            <label class="block text-[#2BAE66] text-sm font-bold mb-2">Gender</label>
+            <div class="flex items-center space-x-4">
+              <div>
+                <input type="radio" id="male" value="male" class="mr-1" formControlName="Gender" >
+                <label for="male" class="text-gray-700">Male</label>
+              </div>
+              <div>
+                <input type="radio" id="female"  value="female" class="mr-1" formControlName="Gender">
+                <label for="female" class="text-gray-700">Female</label>
+              </div>
+              <div>
+                <input type="radio" id="other"  value="other" class="mr-1" formControlName="Gender">
+                <label for="other" class="text-gray-700">Other</label>
+              </div>
+            </div>
+            <small class="text-red-500" *ngIf="formData.get('Gender')?.invalid && formData.get('Gender')?.touched" class="text-red-500 text-sm mt-1">
+              Gender is required.
+            </small>
+          </div>
+
+        </div>
+        <div class="mb-6">
+          <label class="block text-[#2BAE66] text-sm font-bold mb-2" for="password">Password</label>
+          <input
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="password" type="password" placeholder="Password" formControlName="Password">
+            <div class="text-red-500" *ngIf="formData.get('Password')?.invalid && formData.get('Password')?.touched">
+              <small class="text-red-500" *ngIf="formData.get('Password')?.errors?.['required']">Password is required</small>
+              <small class="text-red-500" *ngIf="formData.get('Password')?.errors?.['pattern']">Password must contain at least 8 characters, a number, and a special character</small>
+            </div>
+        </div>
+        <div class="mb-6">
+          <label class="block text-[#2BAE66] text-sm font-bold mb-2" for="password">Confirm Password</label>
+          <input
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="ConfirmPassword" type="password" placeholder="Password" formControlName="ConfirmPassword">
+            <div class="text-red-500" *ngIf="formData.errors?.['passwordsMismatch'] && formData.get('ConfirmPassword')?.touched">
+              <small class="text-red-500">Passwords do not match</small>
+            </div>
+        </div>
+        <div class="">
+          <button
+            class="bg-[#2BAE66] hover:bg-[#239F57] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
+            type="submit">
+            Sign Up
+          </button>
+          <p class="text-sm">Already have an account?<a routerLink="/"
+              class="text-blue-600 text-sm font-bold hover:underline">Login</a></p>
+        </div>
+        <div class="space-x-6 flex justify-center mt-8">
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
