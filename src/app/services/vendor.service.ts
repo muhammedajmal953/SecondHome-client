@@ -34,6 +34,7 @@ export class VendorService {
   vendorChangePassword(email: string, password: string): Observable<ApiRes> {
     return this.http.post<ApiRes>('http://localhost:5000/vendor/change-password', {email, password})
   }
-
-
+  vendorKYC(vendor: any): Observable<ApiRes> {
+    return this.http.post<ApiRes>('http://localhost:5000/vendor/kycUpload', vendor)
+  }
 }

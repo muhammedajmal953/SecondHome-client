@@ -1,14 +1,18 @@
 import { Component } from '@angular/core';
 import { HeaderNameComponent } from '../../../components/header-name/header-name.component';
 import {
+  FormBuilder,
   FormControl,
   FormGroup,
   ReactiveFormsModule,
   ValidationErrors,
   Validators,
 } from '@angular/forms';
-import { log } from 'node:console';
+import { error, log } from 'node:console';
 import { CommonModule } from '@angular/common';
+import { VendorService } from '../../../services/vendor.service';
+import { ApiRes } from '../../../models/IApiRes';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-vendor-kyc',
@@ -23,25 +27,62 @@ import { CommonModule } from '@angular/common';
 })
 export class VendorKycComponent {
   kycForm: FormGroup;
-  constructor() {
-    this.kycForm = new FormGroup({
-      license: new FormControl(null, [Validators.required,this.mimeType]),
+  constructor(private vendorService: VendorService,private fb:FormBuilder) {
+    this.kycForm = this.fb.group({
+      license: [null, [Validators.required,this.mimeType]]
     });
   }
   onFileSelect($event: any) {
-    let file = $event.target?.files[0];
+    const target = $event.target as HTMLInputElement;
+    const file = target.files?.[0];
+
+
 
     if (file) {
-      this.kycForm.patchValue({ licence: file })
-      this.kycForm.get('license')?.updateValueAndValidity();
+
+      this.kycForm.patchValue({
+        license: file
+  })
+      this.kycForm.get('license')?.updateValueAndValidity()
     }
   }
 
 
 
   onSubmit() {
+
+
     if (this.kycForm.valid) {
-      console.log(this.kycForm.value);
+      let formData = new FormData();
+
+      let file = this.kycForm.get('license')?.value;
+      console.log(file);
+
+        formData.append('license', file);
+
+      console.log(formData);
+      this.vendorService.vendorKYC(formData).subscribe((res: ApiRes) => {
+        if (res.success) {
+          Swal.fire({
+            position: 'top',
+            icon: 'success',
+            title: 'License uploaded successfully',
+            showConfirmButton: false,
+            timer: 1500,
+            toast: true,
+          })
+        } else {
+          console.log('no data arrived');
+
+        }
+      }, error => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: error.error.message
+        })
+
+      })
 
     } else {
       console.log('Form is invalid');
@@ -51,11 +92,11 @@ export class VendorKycComponent {
 
 
   mimeType(control: FormControl):ValidationErrors|null {
-    if (control.value && typeof control.value === 'object') {
-      const file = control.value as File;
-      const validMimes = ['image/jpeg', 'image/png', 'application/pdf']
-      if (validMimes.includes(file.type)) {
-        return {mimeType:'Invalid file Type'}
+    const file = control.value ;
+    if (file && typeof file === 'object') {
+      const validMimes = ['image/jpeg','image/png', 'application/pdf']
+      if (!validMimes.includes(file.type)) {
+        return {mimeType:true}
       }
 
     }

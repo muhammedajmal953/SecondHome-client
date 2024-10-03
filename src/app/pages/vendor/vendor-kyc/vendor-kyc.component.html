@@ -6,12 +6,12 @@
   <form [formGroup]="kycForm"  (ngSubmit)="onSubmit()">
     <!-- License Upload Field -->
     <div class="mb-6">
-      <label for="licenseUpload" class="block text-white text-sm font-bold mb-2">Upload License</label>
+      <label for="license" class="block text-white text-sm font-bold mb-2">Upload License</label>
       <input
         class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-[#2BAE66]"
-        id="licenseUpload" type="file" formControlName="license" (change)="onFileSelect($event)" accept=".png,.jpeg,.jpg,.pdf"/>
+        id="license" type="file"  (change)="onFileSelect($event)" accept=".png,.jpeg,.jpg,.pdf"/>
 
-        <div *ngIf="kycForm.get('license')?.hasError('invalidFileType')" class="text-red-500">
+        <div *ngIf="kycForm.get('license')?.hasError('mimeType')" class="text-red-500">
           Only PNG, JPEG, JPG, and PDF files are allowed.
         </div>
         <div *ngIf="kycForm.get('license')?.hasError('required')" class="text-red-500">
@@ -21,7 +21,7 @@
 
     <!-- Submit Button -->
     <div class="flex items-center justify-between mt-6">
-      <button
+      <button [disabled]="kycForm.invalid"
         class="bg-[#2BAE66] hover:bg-[#239F57] text-white font-bold py-3 px-6 rounded-lg focus:outline-none focus:shadow-outline w-full"
         type="submit">
         Upload License
