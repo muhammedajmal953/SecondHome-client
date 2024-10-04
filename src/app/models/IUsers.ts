@@ -23,5 +23,6 @@ export interface UserDoc{
   Phone: number;
   Gender: 'Male' | 'Female' | 'Others';
   IsActive: boolean;
-  isKYCVerified:true
-} 
+  isKYCVerified: true;
+  lisence: string
+}

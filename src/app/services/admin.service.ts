@@ -29,4 +29,9 @@ export class AdminService {
   getAllVendors(page:number,limit:number):Observable<ApiRes>{
     return this.http.get<ApiRes>(`http://localhost:5000/admin/getAllVendors/${page}/${limit}`)
   }
+
+
+  verifyVendor(id:string):Observable<ApiRes> {
+    return this.http.put<ApiRes>('http://localhost:5000/admin/verifyVendor', {id})
+  }
 }

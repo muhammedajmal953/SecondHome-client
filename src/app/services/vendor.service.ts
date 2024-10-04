@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
 import { ApiRes } from '../models/IApiRes';
 
 @Injectable({
@@ -34,7 +34,17 @@ export class VendorService {
   vendorChangePassword(email: string, password: string): Observable<ApiRes> {
     return this.http.post<ApiRes>('http://localhost:5000/vendor/change-password', {email, password})
   }
-  vendorKYC(vendor: any): Observable<ApiRes> {
-    return this.http.post<ApiRes>('http://localhost:5000/vendor/kycUpload', vendor)
+  vendorKYC(file: any) {
+    return this.http.put<ApiRes>('http://localhost:5000/vendor/kycUpload', file)
+  }
+
+
+  vendorDetails(): Observable<ApiRes> {
+    return this.http.get<ApiRes>('http://localhost:5000/vendor/vendorDetails').pipe(
+      catchError((error) => {
+        console.error('Error fetching vendor details:', error);
+        return throwError(() => new Error('Failed to fetch vendor details'));
+      })
+    );
   }
 }

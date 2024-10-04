@@ -26,7 +26,7 @@
                 "input": "public"
               }
             ],
-            "styles": [ 
+            "styles": [
               "src/styles.css"
             ],
             "scripts": [],
@@ -35,6 +35,7 @@
             "ssr": {
               "entry": "server.ts"
             }
+
           },
           "configurations": {
             "production": {

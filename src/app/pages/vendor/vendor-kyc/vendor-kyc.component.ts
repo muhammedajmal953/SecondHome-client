@@ -13,6 +13,8 @@ import { CommonModule } from '@angular/common';
 import { VendorService } from '../../../services/vendor.service';
 import { ApiRes } from '../../../models/IApiRes';
 import Swal from 'sweetalert2';
+import { format } from 'node:path';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-vendor-kyc',
@@ -27,7 +29,7 @@ import Swal from 'sweetalert2';
 })
 export class VendorKycComponent {
   kycForm: FormGroup;
-  constructor(private vendorService: VendorService,private fb:FormBuilder) {
+  constructor(private vendorService: VendorService,private fb:FormBuilder,private router:Router) {
     this.kycForm = this.fb.group({
       license: [null, [Validators.required,this.mimeType]]
     });
@@ -50,15 +52,13 @@ export class VendorKycComponent {
 
 
   onSubmit() {
-
-
     if (this.kycForm.valid) {
       let formData = new FormData();
-
+      let email = localStorage.getItem('vendorEmail')!;
       let file = this.kycForm.get('license')?.value;
-      console.log(file);
 
-        formData.append('license', file);
+      formData.append('license', file);
+      formData.append('email', email);
 
       console.log(formData);
       this.vendorService.vendorKYC(formData).subscribe((res: ApiRes) => {
@@ -71,6 +71,9 @@ export class VendorKycComponent {
             timer: 1500,
             toast: true,
           })
+
+          localStorage.removeItem('vendorEmail');
+          this.router.navigate(['/vendor/home']);
         } else {
           console.log('no data arrived');
 

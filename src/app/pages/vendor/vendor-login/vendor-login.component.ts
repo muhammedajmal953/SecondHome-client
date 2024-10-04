@@ -93,6 +93,7 @@ export class VendorLoginComponent {
             timer: 1500,
             toast: true,
           })
+          return 
         } else {
           Swal.fire({
             position: 'top',

@@ -24,7 +24,9 @@ export class VendorManagementComponent {
   users: UserDoc[] = [];
   page: number = 1;
   limit: number = 5;
-  showModal:boolean = false;
+  showModal: boolean = false;
+  lisence: string = '';
+  _id: string = '';
 
   constructor(private adminService: AdminService, private router: Router, @Inject(PLATFORM_ID) private paltform_id:string) {}
 
@@ -137,12 +139,44 @@ export class VendorManagementComponent {
     this.fetchUsers();
   }
 
+  giveApproval(id: string,license: string) {
+    this._id = id;
+    this.lisence = license;
+    this.showModal = true;
+  }
+
   closeModal(){
     this.showModal = false;
   }
 
-  verifyUser(id: string) {
-    
+  verifyUser() {
+    if (this._id && this.lisence) {
+      this.adminService.verifyVendor(this._id).subscribe((res) => {
+        if (res.success) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Vendor Verified',
+            toast:true,
+            timer: 1500,
+            position: 'top',
+            showConfirmButton:false
+          })
+          this.fetchUsers();
+          this.showModal = false;
+        }
+      }, (error) => {
+        console.error('Error verifying user:', error);
+        Swal.fire({
+          icon: 'error',
+          toast: true,
+          position: 'top',
+          showConfirmButton: false,
+          timer: 1500,
+          title:error.message
+        })
+      })
+
+    }
   }
 }
 

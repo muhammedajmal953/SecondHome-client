@@ -38,7 +38,7 @@ export class VendorForgotPasswordComponent {
             timer: 1500,
             toast: true,
           });
-          localStorage.setItem('email', formData.Email);
+          localStorage.setItem('vendorEmail', formData.Email);
           this.router.navigate(['/vendor/forgot-password/otp']);
         }
       },

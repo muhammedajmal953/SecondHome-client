@@ -51,7 +51,7 @@
                   <button *ngIf="user.IsActive===false &&user.isKYCVerified" (click)="unblockUser(user._id)"
                     type="button"
                     class="inline-flex items-center gap-x-2 text-sm bg-green-700 p-2 font-semibold rounded-lg border border-transparent text-white hover:text-blue-800 focus:outline-none disabled:opacity-50 disabled:pointer-events-none">Un-Block</button>
-                  <button *ngIf="!user.isKYCVerified" (click)="showModal=true" type="button"
+                  <button *ngIf="!user.isKYCVerified" (click)="giveApproval(user._id,user.lisence)" type="button"
                     class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
                     aria-haspopup="dialog" aria-expanded="false" aria-controls="hs-scale-animation-modal"
                     data-hs-overlay="#hs-scale-animation-modal">
@@ -102,18 +102,41 @@
 
 </section>
 
-<div class="w-[200px] h-[200px] rounded z-40 fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 border-blue-500 bg-gray-300 shadow shadow-gray-400"  *ngIf="showModal==true">
- <h1 class="text-center">Verification cirtificate</h1>
-<div >
-  <button class="rounded bg-red-500 text-white p-2" (click)="showModal=false">
-    close
-  </button>
-  <button class="rounded bg-green-500 text-white p-2">
-    verify
-  </button>
-  <button class="rounded bg-red-500 text-white p-2">
-    reject
-  </button>
-</div>
+<div
+  class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+  *ngIf="showModal == true"
+>
+  <div class="bg-white rounded-lg shadow-xl w-[450px] max-w-full mx-auto overflow-hidden">
+    <div class="py-8 px-12 bg-gradient-to-r from-blue-500 to-purple-600 text-white text-center">
+      <h2 class="text-2xl font-bold mb-2">Verification Certificate</h2>
+      <p class="text-sm opacity-80">Please review the certificate carefully.</p>
+    </div>
 
+    <div class="p-8 bg-white">
+      <img [src]="lisence" alt="Verification Certificate" class="max-h-[350px] mx-auto object-contain">
+
+      <div class="mt-8 flex justify-between space-x-4">
+        <button
+          class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
+          (click)="showModal = false"
+        >
+          Close
+        </button>
+
+        <button
+          class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
+          (click)="verifyUser()"
+        >
+          Verify
+        </button>
+
+        <button
+          class="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-2 px-4 rounded"
+          (click)="showModal=false"
+        >
+          Reject
+        </button>
+      </div>
+    </div>
+  </div>
 </div>

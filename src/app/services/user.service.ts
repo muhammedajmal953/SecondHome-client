@@ -39,4 +39,9 @@ export class UserService {
 
     return this.http.post<ApiRes>(`${this.api}/change-password`, {email, password})
   }
+
+
+  getUser(): Observable<ApiRes>{
+    return this.http.get<ApiRes>(`${this.api}/getUser`)
+  }
 }

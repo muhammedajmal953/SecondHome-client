@@ -17,7 +17,7 @@ export class VendorChangePasswordComponent {
   constructor(private vendorServices: VendorService,private router:Router){}
   onSubmit(password:string) {
     if (password) {
-      let email = localStorage.getItem('email')!;
+      let email = localStorage.getItem('vendorEmail')!;
       console.log('email', email);
 
       this.vendorServices.vendorChangePassword(email, password).subscribe((res: ApiRes) => {
@@ -30,7 +30,7 @@ export class VendorChangePasswordComponent {
             timer: 1500,
             toast: true,
           })
-          localStorage.removeItem('email');
+          localStorage.removeItem('vendorEmail');
           this.router.navigate(['/vendor']);
         } else {
           Swal.fire({

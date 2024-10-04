@@ -27,7 +27,9 @@ export class VendorOtpComponent {
         toast: true,
       });
     } else {
-      let email:string=localStorage.getItem('vendorEmail')!
+      let email: string = localStorage.getItem('vendorEmail')!
+      console.log(email);
+
       this.vendorService.verifyVendor(email, otp).subscribe((res: ApiRes) => {
         if(res.success == true&&res.data==null){
           Swal.fire({
@@ -50,9 +52,7 @@ export class VendorOtpComponent {
             toast: true,
           })
           console.log(res.data);
-
           localStorage.setItem('vendor', res.data)
-          localStorage.removeItem('vendorEmail')
           this.router.navigate(['/vendor/sign-up/kyc'])
         } else {
           Swal.fire({

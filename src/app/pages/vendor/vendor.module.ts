@@ -10,17 +10,19 @@ import { VendorChangePasswordComponent } from './vendor-change-password/vendor-c
 import { authGuard } from '../../guards/auth.guard';
 import { loginGuard } from '../../guards/login.guard';
 import { VendorKycComponent } from './vendor-kyc/vendor-kyc.component';
+import { log } from 'console';
+import { VendorHostelsComponent } from './vendor-hostels/vendor-hostels.component';
 
 
 const routes: Routes = [
   {
     path: '',
-    canActivate:[authGuard],
+    canActivate:[loginGuard],
     component: VendorLoginComponent,
   },
   {
     path: 'sign-up',
-    canActivate:[authGuard],
+    canActivate:[loginGuard],
     children: [
       {
         path: '',
@@ -38,8 +40,15 @@ const routes: Routes = [
   },
   {
     path: 'home',
-    canActivate:[authGuard],
+    canActivate: [authGuard],
     component: VendorHomeComponent,
+    children: [
+      {
+        path: 'hostels',
+        component: VendorHostelsComponent
+
+      },
+    ]
   },
   {
     path: 'forgot-password',
