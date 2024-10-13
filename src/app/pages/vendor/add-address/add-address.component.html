@@ -1,0 +1,118 @@
+<!-- hostel-address-rate.component.html -->
+<div class="container mx-auto max-w-3xl p-4 h-full">
+  <h2 class="text-center bg-green-200 text-gray-700 py-2 rounded-md mb-6">Address and Rate Details</h2>
+  <form [formGroup]="addressRateForm" (ngSubmit)="onSubmit()" class="space-y-6 h-fit">
+    <div>
+      <h3 class="text-green-500 mb-2">Address Details</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label for="street" class="block text-green-500 mb-1">Street</label>
+          <input id="street" formControlName="street" placeholder="Street"
+            class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500">
+          <p class="text-red-500"
+            *ngIf="addressRateForm.get('street')?.hasError('required') && addressRateForm.get('street')?.touched">Street
+            is required.</p>
+        </div>
+
+        <div>
+          <label for="city" class="block text-green-500 mb-1">City</label>
+          <input id="city" formControlName="city" placeholder="City"
+            class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500">
+          <p class="text-red-500"
+            *ngIf="addressRateForm.get('city')?.hasError('required') && addressRateForm.get('city')?.touched">City is
+            required.</p>
+          <p class="text-red-500"
+            *ngIf="addressRateForm.get('city')?.hasError('pattern') && addressRateForm.get('city')?.touched">City must
+            only contain letters.</p>
+        </div>
+
+        <div>
+          <label for="district" class="block text-green-500 mb-1">District</label>
+          <input id="district" formControlName="district" placeholder="District"
+            class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500">
+          <p class="text-red-500"
+            *ngIf="addressRateForm.get('district')?.hasError('required') && addressRateForm.get('district')?.touched">
+            District is required.</p>
+        </div>
+
+        <div>
+          <label for="state" class="block text-green-500 mb-1">State</label>
+          <input id="state" formControlName="state" placeholder="State"
+            class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500">
+          <p class="text-red-500"
+            *ngIf="addressRateForm.get('state')?.hasError('required') && addressRateForm.get('state')?.touched">State is
+            required.</p>
+        </div>
+
+        <div>
+          <label for="pin" class="block text-green-500 mb-1">PIN Code</label>
+          <input id="pin" formControlName="pincode" placeholder="PIN Code"
+            class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500">
+          <p class="text-red-500"
+            *ngIf="addressRateForm.get('pincode')?.hasError('required') && addressRateForm.get('pincode')?.touched">PIN
+            code is required.</p>
+          <p class="text-red-500"
+            *ngIf="addressRateForm.get('pincode')?.hasError('pattern') && addressRateForm.get('pincode')?.touched">PIN
+            code must be a valid 6-digit number.</p>
+        </div>
+
+        <div>
+          <label class="block text-green-500 mb-1">Add Photos</label>
+          <input type="file" accept="image/*" (change)="onFileSelect($event)" class="" multiple>
+          <p class="text-red-500"
+            *ngIf="addressRateForm.get('photos')?.hasError('required') && addressRateForm.get('photos')?.touched">Photos
+            must be added.</p>
+          <p class="text-red-500"
+            *ngIf="addressRateForm.get('photos')?.hasError('mimeType') && addressRateForm.get('photos')?.touched">Only
+            PNG, JPEG, JPG, and WEBP are allowed.</p>
+          <p class="text-red-500"
+            *ngIf="addressRateForm.get('photos')?.hasError('exceedLimit') && addressRateForm.get('photos')?.touched">
+            Please select less than 5 photos.</p>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="text-green-500 mb-2">Rate Details</h3>
+        <div class="flex justify-around gap-3" formGroupName="rates">
+          <div *ngFor="let type of bedTypes; let i = index" class="w-full">
+            <label for="{{type}}" class="block text-green-500 mb-1">{{type}} Rate</label>
+            <input id="{{type}}" type="number"
+              class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+              [formControlName]="type" placeholder="Rate" />
+            <p class="text-red-500"
+              *ngIf="addressRateForm.get('rates')?.get(type)?.hasError('required')&&addressRateForm.get('rates')?.get(type)?.touched">
+              rate is required</p>
+            <p class="text-red-500"
+              *ngIf="addressRateForm.get('rates')?.get(type)?.hasError('min')&&addressRateForm.get('rates')?.get(type)?.touched">
+              Rate is required and must be greater than 0.
+            </p>
+          </div>
+        </div>
+      </div>
+
+
+      <div>
+        <h3 class="text-green-500 mb-2">Food Rate</h3>
+        <div>
+          <label for="foodRate" class="block text-green-500 mb-1">Food Rate per Month</label>
+          <input id="foodRate" type="number" formControlName="foodRate" placeholder="Food Rate"
+            class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500">
+          <p class="text-red-500"
+            *ngIf="addressRateForm.get('foodRate')?.hasError('required') && addressRateForm.get('foodRate')?.touched">
+            Food rate is required.</p>
+          <p class="text-red-500"
+            *ngIf="addressRateForm.get('foodRate')?.hasError('pattern') && addressRateForm.get('foodRate')?.touched">
+            Food rate must be greater than 0.</p>
+        </div>
+      </div>
+
+      <div class="flex justify-between py-4">
+        <button type="submit"
+          class="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 disabled:opacity-50 disabled:cursor-not-allowed">
+          Submit
+        </button>
+      </div>
+    </div>
+  </form>
+
+</div>

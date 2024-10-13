@@ -44,4 +44,8 @@ export class UserService {
   getUser(): Observable<ApiRes>{
     return this.http.get<ApiRes>(`${this.api}/getUser`)
   }
+
+  editProfile(data: any): Observable<ApiRes>{
+    return this.http.put<ApiRes>(`${this.api}/edit-profile`, data)
+  }
 }

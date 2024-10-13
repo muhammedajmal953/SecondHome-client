@@ -1,0 +1,59 @@
+<div class="container mx-auto px-4 py-8 max-w-4xl bg-white shadow-md rounded-lg">
+  <div class=" overflow-hidden flex justify-around">
+    <!-- Profile Header -->
+    <div class="p-6 text-center">
+      <img src="{{profileImage}}" alt="Profile Picture" class="w-24 h-24 rounded-full mx-auto mb-4">
+      <h2 class="text-2xl font-bold text-[#2BAE66]">{{ user.First_name }}</h2>
+      <p class="text-gray-600">{{ user.Email }}</p>
+      <p class="text-gray-600 mt-2">{{ user.Phone }}</p>
+      <div class="mt-4 space-x-2">
+        <button (click)="editProfile()" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
+          Edit
+        </button>
+        <button (click)="saveProfile()" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
+          Saved
+        </button>
+        <button (click)="changePassword()" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
+          Change Password
+        </button>
+      </div>
+    </div>
+
+    <!-- Wallet Section -->
+    <div class="p-6  border-gray-200">
+      <h3 class="text-xl inline font-semibold text-[#2BAE66] mb-6">Wallet <img class="w-4 h-4 inline" src="https://www.svgrepo.com/show/128494/wallet.svg" alt=""></h3>
+      <div class=" items-center gap-4 space-y-2 ">
+        <input type="text" [(ngModel)]="walletBalance"  class="bg-gray-100 border border-gray-300 rounded-md py-2 px-4 w-full sm:w-auto block">
+        <button (click)="addMoney()" class="bg-green-500 me-1 hover:bg-green-600 text-white font-bold py-2 px-4 rounded w-full sm:w-auto">
+          ADD MONEY
+        </button>
+        <button (click)="debit()" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded w-full sm:w-auto">
+          DEBIT
+        </button>
+      </div>
+    </div>
+    </div>
+
+    <!-- Bookings Section -->
+    <div class="p-6 border-t border-gray-200">
+      <h3 class="text-xl font-semibold text-gray-800 mb-4">BOOKINGS</h3>
+      <div class="space-y-4">
+        <div *ngFor="let booking of bookings" class="flex flex-col sm:flex-row items-center justify-between bg-gray-50 p-4 rounded-lg">
+          <div class="flex items-center mb-4 sm:mb-0">
+            <img [src]="booking.image" alt="Booking Image" class="w-16 h-16 object-cover rounded-md mr-4">
+            <span class="font-semibold text-gray-700">{{ booking.status }}</span>
+          </div>
+          <div class="flex flex-col sm:flex-row gap-2">
+            <button (click)="editBooking(booking)" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+              EDIT INFORMATION
+            </button>
+            <button (click)="cancelBooking(booking)" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
+              Cancel Booking
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+</div>
+

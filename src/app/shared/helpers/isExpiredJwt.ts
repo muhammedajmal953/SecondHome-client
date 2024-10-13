@@ -8,11 +8,7 @@ export function isEpiredToken(token: string): boolean{
     const expireTime = payload.exp * 1000
 
     if (expireTime > Date.now()) return false
-
-    console.warn('token is expired')
     return true
   }
-
-  console.warn("token dont have expiration time")
   return false
 }

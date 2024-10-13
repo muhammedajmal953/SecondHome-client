@@ -1,0 +1,74 @@
+<div class="container mx-auto px-4 py-8 max-w-4xl bg-white shadow-md ">
+  <h2 class="text-center bg-green-200 text-gray-700 py-2 rounded-md mb-6">Edit Profile</h2>
+  <div class="">
+    <form [formGroup]="editedForm" (ngSubmit)="onSubmit()" action="" class="">
+      <div class="mb-4 ">
+        <label for="name" class="block text-green-500 mb-1">First_name</label>
+        <input type="text" placeholder="Name" formControlName="First_name"
+          class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500">
+        <p class="text-red-500"
+          *ngIf="editedForm.get('First_name')?.hasError('required') && editedForm.get('First_name')?.touched">
+          Name is required
+        </p>
+        <p class="text-red-500"
+          *ngIf="editedForm.get('First_name')?.hasError('pattern') && editedForm.get('First_name')?.touched">
+          Name must be at least 5 characters long and contain only letters
+        </p>
+      </div>
+      <div class="mb-4 ">
+        <label for="name" class="block text-green-500 mb-1">Last_name</label>
+        <input type="text" placeholder="Name" formControlName="Last_name"
+          class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500">
+        <p class="text-red-500"
+          *ngIf="editedForm.get('Last_name')?.hasError('required') && editedForm.get('Last_name')?.touched">
+          Name is required
+        </p>
+        <p class="text-red-500"
+          *ngIf="editedForm.get('Last_name')?.hasError('pattern') && editedForm.get('Last_name')?.touched">
+          Name must be at least 3 characters long and contain only letters
+        </p>
+      </div>
+      <div class="mb-4 ">
+        <label for="name" class="block text-green-500 mb-1">Email</label>
+        <input type="email" placeholder="Email" formControlName="Email"
+          class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500">
+        <p class="text-red-500"
+          *ngIf="editedForm.get('Email')?.hasError('required') && editedForm.get('Email')?.touched">
+          Email is required
+        </p>
+        <p class="text-red-500"
+          *ngIf="editedForm.get('Email')?.hasError('pattern') && editedForm.get('Email')?.touched">
+          Email must be valid
+        </p>
+      </div>
+      <div class="mb-4 ">
+        <label for="name" class="block text-green-500 mb-1">Phone</label>
+        <input type="number" placeholder="Phone" formControlName="Phone"
+          class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500">
+        <p class="text-red-500"
+          *ngIf="editedForm.get('Phone')?.hasError('required') && editedForm.get('Phone')?.touched">
+          Phone is required
+        </p>
+        <p class="text-red-500"
+          *ngIf="editedForm.get('Phone')?.hasError('pattern') && editedForm.get('Phone')?.touched">
+          Phone must be valid
+        </p>
+      </div>
+      <div class="mb-4 ">
+        <label for="name" class="block text-green-500 mb-1">Change Profile</label>
+        <input type="file" (change)="onPhotoChange($event)" name="" id=""
+          class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500">
+        <div *ngIf="editedForm.get('avatar')?.hasError('mimeType')" class="text-red-500">
+          Only PNG, JPEG,and JPG are allowed.
+        </div>
+        <img class="w-32 h-32 rounded-md my-3" *ngIf="preview && !editedForm.get('avatar')?.hasError('mimeType')" [src]="preview" alt="preview">
+      </div>
+      <div class="mb-4 ">
+        <button type="submit" [disabled]="!editedForm.valid "
+          class="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">Save
+          Changes</button>
+
+      </div>
+    </form>
+  </div>
+</div>

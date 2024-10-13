@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-vendor-hostels',
@@ -8,5 +9,10 @@ import { Component } from '@angular/core';
   styleUrl: './vendor-hostels.component.css'
 })
 export class VendorHostelsComponent {
+  constructor(private router:Router) {
 
+  }
+  addHostel() {
+    this.router.navigate(['/vendor/home/add-hostel']);
+  }
 }

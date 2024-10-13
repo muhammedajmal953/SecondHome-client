@@ -10,6 +10,9 @@ import { UserSignOtpComponent } from './user-sign-otp/user-sign-otp.component';
 import { UserSignForgotPassWordComponent } from './user-sign-forgot-pass-word/user-sign-forgot-pass-word.component';
 import { UserSignForgotChangePassWordComponent } from './user-sign-forgot-change-pass-word/user-sign-forgot-change-pass-word.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { LandingComponent } from './landing/landing.component';
+import { ProfileComponent } from './profile/profile.component';
+import { EditProfileComponent } from './edit-profile/edit-profile.component';
 
 
 const routes: Routes = [
@@ -36,6 +39,20 @@ const routes: Routes = [
     path: 'home',
     canActivate:[authGuard],
     component: UserHomeComponent,
+    children: [
+      {
+        path: '',
+        component:LandingComponent
+      },
+      {
+        path: 'profile',
+        component:ProfileComponent
+      },
+      {
+        path: 'edit-profile',
+        component:EditProfileComponent
+      }
+    ]
   },
   {
     path: 'forgot-password',

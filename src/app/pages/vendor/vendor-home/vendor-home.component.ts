@@ -2,9 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { HeaderNameComponent } from "../../../components/header-name/header-name.component";
 import { CommonModule } from '@angular/common';
 import { UserDoc } from '../../../models/IUsers';
-import { VendorService } from '../../../services/vendor.service';
+
 import { catchError, of, timeout } from 'rxjs';
 import { RouterModule } from '@angular/router';
+import Swal from 'sweetalert2';
+import { ApiRes } from '../../../models/IApiRes';
+import { VendorService } from '../../../services/vendor.service';
 
 @Component({
   selector: 'app-vendor-home',
@@ -20,10 +23,9 @@ import { RouterModule } from '@angular/router';
 export class VendorHomeComponent implements OnInit {
   toggleShow: boolean = false
   user: UserDoc | null = null
+  kycVerified: boolean = true
 
   constructor(private vendorService: VendorService) {
-
-
   }
 
   toggleCollapse() {
@@ -32,19 +34,35 @@ export class VendorHomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.vendorService.vendorDetails().pipe(
-      timeout(3000), // 10 seconds timeout
+      timeout(3000),
       catchError((error) => {
         console.error('Error or timeout in vendorDetails:', error);
-        return of(null); // or handle the error as appropriate
+        return of(null);
       })
     ).subscribe({
       next: (data) => {
-        this.user = data?.data;
+        if(data?.success) {
+          this.user = data?.data;
+          this.kycVerified = this.user?.isKYCVerified! ;
+        }
       },
       complete: () => {
         console.log('vendorDetails completed');
+      },
+      error: (error) => {
+        console.error('Error fetching vendor details:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to fetch vendor details',
+        })
       }
     });
+  }
+
+  logout() {
+    localStorage.removeItem('vendor')
+    window.location.reload();
   }
 }
 

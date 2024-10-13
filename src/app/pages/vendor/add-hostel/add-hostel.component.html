@@ -1,0 +1,130 @@
+<!-- hostel-details.component.html -->
+<div class="container mx-auto max-w-3xl p-4 bg-white rounded-lg shadow-md ">
+  <h2 class="text-center bg-green-200 text-gray-700 py-2 rounded-md mb-6">Add hostel details</h2>
+  <form [formGroup]="hostelForm" (ngSubmit)="onSubmit($event)" class="space-y-6">
+    <div>
+      <h3 class="text-green-500 mb-2 ">Property details</h3>
+      <div class="flex space-x-4 mb-4">
+        <div class="flex-1 ">
+          <label for="name" class="block text-green-500 mb-1">name</label>
+          <input id="name" formControlName="name" placeholder="name"
+            class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500">
+            <p class="text-red-500" *ngIf="hostelForm.get('name')?.hasError('required')&&hostelForm.get('name')?.touched"> name is required</p>
+            <p class="text-red-500" *ngIf="hostelForm.get('name')?.hasError('pattern')&&hostelForm.get('name')?.touched">atleast 3 characters</p>
+        </div>
+       
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label for="location" class="block text-green-500 mb-1">Email</label>
+          <input id="location" type="email" formControlName="email" placeholder="Contact Email"
+            class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500">
+          <p class="text-red-500"
+            *ngIf="hostelForm.get('email')?.hasError('required') && hostelForm.get('email')?.touched">
+            Email is required
+          </p>
+          <p class="text-red-500"
+            *ngIf="hostelForm.get('email')?.hasError('pattern') && hostelForm.get('email')?.touched">
+            Email must be valid
+          </p>
+        </div>
+        <div>
+          <label for="location" class="block text-green-500 mb-1">Phone</label>
+          <input id="location" type="number" formControlName="phone" placeholder="Contact Number"
+            class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500">
+          <p class="text-red-500"
+            *ngIf="hostelForm.get('phone')?.hasError('required') && hostelForm.get('phone')?.touched">
+            Phone is required
+          </p>
+          <p class="text-red-500"
+            *ngIf="hostelForm.get('phone')?.hasError('pattern') && hostelForm.get('phone')?.touched">
+            Phone must be starting with 5 and should be 10  numbers
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="space-y-4">
+      <h3 class="text-green-500 mb-2 font-bold">Hostel Facilities/Types of bed sharing</h3>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label for="facilities" class="block text-green-500 mb-1">Facilities</label>
+          <input type="text" id="facilities" (keydown.enter)="addFecilities();$event.preventDefault()"  formControlName="facilities"
+            placeholder="eg: wifi,laundry,food"
+            class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500">
+            <p class="text-red-500" *ngIf="hostelForm.get('facilities')?.hasError('facility')&&hostelForm.get('facilities')?.touched"> facilities is required</p>
+
+            <div class="pt-3 flex flex-wrap gap-2">
+              <div *ngFor="let facility of facilities" class="bg-green-200 text-green-800 rounded-full px-4 py-1 flex items-center">
+                {{ facility }}
+                <button (click)="removeFacility(facility)" class="ml-2 text-green-600 focus:outline-none">&times;</button>
+              </div>
+            </div>
+        </div>
+        <div>
+          <label for="policies" class="block text-green-500 mb-1">Policies</label>
+          <input id="policies" formControlName="policies" placeholder="eg: only for bathelors"
+            class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500">
+        </div>
+        <div>
+          <label class="block text-green-500 mb-1">No of beds per Room</label>
+          <div formGroupName="noOfBedsPerRoom" class="flex justify-around items-center">
+            <div *ngFor="let type of bedTypes" class="bg-green-300 rounded-xl px-4 py-1">
+              <input type="checkbox" [formControlName]="type" [value]="type" id="{{type}}"
+                class="mr-2 leading-tight rounded-lg" />
+              <label for="{{type}}" class="text-gray-700">{{type}}</label>
+            </div>
+            <p class="text-red-500" *ngIf="hostelForm.get('noOfBedsPerRoom')?.hasError('noCheckboxSelected') && hostelForm.get('noOfBedsPerRoom')?.touched">Atleast one bed type should be selected</p>
+          </div>
+        </div>
+
+        <div>
+          <label for="category" class="block text-green-500 mb-1">Catagory</label>
+          <select id="category" formControlName="category"
+            class="w-full border  border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500">
+            <option value="" class="text-gray-500" disabled>Select Catagory</option>
+            <option *ngFor="let cat of categories" [value]="cat">{{cat}}</option>
+          </select>
+
+          <p class="text-red-500" *ngIf="hostelForm.get('category')?.hasError('required')&&hostelForm.get('category')?.touched">Catagory is required</p>
+
+        </div>
+        <div>
+          <label for="nearByAccess" class="block text-green-500 mb-1">Near By Access</label>
+          <input type="text" id="nearByAccess" (keydown.enter)="addNearAccess(); $event.preventDefault()" formControlName="nearByAccess"
+          placeholder="eg: wifi,laundry,food"
+          class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500">
+
+          <p class="text-red-500" *ngIf="hostelForm.get('nearByAccess')?.hasError('nearByAccess')&&hostelForm.get('nearByAccess')?.touched">atleast one near by access required</p>
+          <div class="pt-3 flex flex-wrap gap-2">
+            <div *ngFor="let item of nearbyPlaces "
+              class="bg-green-200 text-green-800 w-fit  rounded-full px-4 py-1 mr-2 mb-2 flex items-center">
+              {{ item }}
+              <button (click)="removeNearAcess(item)" class="ml-2 text-green-600 focus:outline-none">&times;</button>
+            </div>
+          </div>
+        </div>
+        <div>
+          <label for="advance" class="block text-green-500 mb-1">Advance</label>
+          <input id="advance" formControlName="advance" placeholder="Money you want as advance"
+            class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500">
+            <p class="text-red-500" *ngIf="hostelForm.get('advance')?.hasError('required')&&hostelForm.get('advance')?.touched">Advance is required</p>
+            <p class="text-red-500" *ngIf="hostelForm.get('advance')?.hasError('pattern')&&hostelForm.get('advance')?.touched">Advance should be greater than 0</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex items-center">
+      <input type="checkbox" id="agreeToContact" formControlName="agreeToContact"
+        class="mr-2 focus:ring-green-500 h-4 w-4 text-green-600 border-gray-300 rounded">
+      <label for="agreeToContact" class="text-sm text-gray-700">
+        I agree second home team can contact me regarding the hostel details and platform improvement
+      </label>
+    </div>
+
+    <button type="submit"
+      class="w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 disabled:opacity-50 disabled:cursor-not-allowed">
+      Next
+    </button>
+  </form>
+</div>

@@ -7,7 +7,7 @@ import { isPlatformBrowser } from '@angular/common';
 export const loginGuard: CanActivateFn = (route, state) => {
   const router = inject(Router)
   const role = route.parent?.routeConfig?.path!
-  console.warn(`the role is : ${role}`);
+  console.warn(`the role is : ${role} login guard`);
   let token
   const platform_id = inject(PLATFORM_ID)
 
@@ -16,11 +16,11 @@ export const loginGuard: CanActivateFn = (route, state) => {
   }
 
 
-  if (token === null || isEpiredToken(token!)) {
+  if (!token || isEpiredToken(token!)) {
     return true
-  } else {
+  }
     void router.navigate([`${role}/home`])
     return false
-  }
+
 
 };

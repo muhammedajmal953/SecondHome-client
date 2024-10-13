@@ -16,17 +16,11 @@
             "outputPath": "dist/sh-client",
             "index": "src/index.html",
             "browser": "src/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
+            "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
-            "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
-            ],
+            "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
+
               "src/styles.css"
             ],
             "scripts": [],
@@ -35,7 +29,6 @@
             "ssr": {
               "entry": "server.ts"
             }
-
           },
           "configurations": {
             "production": {
@@ -79,18 +72,11 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ],
+            "polyfills": ["zone.js", "zone.js/testing"],
             "tsConfig": "tsconfig.spec.json",
-            "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
-            ],
+            "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
+              "./node_modules/leaflet/dist/leaflet.css",
               "@angular/material/prebuilt-themes/azure-blue.css",
               "src/styles.css"
             ],

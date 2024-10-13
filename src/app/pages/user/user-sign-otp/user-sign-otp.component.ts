@@ -54,7 +54,7 @@ export class UserSignOtpComponent {
 
           localStorage.setItem('user', res.data)
           localStorage.removeItem('email')
-          this.router.navigate(['/user/user-home'])
+          this.router.navigate(['/user/home'])
         } else {
           Swal.fire({
             position: 'top',

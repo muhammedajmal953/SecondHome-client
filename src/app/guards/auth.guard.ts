@@ -8,7 +8,7 @@ import { isPlatformBrowser } from '@angular/common';
 export const authGuard: CanActivateFn = (route, state) => {
   const router = inject(Router)
   const role = route.parent?.routeConfig?.path!
-  console.warn(`the role is : ${role}`);
+  console.warn(`the role is : ${role} auth guard`);
 
   let token
   const platform_id = inject(PLATFORM_ID)
@@ -18,7 +18,7 @@ export const authGuard: CanActivateFn = (route, state) => {
   }
 
 
-  if (token===null&& isEpiredToken(token!)) {
+  if (!token|| isEpiredToken(token!)) {
     router.navigate([`/${role}`])
     return false
   }

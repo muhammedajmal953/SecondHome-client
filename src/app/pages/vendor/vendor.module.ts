@@ -12,6 +12,10 @@ import { loginGuard } from '../../guards/login.guard';
 import { VendorKycComponent } from './vendor-kyc/vendor-kyc.component';
 import { log } from 'console';
 import { VendorHostelsComponent } from './vendor-hostels/vendor-hostels.component';
+import { AddHostelComponent } from './add-hostel/add-hostel.component';
+import { AddAddressComponent } from './add-address/add-address.component';
+import { VendorProfileComponent } from './vendor-profile/vendor-profile.component';
+import { EditProfileComponent } from './edit-profile/edit-profile.component';
 
 
 const routes: Routes = [
@@ -44,10 +48,25 @@ const routes: Routes = [
     component: VendorHomeComponent,
     children: [
       {
-        path: 'hostels',
+        path: '',
         component: VendorHostelsComponent
-
       },
+      {
+        path: 'add-hostel',
+        component:AddHostelComponent
+      },
+      {
+        path:'add-hostel2',
+        component:AddAddressComponent
+      },
+      {
+        path: 'profile',
+        component:VendorProfileComponent
+      },
+      {
+        path: 'edit-profile',
+        component:EditProfileComponent
+      }
     ]
   },
   {
