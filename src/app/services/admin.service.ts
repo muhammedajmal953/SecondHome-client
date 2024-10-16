@@ -9,29 +9,29 @@ import { ApiRes } from '../models/IApiRes';
 export class AdminService {
 
 
-  constructor(private http: HttpClient) { }
+  constructor(private _http: HttpClient) { }
 
   adminLogin(data: any): Observable<ApiRes> {
 
-    return this.http.post<ApiRes>('http://localhost:5000/admin/login', { data })
+    return this._http.post<ApiRes>('http://localhost:5000/admin/login', { data })
   }
 
   getAllUsers(page:number,limit:number): Observable<ApiRes> {
-  return this.http.get<ApiRes>(`http://localhost:5000/admin/getAllUsers/${page}/${limit}`)
+  return this._http.get<ApiRes>(`http://localhost:5000/admin/getAllUsers/${page}/${limit}`)
   }
   blockUser(token: string): Observable<ApiRes> {
-    return this.http.put<ApiRes>('http://localhost:5000/admin/blockUser', { token })
+    return this._http.put<ApiRes>('http://localhost:5000/admin/blockUser', { token })
   }
   unBlockUser(token: string): Observable<ApiRes> {
-    return this.http.put<ApiRes>('http://localhost:5000/admin/unBlockUser', { token })
+    return this._http.put<ApiRes>('http://localhost:5000/admin/unBlockUser', { token })
   }
 
   getAllVendors(page:number,limit:number):Observable<ApiRes>{
-    return this.http.get<ApiRes>(`http://localhost:5000/admin/getAllVendors/${page}/${limit}`)
+    return this._http.get<ApiRes>(`http://localhost:5000/admin/getAllVendors/${page}/${limit}`)
   }
 
 
   verifyVendor(id:string):Observable<ApiRes> {
-    return this.http.put<ApiRes>('http://localhost:5000/admin/verifyVendor', {id})
+    return this._http.put<ApiRes>('http://localhost:5000/admin/verifyVendor', {id})
   }
 }

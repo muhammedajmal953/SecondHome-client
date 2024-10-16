@@ -22,4 +22,11 @@ import { RouterModule, RouterOutlet } from '@angular/router';
 })
 export class AdminDashboardComponent {
    toggleShow:boolean=true
+
+
+  logout():void {
+    localStorage.removeItem('admin')
+    localStorage.removeItem('adminRefresh')
+    window.location.reload()
+  }
 }

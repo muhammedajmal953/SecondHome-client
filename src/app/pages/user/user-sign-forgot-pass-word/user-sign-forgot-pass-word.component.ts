@@ -13,12 +13,12 @@ import Swal from 'sweetalert2';
   styleUrl: './user-sign-forgot-pass-word.component.css'
 })
 export class UserSignForgotPassWordComponent {
-  constructor(private router:Router,private userServices:UserService) {
+  constructor(private _router:Router,private _userServices:UserService) {
   }
   onSubmit(formData: any): void {
     if (formData) {
 
-      this.userServices.forgotPassword(formData).subscribe((res) => {
+      this._userServices.forgotPassword(formData).subscribe((res) => {
 
         if (!res.success) {
           Swal.fire({
@@ -39,7 +39,7 @@ export class UserSignForgotPassWordComponent {
             toast: true,
           });
           localStorage.setItem('email', formData.Email);
-          this.router.navigate(['/user/forgot-password/otp']);
+          this._router.navigate(['/user/forgot-password/otp']);
         }
       },
         (error) => {

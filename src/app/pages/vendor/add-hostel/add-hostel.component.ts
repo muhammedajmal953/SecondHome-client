@@ -31,16 +31,15 @@ export class AddHostelComponent {
 
 
   constructor(
-    private fb: FormBuilder,
-    private cdr: ChangeDetectorRef,
-    private router:Router
+    private _fb: FormBuilder,
+    private _router:Router
   ) {
-    this.hostelForm = this.fb.group({
+    this.hostelForm = this._fb.group({
       name: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+( [a-zA-Z]+)*$')]],
       phone: ['',[ Validators.required, Validators.pattern('^[5-9][0-9]{9}$')]],
       email: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')]],
       facilities: ['',this.facilityValidator.bind(this)],
-      noOfBedsPerRoom: this.fb.group({
+      noOfBedsPerRoom: this._fb.group({
         '2 share': [false],
         '4 share': [false],
         '6 share': [false]
@@ -75,7 +74,7 @@ console.log('clicked');
 
 
       localStorage.setItem('hostelForm1', JSON.stringify(formData))
-      this.router.navigate(['/vendor/home/add-hostel2'])
+      this._router.navigate(['/vendor/home/add-hostel2'])
     }
     this.hostelForm.markAllAsTouched();
     this.checkFormValidity()

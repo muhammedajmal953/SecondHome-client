@@ -25,7 +25,7 @@ export class VendorHomeComponent implements OnInit {
   user: UserDoc | null = null
   kycVerified: boolean = true
 
-  constructor(private vendorService: VendorService) {
+  constructor(private _vendorService: VendorService) {
   }
 
   toggleCollapse() {
@@ -33,7 +33,7 @@ export class VendorHomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.vendorService.vendorDetails().pipe(
+    this._vendorService.vendorDetails().pipe(
       timeout(3000),
       catchError((error) => {
         console.error('Error or timeout in vendorDetails:', error);

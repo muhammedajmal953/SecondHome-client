@@ -24,7 +24,7 @@ import { HeaderNameComponent } from "../../../components/header-name/header-name
 export class VendorLoginComponent {
   formdata
 
-  constructor(private vendorServices:VendorService,private authservice:SocialAuthService,private router:Router) {
+  constructor(private _vendorServices:VendorService,private _authservice:SocialAuthService,private _router:Router) {
     this.formdata =new FormGroup({
       Email: new FormControl<string | null>("",
         [Validators.required,
@@ -39,10 +39,10 @@ export class VendorLoginComponent {
 
 
   ngOnInit(): void {
-    this.authservice.authState.subscribe((user) => {
+    this._authservice.authState.subscribe((user) => {
       console.log(user.idToken);
 
-      this.vendorServices.googleAuthVendor(user.idToken).subscribe((res)=>{
+      this._vendorServices.googleAuthVendor(user.idToken).subscribe((res)=>{
         if(!res.success){
           Swal.fire({
             position: 'top',
@@ -54,8 +54,8 @@ export class VendorLoginComponent {
             toast: true,
           })
         } else {
-          localStorage.setItem('vendor', res.data)
-
+          localStorage.setItem('vendor', res.data.token)
+          localStorage.setItem('vendorRefresh', res.data.refreshToken)
           Swal.fire({
             position: 'top',
             icon: 'success',
@@ -66,7 +66,7 @@ export class VendorLoginComponent {
             toast: true,
           })
 
-          this.router.navigate(['/vendor/home'])
+          this._router.navigate(['/vendor/home'])
         }
 
 
@@ -82,7 +82,7 @@ export class VendorLoginComponent {
         Password: this.formdata.value.Password!
       }
 
-      this.vendorServices.vendorLogin(data).subscribe((res)=>{
+      this._vendorServices.vendorLogin(data).subscribe((res)=>{
         if (!res.success) {
           Swal.fire({
             position: 'top',
@@ -93,7 +93,7 @@ export class VendorLoginComponent {
             timer: 1500,
             toast: true,
           })
-          return 
+          return
         } else {
           Swal.fire({
             position: 'top',
@@ -104,8 +104,9 @@ export class VendorLoginComponent {
             timer: 1500,
             toast: true,
           })
-          localStorage.setItem('vendor',res.data)
-          this.router.navigate(['/vendor/home'])
+          localStorage.setItem('vendor', res.data.token)
+          localStorage.setItem('vendorRefresh', res.data.refreshToken)
+          this._router.navigate(['/vendor/home'])
         }
       })
     } else{

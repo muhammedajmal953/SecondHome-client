@@ -29,8 +29,8 @@ import { Router } from '@angular/router';
 })
 export class VendorKycComponent {
   kycForm: FormGroup;
-  constructor(private vendorService: VendorService,private fb:FormBuilder,private router:Router) {
-    this.kycForm = this.fb.group({
+  constructor(private _vendorService: VendorService,private _fb:FormBuilder,private _router:Router) {
+    this.kycForm = this._fb.group({
       license: [null, [Validators.required,this.mimeType]]
     });
   }
@@ -61,7 +61,7 @@ export class VendorKycComponent {
       formData.append('email', email);
 
       console.log(formData);
-      this.vendorService.vendorKYC(formData).subscribe((res: ApiRes) => {
+      this._vendorService.vendorKYC(formData).subscribe((res: ApiRes) => {
         if (res.success) {
           Swal.fire({
             position: 'top',
@@ -73,7 +73,7 @@ export class VendorKycComponent {
           })
 
           localStorage.removeItem('vendorEmail');
-          this.router.navigate(['/vendor/home']);
+          this._router.navigate(['/vendor/home']);
         } else {
           console.log('no data arrived');
 

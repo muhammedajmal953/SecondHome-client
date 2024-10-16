@@ -5,26 +5,27 @@ import { UserService } from '../../../services/user.service';
 import { Router } from '@angular/router';
 import { ApiRes } from '../../../models/IApiRes';
 import Swal from 'sweetalert2';
+import { ResetPasswordComponent } from "../../../components/reset-password/reset-password.component";
 
 @Component({
   selector: 'app-user-sign-forgot-change-pass-word',
   standalone: true,
   imports: [
     HeaderNameComponent,
-    CahangePasswordFormComponent
-
-  ],
+    CahangePasswordFormComponent,
+    ResetPasswordComponent
+],
   templateUrl: './user-sign-forgot-change-pass-word.component.html',
   styleUrl: './user-sign-forgot-change-pass-word.component.css'
 })
 export class UserSignForgotChangePassWordComponent {
-  constructor(private userService: UserService,private router:Router){}
+  constructor(private _userService: UserService,private _router:Router){}
   onSubmit(password:string) {
     if (password) {
       let email = localStorage.getItem('email')!;
       console.log('email', email);
 
-      this.userService.userChangePassword(email, password).subscribe((res: ApiRes) => {
+      this._userService.userChangePassword(email, password).subscribe((res: ApiRes) => {
         if (res.success == true) {
           Swal.fire({
             position: 'top',
@@ -35,7 +36,7 @@ export class UserSignForgotChangePassWordComponent {
             toast: true,
           })
           localStorage.removeItem('email');
-          this.router.navigate(['/user']);
+          this._router.navigate(['/user']);
         } else {
           Swal.fire({
             position: 'top',

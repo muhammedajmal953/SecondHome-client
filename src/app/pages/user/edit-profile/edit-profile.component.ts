@@ -31,8 +31,8 @@ export class EditProfileComponent {
   preview!: SafeUrl
   user!: User
 
-  constructor(private userService: UserService,private fb:FormBuilder ,private sanitizer:DomSanitizer,private router:Router) {
-    this.editedForm = this.fb.group({
+  constructor(private _userService: UserService,private _fb:FormBuilder ,private _sanitizer:DomSanitizer,private _router:Router) {
+    this.editedForm = this._fb.group({
       First_name: ['', [Validators.required, Validators.pattern('^[a-zA-Z]{5,}$')]],
       Last_name: ['', [Validators.required, Validators.pattern('^[a-zA-Z]{3,}$')]],
       Email: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')]],
@@ -41,7 +41,7 @@ export class EditProfileComponent {
     })
   }
   ngOnInit(): void {
-    this.userService.getUser().subscribe({
+    this._userService.getUser().subscribe({
       next: (res:ApiRes ) => {
         if(res.success) {
           this.user = res.data
@@ -105,7 +105,7 @@ export class EditProfileComponent {
 
       console.log(formData.get('First_name'))
 
-      this.userService.editProfile(formData).subscribe({
+      this._userService.editProfile(formData).subscribe({
         next: (res => {
           if (res.success) {
             Swal.fire({
@@ -115,7 +115,7 @@ export class EditProfileComponent {
               timer: 1500,
               title:'Profile edited'
             })
-            this.router.navigate(['/user/home/profile'])
+            this._router.navigate(['/user/home/profile'])
 
           } else {
             Swal.fire({

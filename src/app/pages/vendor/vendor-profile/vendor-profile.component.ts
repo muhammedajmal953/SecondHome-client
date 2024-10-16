@@ -20,9 +20,9 @@ import { Router } from '@angular/router';
 })
 export class VendorProfileComponent implements OnInit{
 
-  constructor(private vendorService: VendorService,private router:Router){}
+  constructor(private _vendorService: VendorService,private _router:Router){}
 ngOnInit(): void {
-  this.vendorService.vendorDetails().subscribe({
+  this._vendorService.vendorDetails().subscribe({
     next: (res:ApiRes) => {
       if(res.success) {
         this.user = res.data;
@@ -38,13 +38,13 @@ ngOnInit(): void {
 
   profileImage:string='https://www.dgvaishnavcollege.edu.in/dgvaishnav-c/uploads/2021/01/dummy-profile-pic.jpg'
   editProfile() {
-  this.router.navigate(['/vendor/home/edit-profile'])
+  this._router.navigate(['/vendor/home/edit-profile'])
 }
 saveProfile() {
 throw new Error('Method not implemented.');
 }
 changePassword() {
- this.router.navigate(['/vendor/home/change-password'])
+ this._router.navigate(['/vendor/home/change-password'])
 }
 walletBalance: any;
 addMoney() {

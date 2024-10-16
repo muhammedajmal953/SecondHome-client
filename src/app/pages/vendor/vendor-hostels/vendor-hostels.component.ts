@@ -9,10 +9,10 @@ import { Router } from '@angular/router';
   styleUrl: './vendor-hostels.component.css'
 })
 export class VendorHostelsComponent {
-  constructor(private router:Router) {
+  constructor(private _router:Router) {
 
   }
   addHostel() {
-    this.router.navigate(['/vendor/home/add-hostel']);
+    this._router.navigate(['/vendor/home/add-hostel']);
   }
 }

@@ -23,7 +23,7 @@ import { CommonModule } from '@angular/common';
 export class UserLoginComponent {
   formdata
 
-  constructor( private userServices:UserService,private authservice:SocialAuthService,private router:Router) {
+  constructor( private _userServices:UserService,private _authservice:SocialAuthService,private _router:Router) {
     this.formdata =new FormGroup({
       Email: new FormControl<string | null>("",
         [Validators.required,
@@ -36,9 +36,9 @@ export class UserLoginComponent {
     })
   }
   ngOnInit(): void {
-    this.authservice.authState.subscribe((user) => {
+    this._authservice.authState.subscribe((user) => {
       console.log(user);
-      this.userServices.loginWithGoogle(user.idToken).subscribe((res)=>{
+      this._userServices.loginWithGoogle(user.idToken).subscribe((res)=>{
         if(!res.success){
           Swal.fire({
             position: 'top',
@@ -50,7 +50,8 @@ export class UserLoginComponent {
             toast: true,
           })
         } else {
-          localStorage.setItem('/user', res.data)
+          localStorage.setItem('user', res.data.token)
+          localStorage.setItem('userRefresh', res.data.refreshToken)
 
           Swal.fire({
             position: 'top',
@@ -62,7 +63,7 @@ export class UserLoginComponent {
             toast: true,
           })
 
-          this.router.navigate(['/user/home'])
+          this._router.navigate(['/user/home'])
         }
 
 
@@ -78,7 +79,7 @@ export class UserLoginComponent {
         Password: this.formdata.value.Password!
       }
 
-      this.userServices.userLogin(data).subscribe((res)=>{
+      this._userServices.userLogin(data).subscribe((res)=>{
         if (!res.success) {
           Swal.fire({
             position: 'top',
@@ -99,8 +100,9 @@ export class UserLoginComponent {
             timer: 1500,
             toast: true,
           })
-          localStorage.setItem('user',res.data)
-          this.router.navigate(['/user/home'])
+          localStorage.setItem('user', res.data.token)
+          localStorage.setItem('userRefresh', res.data.refreshToken)
+          this._router.navigate(['/user/home'])
         }
       },
         (error) => {

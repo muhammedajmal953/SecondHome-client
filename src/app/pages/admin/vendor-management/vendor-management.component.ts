@@ -28,7 +28,7 @@ export class VendorManagementComponent {
   lisence: string = '';
   _id: string = '';
 
-  constructor(private adminService: AdminService, private router: Router, @Inject(PLATFORM_ID) private paltform_id:string) {}
+  constructor(private _adminService: AdminService, private _router: Router, @Inject(PLATFORM_ID) private paltform_id:string) {}
 
   ngOnInit(): void {
     let storedPage: string
@@ -45,7 +45,7 @@ export class VendorManagementComponent {
   fetchUsers() {
     if (isPlatformBrowser(this.paltform_id)) {
       localStorage.setItem('page', this.page.toString());
-      this.adminService.getAllVendors(this.page, this.limit).subscribe((res) => {
+      this._adminService.getAllVendors(this.page, this.limit).subscribe((res) => {
         if (res.success) {
           this.users = res.data;
         } else {
@@ -77,7 +77,7 @@ export class VendorManagementComponent {
     }).then((result) => {
 
       if (result.isConfirmed) {
-        this.adminService.blockUser(id).subscribe((res) => {
+        this._adminService.blockUser(id).subscribe((res) => {
           if (res.success) {
             Swal.fire({
               icon: 'success',
@@ -110,7 +110,7 @@ export class VendorManagementComponent {
       icon:'warning'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.adminService.unBlockUser(id).subscribe((res) => {
+        this._adminService.unBlockUser(id).subscribe((res) => {
           if (res.success) {
             Swal.fire({
               icon: 'success',
@@ -151,7 +151,7 @@ export class VendorManagementComponent {
 
   verifyUser() {
     if (this._id && this.lisence) {
-      this.adminService.verifyVendor(this._id).subscribe((res) => {
+      this._adminService.verifyVendor(this._id).subscribe((res) => {
         if (res.success) {
           Swal.fire({
             icon: 'success',

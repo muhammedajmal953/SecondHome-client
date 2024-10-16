@@ -21,7 +21,7 @@ import { HeaderNameComponent } from "../../../components/header-name/header-name
 export class VendorSignupComponent {
   formData:FormGroup
 
-  constructor(private vendorService:VendorService, private router:Router) {
+  constructor(private _vendorService:VendorService, private _router:Router) {
     this.formData = new FormGroup({
       Email: new FormControl('', [Validators.required, Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')]),
       First_name: new FormControl('', [Validators.required, Validators.pattern('^[a-zA-Z]{5,}$')]),
@@ -48,11 +48,11 @@ export class VendorSignupComponent {
 
   onSubmit(): void {
     if (this.formData.valid) {
-      this.vendorService.vendorRegister(this.formData.value).subscribe((res:ApiRes) => {
+      this._vendorService.vendorRegister(this.formData.value).subscribe((res:ApiRes) => {
        const email = this.formData.value.Email;
         if (res.success == true) {
          localStorage.setItem("vendorEmail", email);
-         this.router.navigate(['/vendor/sign-up/otp'])
+         this._router.navigate(['/vendor/sign-up/otp'])
        } else {
          Swal.fire({
            position: 'top',

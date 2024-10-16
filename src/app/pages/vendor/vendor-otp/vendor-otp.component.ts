@@ -14,7 +14,7 @@ import { VendorService } from '../../../services/vendor.service';
   styleUrl: './vendor-otp.component.css'
 })
 export class VendorOtpComponent {
-  constructor(private vendorService: VendorService, private router: Router) { }
+  constructor(private _vendorService: VendorService, private _router: Router) { }
   onSubmit(otp:string) {
 
     if (otp.length !== 6) {
@@ -30,7 +30,7 @@ export class VendorOtpComponent {
       let email: string = localStorage.getItem('vendorEmail')!
       console.log(email);
 
-      this.vendorService.verifyVendor(email, otp).subscribe((res: ApiRes) => {
+      this._vendorService.verifyVendor(email, otp).subscribe((res: ApiRes) => {
         if(res.success == true&&res.data==null){
           Swal.fire({
             position: 'top',
@@ -40,7 +40,7 @@ export class VendorOtpComponent {
             timer: 1500,
             toast: true,
           })
-          this.router.navigate(['/vendor/forgot-password/change-password'])
+          this._router.navigate(['/vendor/forgot-password/change-password'])
         }
         else if (res.success == true) {
           Swal.fire({
@@ -51,9 +51,9 @@ export class VendorOtpComponent {
             timer: 1500,
             toast: true,
           })
-          console.log(res.data);
-          localStorage.setItem('vendor', res.data)
-          this.router.navigate(['/vendor/sign-up/kyc'])
+          localStorage.setItem('vendor', res.data.token)
+          localStorage.setItem('vendorRefresh', res.data.refreshToken)
+          this._router.navigate(['/vendor/sign-up/kyc'])
         } else {
           Swal.fire({
             position: 'top',

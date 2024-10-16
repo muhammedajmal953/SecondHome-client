@@ -10,14 +10,14 @@ export class HostelService {
 
   api:string='http://localhost:5000'
 
-  constructor(private http: HttpClient) { }
+  constructor(private _http: HttpClient) { }
 
   addHostel(formData: any): Observable<ApiRes>{
-    return this.http.post<ApiRes>(`${this.api}/vendor/addHostel`,formData)
+    return this._http.post<ApiRes>(`${this.api}/vendor/addHostel`,formData)
   }
 
   getAllHostel(): Observable<ApiRes>{
-    return this.http.get<ApiRes>(`${this.api}/getAllHostel`)
+    return this._http.get<ApiRes>(`${this.api}/getAllHostel`)
   }
 
 

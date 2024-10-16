@@ -20,7 +20,7 @@ import { CommonModule } from '@angular/common';
 export class AdminLoginComponent {
   formdata:FormGroup
   loggedIn:boolean=false
-  constructor(private adminService: AdminService, private router: Router) {
+  constructor(private _adminService: AdminService, private _router: Router) {
 
     this.formdata =new FormGroup({
       Email: new FormControl<string | null>("",
@@ -43,7 +43,7 @@ export class AdminLoginComponent {
           Password: this.formdata.value.Password!
         }
 
-        this.adminService.adminLogin(data).subscribe((res)=>{
+        this._adminService.adminLogin(data).subscribe((res)=>{
           if (!res.success) {
             Swal.fire({
               position: 'top',
@@ -64,9 +64,10 @@ export class AdminLoginComponent {
               timer: 1500,
               toast: true,
             })
-            localStorage.setItem('admin', res.data)
+            localStorage.setItem('admin', res.data.token)
+            localStorage.setItem('adminRefresh',res.data.refreshToken)
             this.loggedIn=true
-            this.router.navigate(['/admin/home'])
+            this._router.navigate(['/admin/home'])
 
           }
         })

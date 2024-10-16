@@ -5,22 +5,23 @@ import Swal from 'sweetalert2';
 import { VendorService } from '../../../services/vendor.service';
 import { Router } from '@angular/router';
 import { ApiRes } from '../../../models/IApiRes';
+import { ResetPasswordComponent } from "../../../components/reset-password/reset-password.component";
 
 @Component({
   selector: 'app-vendor-change-password',
   standalone: true,
-  imports: [HeaderNameComponent, CahangePasswordFormComponent],
+  imports: [HeaderNameComponent, CahangePasswordFormComponent, ResetPasswordComponent],
   templateUrl: './vendor-change-password.component.html',
   styleUrl: './vendor-change-password.component.css'
 })
 export class VendorChangePasswordComponent {
-  constructor(private vendorServices: VendorService,private router:Router){}
+  constructor(private _vendorServices: VendorService,private _router:Router){}
   onSubmit(password:string) {
     if (password) {
       let email = localStorage.getItem('vendorEmail')!;
       console.log('email', email);
 
-      this.vendorServices.vendorChangePassword(email, password).subscribe((res: ApiRes) => {
+      this._vendorServices.vendorChangePassword(email, password).subscribe((res: ApiRes) => {
         if (res.success == true) {
           Swal.fire({
             position: 'top',
@@ -31,7 +32,7 @@ export class VendorChangePasswordComponent {
             toast: true,
           })
           localStorage.removeItem('vendorEmail');
-          this.router.navigate(['/vendor']);
+          this._router.navigate(['/vendor']);
         } else {
           Swal.fire({
             position: 'top',

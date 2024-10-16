@@ -1,6 +1,4 @@
 import { Component, Output } from '@angular/core';
-import { UserService } from '../../services/user.service';
-import { Router } from '@angular/router';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -19,7 +17,7 @@ export class CahangePasswordFormComponent {
   formData: FormGroup;
   @Output() formSubmitted = new EventEmitter();
 
-  constructor(private userService: UserService, private router: Router) {
+  constructor() {
     this.formData = new FormGroup({
       oldPassword: new FormControl('', [
         Validators.required,

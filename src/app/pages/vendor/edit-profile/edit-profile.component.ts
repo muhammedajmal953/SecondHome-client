@@ -3,11 +3,10 @@ import { VendorService } from '../../../services/vendor.service';
 import { ApiRes } from '../../../models/IApiRes';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import {ImageCropperComponent,LoadedImage} from "ngx-image-cropper";
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { SafeUrl } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
-import { log } from 'node:console';
 
 
 interface User{
@@ -34,8 +33,8 @@ export class EditProfileComponent implements OnInit{
   preview!: SafeUrl
   user!: User
 
-  constructor(private vendorService: VendorService,private fb:FormBuilder ,private sanitizer:DomSanitizer,private router:Router) {
-    this.editedForm = this.fb.group({
+  constructor(private _vendorService: VendorService,private _fb:FormBuilder ,private _router:Router) {
+    this.editedForm = this._fb.group({
       First_name: ['', [Validators.required, Validators.pattern('^[a-zA-Z]{5,}$')]],
       Last_name: ['', [Validators.required, Validators.pattern('^[a-zA-Z]{3,}$')]],
       Email: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')]],
@@ -44,7 +43,7 @@ export class EditProfileComponent implements OnInit{
     })
   }
   ngOnInit(): void {
-    this.vendorService.vendorDetails().subscribe({
+    this._vendorService.vendorDetails().subscribe({
       next: (res:ApiRes) => {
         if(res.success) {
           this.user = res.data
@@ -108,7 +107,7 @@ export class EditProfileComponent implements OnInit{
 
       console.log(formData)
 
-      this.vendorService.vendorEditProfile(formData).subscribe({
+      this._vendorService.vendorEditProfile(formData).subscribe({
         next: (res => {
           if (res.success) {
             Swal.fire({
@@ -118,7 +117,7 @@ export class EditProfileComponent implements OnInit{
               timer: 1500,
               title:'Profile edited'
             })
-            this.router.navigate(['/vendor/home/profile'])
+            this._router.navigate(['/vendor/home/profile'])
 
           } else {
             Swal.fire({

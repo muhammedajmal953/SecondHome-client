@@ -22,7 +22,7 @@ import { HeaderNameComponent } from "../../../components/header-name/header-name
 export class UserSignUpComponent {
   formData:FormGroup
 
-  constructor(private userService:UserService, private router:Router) {
+  constructor(private _userService:UserService, private _router:Router) {
     this.formData = new FormGroup({
       Email: new FormControl('', [Validators.required, Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')]),
       First_name: new FormControl('', [Validators.required, Validators.pattern('^[a-zA-Z]{5,}$')]),
@@ -50,11 +50,11 @@ export class UserSignUpComponent {
   onSubmit(): void {
 
     if (this.formData.valid) {
-       this.userService.userRegister(this.formData.value).subscribe((res:ApiRes) => {
+       this._userService.userRegister(this.formData.value).subscribe((res:ApiRes) => {
         const email = this.formData.value.Email;
          if (res.success == true) {
           localStorage.setItem("email", email);
-          this.router.navigate(['/user/sign-up/otp'])
+          this._router.navigate(['/user/sign-up/otp'])
         } else {
           Swal.fire({
             position: 'top',

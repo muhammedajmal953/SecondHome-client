@@ -66,7 +66,7 @@ export class AddAddressComponent {
 
 
 
-        this.hostelService.addHostel(formdata).subscribe({
+        this._hostelService.addHostel(formdata).subscribe({
           next: (res) => {
             if (res.success) {
               console.log(res.message);
@@ -75,7 +75,7 @@ export class AddAddressComponent {
                 text: res.message,
               })
               localStorage.removeItem('hostelForm1')
-              this.router.navigate(['/vendor/home'])
+              this._router.navigate(['/vendor/home'])
 
 
             } else {
@@ -102,7 +102,7 @@ export class AddAddressComponent {
   bedTypes: string[] = [];
 
 
-  constructor(private fb: FormBuilder,private hostelService:HostelService,private router:Router) {
+  constructor(private _fb: FormBuilder,private _hostelService:HostelService,private _router:Router) {
     const bedTypeGroup:{[key:string]:FormControl}={}
     const hostelFormData = localStorage.getItem('hostelForm1');
     if (hostelFormData) {
@@ -114,11 +114,11 @@ export class AddAddressComponent {
     }
 
     this.bedTypes.forEach((item) =>{
-        bedTypeGroup[item]=this.fb.control('',[Validators.required,Validators.min(1)])
+        bedTypeGroup[item]=this._fb.control('',[Validators.required,Validators.min(1)])
     })
 
 
-    this.addressRateForm = this.fb.group({
+    this.addressRateForm = this._fb.group({
       city: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]{2,}$')]],
       street: ['', Validators.required],
       state: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]],
@@ -131,7 +131,7 @@ export class AddAddressComponent {
         '',
         [Validators.required, Validators.pattern('^[1-9][0-9]*$')],
       ],
-      rates: this.fb.group(bedTypeGroup),
+      rates: this._fb.group(bedTypeGroup),
       photos: ['', [Validators.required, this.mimeTypeValidator]],
     });
   }

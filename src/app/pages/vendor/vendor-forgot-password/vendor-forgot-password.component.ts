@@ -4,21 +4,22 @@ import { ForgotPasswordFormComponent } from "../../../components/forgot-password
 import Swal from 'sweetalert2';
 import { VendorService } from '../../../services/vendor.service';
 import { Router } from '@angular/router';
+import { ResetPasswordComponent } from "../../../components/reset-password/reset-password.component";
 
 @Component({
   selector: 'app-vendor-forgot-password',
   standalone: true,
-  imports: [HeaderNameComponent, ForgotPasswordFormComponent],
+  imports: [HeaderNameComponent, ForgotPasswordFormComponent, ResetPasswordComponent],
   templateUrl: './vendor-forgot-password.component.html',
   styleUrl: './vendor-forgot-password.component.css'
 })
 export class VendorForgotPasswordComponent {
-  constructor(private router:Router,private vendorServices:VendorService) {
+  constructor(private _router:Router,private _vendorServices:VendorService) {
   }
   onSubmit(formData: any): void {
     if (formData) {
 
-      this.vendorServices.vendorForgotPassword(formData).subscribe((res) => {
+      this._vendorServices.vendorForgotPassword(formData).subscribe((res) => {
 
         if (!res.success) {
           Swal.fire({
@@ -39,7 +40,7 @@ export class VendorForgotPasswordComponent {
             toast: true,
           });
           localStorage.setItem('vendorEmail', formData.Email);
-          this.router.navigate(['/vendor/forgot-password/otp']);
+          this._router.navigate(['/vendor/forgot-password/otp']);
         }
       },
         (error) => {

@@ -19,9 +19,9 @@ import { CommonModule } from '@angular/common';
 export class ProfileComponent implements OnInit{
   user!: UserDoc
 
-  constructor(private userService: UserService,private router:Router){}
+  constructor(private _userService: UserService,private _router:Router){}
   ngOnInit(): void {
-    this.userService.getUser().subscribe({
+    this._userService.getUser().subscribe({
       next: (res:ApiRes) => {
         if(res.success) {
           this.user = res.data;
@@ -37,13 +37,13 @@ export class ProfileComponent implements OnInit{
 
     profileImage:string='https://www.dgvaishnavcollege.edu.in/dgvaishnav-c/uploads/2021/01/dummy-profile-pic.jpg'
     editProfile() {
-    this.router.navigate(['/user/home/edit-profile'])
+    this._router.navigate(['/user/home/edit-profile'])
   }
   saveProfile() {
   throw new Error('Method not implemented.');
   }
   changePassword() {
-  this.router.navigate(['/user/home/change-password'])
+  this._router.navigate(['/user/home/change-password'])
   }
   walletBalance: any;
   addMoney() {

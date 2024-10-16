@@ -13,11 +13,11 @@ import Swal from 'sweetalert2';
 })
 export class ChangePasswordComponent {
 
-  constructor(private router: Router, private userService: UserService) { }
-  
+  constructor(private _router: Router, private _userService: UserService) { }
+
   submitForm(event:Event) {
     if (event) {
-      this.userService.changePassword(event).subscribe({
+      this._userService.changePassword(event).subscribe({
         next: (res)=>{
           if (res.success) {
             Swal.fire({
@@ -28,7 +28,7 @@ export class ChangePasswordComponent {
               showConfirmButton: false,
               timer:1500
             })
-            this.router.navigate(['/user/home/profile'])
+            this._router.navigate(['/user/home/profile'])
           } else {
             Swal.fire({
               icon: 'error',

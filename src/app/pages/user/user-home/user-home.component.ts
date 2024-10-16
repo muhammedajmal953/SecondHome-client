@@ -18,7 +18,7 @@ import { UserService } from '../../../services/user.service';
 export class UserHomeComponent implements OnInit {
   toggleShow: boolean = false
   user: UserDoc | null = null
-  constructor(private userService: UserService) {
+  constructor(private _userService: UserService) {
   };
   toggleCollapse() {
     this.toggleShow = !this.toggleShow
@@ -26,7 +26,7 @@ export class UserHomeComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.userService.getUser().subscribe({
+    this._userService.getUser().subscribe({
       next: (data) => {
         if (data?.success) {
           this.user = data?.data

@@ -12,12 +12,12 @@ import { Router } from '@angular/router';
   styleUrl: './change-password.component.css'
 })
 export class ChangePasswordComponent {
-  constructor(private router:Router,private vendorService:VendorService) {
+  constructor(private _router:Router,private _vendorService:VendorService) {
 
   }
   submitForm(event:Event) {
     if (event) {
-      this.vendorService.changePassword(event).subscribe({
+      this._vendorService.changePassword(event).subscribe({
         next: (res)=>{
           if (res.success) {
             Swal.fire({
@@ -28,7 +28,7 @@ export class ChangePasswordComponent {
               showConfirmButton: false,
               timer:1500
             })
-            this.router.navigate(['/vendor/home/profile'])
+            this._router.navigate(['/vendor/home/profile'])
           } else {
 
           }

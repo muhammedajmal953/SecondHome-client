@@ -15,7 +15,7 @@ import { OtpFormComponent } from "../../../components/otp-form/otp-form.componen
 })
 export class UserSignOtpComponent {
 
-  constructor(private userService: UserService, private router: Router) { }
+  constructor(private _userService: UserService, private _router: Router) { }
   onSubmit(otp:string) {
 
     if (otp.length !== 6) {
@@ -29,7 +29,7 @@ export class UserSignOtpComponent {
       });
     } else {
       let email:string=localStorage.getItem('email')!
-      this.userService.verifyUser(email, otp).subscribe((res: ApiRes) => {
+      this._userService.verifyUser(email, otp).subscribe((res: ApiRes) => {
         if(res.success == true&&res.data==null){
           Swal.fire({
             position: 'top',
@@ -39,7 +39,7 @@ export class UserSignOtpComponent {
             timer: 1500,
             toast: true,
           })
-          this.router.navigate(['/user/forgot-password/change-password'])
+          this._router.navigate(['/user/forgot-password/change-password'])
         }
         else if (res.success == true) {
           Swal.fire({
@@ -54,7 +54,7 @@ export class UserSignOtpComponent {
 
           localStorage.setItem('user', res.data)
           localStorage.removeItem('email')
-          this.router.navigate(['/user/home'])
+          this._router.navigate(['/user/home'])
         } else {
           Swal.fire({
             position: 'top',

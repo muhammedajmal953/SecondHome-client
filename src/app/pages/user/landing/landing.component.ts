@@ -24,8 +24,8 @@ export class LandingComponent{
   hostels$: any
 
 
-  constructor(private hostelService:HostelService) {
-    this.hostelService.getAllHostel().subscribe({
+  constructor(private _hostelService:HostelService) {
+    this._hostelService.getAllHostel().subscribe({
       next: (res) => {
         this.hostels$=res.data
           console.log(this.hostels$);
