@@ -44,7 +44,7 @@ saveProfile() {
 throw new Error('Method not implemented.');
 }
 changePassword() {
-throw new Error('Method not implemented.');
+ this.router.navigate(['/vendor/home/change-password'])
 }
 walletBalance: any;
 addMoney() {

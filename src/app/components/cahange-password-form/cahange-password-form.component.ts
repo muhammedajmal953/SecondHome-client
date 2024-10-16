@@ -19,26 +19,33 @@ export class CahangePasswordFormComponent {
   formData: FormGroup;
   @Output() formSubmitted = new EventEmitter();
 
-  constructor(private userService: UserService,private router:Router) {
+  constructor(private userService: UserService, private router: Router) {
     this.formData = new FormGroup({
-      Password:new FormControl('', [Validators.required, Validators.pattern('^(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{8,}$')]),
-      ConfirmPassword:new FormControl('', [Validators.required]),
-    }, { validators: this.passwordsMatchValidator }
-    );
+      oldPassword: new FormControl('', [
+        Validators.required,
+        Validators.pattern('^(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{8,}$')
+      ]),
+      newPassword: new FormControl('', [
+        Validators.required,
+        Validators.pattern('^(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{8,}$')
+      ]),
+      confirmPassword: new FormControl('', [Validators.required]),
+    }, { validators: this.passwordsMatchValidator });
   }
-
 
   passwordsMatchValidator(control: AbstractControl): ValidationErrors | null {
-    const password = control.get('Password')?.value;
-    const confirmPassword = control.get('ConfirmPassword')?.value;
-    return password === confirmPassword ? null : { passwordsMismatch: true };
-  }
+    const newPassword = control.get('newPassword')?.value;
+    const confirmPassword = control.get('confirmPassword')?.value;
+    if (newPassword && confirmPassword && newPassword !== confirmPassword) {
+      return { passwordsMismatch: true };
+    }
 
+    return null;
+  }
 
   handleSubmit() {
     if (this.formData.valid) {
-      const password = this.formData.get('Password')?.value as string;
-      this.formSubmitted.emit(password);
+      this.formSubmitted.emit(this.formData.value);
     } else {
       this.formData.markAllAsTouched();
     }

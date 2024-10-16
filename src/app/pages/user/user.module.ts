@@ -13,6 +13,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { LandingComponent } from './landing/landing.component';
 import { ProfileComponent } from './profile/profile.component';
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
+import { ChangePasswordComponent } from './change-password/change-password.component';
 
 
 const routes: Routes = [
@@ -51,6 +52,10 @@ const routes: Routes = [
       {
         path: 'edit-profile',
         component:EditProfileComponent
+      },
+      {
+        path: 'change-password',
+        component:ChangePasswordComponent
       }
     ]
   },

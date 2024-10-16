@@ -11,9 +11,9 @@ export class AdminService {
 
   constructor(private http: HttpClient) { }
 
-  adminLogin(data:any): Observable<ApiRes> {
-    return this.http.post<ApiRes>('http://localhost:5000/admin/login', { data })
+  adminLogin(data: any): Observable<ApiRes> {
 
+    return this.http.post<ApiRes>('http://localhost:5000/admin/login', { data })
   }
 
   getAllUsers(page:number,limit:number): Observable<ApiRes> {

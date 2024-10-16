@@ -8,12 +8,17 @@ import { ApiRes } from '../models/IApiRes';
 })
 export class HostelService {
 
-  api:string='http://localhost:5000/vendor'
+  api:string='http://localhost:5000'
 
   constructor(private http: HttpClient) { }
 
   addHostel(formData: any): Observable<ApiRes>{
-    return this.http.post<ApiRes>(`${this.api}/addHostel`,formData)
+    return this.http.post<ApiRes>(`${this.api}/vendor/addHostel`,formData)
   }
+
+  getAllHostel(): Observable<ApiRes>{
+    return this.http.get<ApiRes>(`${this.api}/getAllHostel`)
+  }
+
 
 }

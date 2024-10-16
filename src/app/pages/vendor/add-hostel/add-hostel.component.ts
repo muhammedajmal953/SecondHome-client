@@ -36,7 +36,7 @@ export class AddHostelComponent {
     private router:Router
   ) {
     this.hostelForm = this.fb.group({
-      name: ['', [Validators.required, Validators.pattern('^[a-zA-Z]{3,}$')]],
+      name: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+( [a-zA-Z]+)*$')]],
       phone: ['',[ Validators.required, Validators.pattern('^[5-9][0-9]{9}$')]],
       email: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')]],
       facilities: ['',this.facilityValidator.bind(this)],
@@ -47,10 +47,9 @@ export class AddHostelComponent {
       },{
         validator: this.atLeastOneCheckboxSelected}),
       nearByAccess: ['',this.nearByAccessValidator.bind(this)],
-      policies: ['', [Validators.required, Validators.pattern('^[a-zA-Z]{3,}$')]],
+      policies: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+( [a-zA-Z]+)*$')]],
       category: ['',Validators.required],
       advance: ['', [Validators.required,Validators.pattern('^[1-9][0-9]*$')]],
-      agreeToContact: [false, Validators.requiredTrue],
 
     });
   }
@@ -58,6 +57,8 @@ export class AddHostelComponent {
 
 
   onSubmit(event: Event) {
+
+console.log('clicked');
 
     if (this.hostelForm.valid) {
 
@@ -77,6 +78,8 @@ export class AddHostelComponent {
       this.router.navigate(['/vendor/home/add-hostel2'])
     }
     this.hostelForm.markAllAsTouched();
+    this.checkFormValidity()
+
   }
 
 
@@ -143,4 +146,24 @@ export class AddHostelComponent {
       .filter(([key, value]) => value)
       .map(([key]) => key);
   }
+
+
+  checkFormValidity() {
+    Object.keys(this.hostelForm.controls).forEach(key => {
+      const control = this.hostelForm.get(key);
+      if (control instanceof FormGroup) {
+        Object.keys(control.controls).forEach(nestedKey => {
+          const nestedControl = control.get(nestedKey);
+          if (nestedControl && nestedControl.invalid) {
+            console.log(`Field ${nestedKey} in ${key} is invalid:`, nestedControl.errors);
+          }
+        });
+      } else {
+        if (control && control.invalid) {
+          console.log(`Field ${key} is invalid:`, control.errors);
+        }
+      }
+    });
+  }
+
 }

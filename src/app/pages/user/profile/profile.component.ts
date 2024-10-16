@@ -17,6 +17,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './profile.component.css'
 })
 export class ProfileComponent implements OnInit{
+  user!: UserDoc
 
   constructor(private userService: UserService,private router:Router){}
   ngOnInit(): void {
@@ -31,7 +32,7 @@ export class ProfileComponent implements OnInit{
     })
   }
 
-    user!: UserDoc
+
 
 
     profileImage:string='https://www.dgvaishnavcollege.edu.in/dgvaishnav-c/uploads/2021/01/dummy-profile-pic.jpg'
@@ -42,7 +43,7 @@ export class ProfileComponent implements OnInit{
   throw new Error('Method not implemented.');
   }
   changePassword() {
-  throw new Error('Method not implemented.');
+  this.router.navigate(['/user/home/change-password'])
   }
   walletBalance: any;
   addMoney() {

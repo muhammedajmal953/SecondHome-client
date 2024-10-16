@@ -12,6 +12,7 @@ import {
 } from '@angular/forms';
 import { HostelService } from '../../../services/hostel.service';
 import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-address',
@@ -73,6 +74,9 @@ export class AddAddressComponent {
                 icon: 'success',
                 text: res.message,
               })
+              localStorage.removeItem('hostelForm1')
+              this.router.navigate(['/vendor/home'])
+
 
             } else {
               Swal.fire({
@@ -98,7 +102,7 @@ export class AddAddressComponent {
   bedTypes: string[] = [];
 
 
-  constructor(private fb: FormBuilder,private hostelService:HostelService) {
+  constructor(private fb: FormBuilder,private hostelService:HostelService,private router:Router) {
     const bedTypeGroup:{[key:string]:FormControl}={}
     const hostelFormData = localStorage.getItem('hostelForm1');
     if (hostelFormData) {

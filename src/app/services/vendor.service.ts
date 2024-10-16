@@ -53,5 +53,8 @@ export class VendorService {
     return this.http.put<ApiRes>(`${this.api}/edit-profile`, data)
   }
 
-  
+  changePassword(data:any): Observable<ApiRes>{
+    return this.http.put<ApiRes>(`${this.api}/changePassword`,data)
+  }
+
 }
