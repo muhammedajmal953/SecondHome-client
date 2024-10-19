@@ -13,6 +13,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './hostel-card.component.css'
 })
 export class HostelCardComponent {
+  @Input() buttonName:string='Book Now'
   @Input() hosteDetails: any
   stars:number[]=[1,2,3]
 }

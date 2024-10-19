@@ -14,6 +14,7 @@ import { LandingComponent } from './landing/landing.component';
 import { ProfileComponent } from './profile/profile.component';
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
+import { HostelListingComponent } from './hostel-listing/hostel-listing.component';
 
 
 const routes: Routes = [
@@ -56,6 +57,10 @@ const routes: Routes = [
       {
         path: 'change-password',
         component:ChangePasswordComponent
+      },
+      {
+        path: 'hostels',
+        component:HostelListingComponent
       }
     ]
   },

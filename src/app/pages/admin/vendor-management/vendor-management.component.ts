@@ -6,14 +6,16 @@ import { Observable } from 'rxjs';
 import Swal from 'sweetalert2';
 import { ApiRes } from '../../../models/IApiRes';
 import { UserDoc } from '../../../models/IUsers';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, NgModel, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-vendor-management',
   standalone: true,
   imports: [
     CommonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    CommonModule,
+    FormsModule
   ],
   templateUrl: './vendor-management.component.html',
   styleUrl: './vendor-management.component.css'
@@ -27,6 +29,8 @@ export class VendorManagementComponent {
   showModal: boolean = false;
   lisence: string = '';
   _id: string = '';
+
+  searchText:string=''
 
   constructor(private _adminService: AdminService, private _router: Router, @Inject(PLATFORM_ID) private paltform_id:string) {}
 
@@ -45,7 +49,7 @@ export class VendorManagementComponent {
   fetchUsers() {
     if (isPlatformBrowser(this.paltform_id)) {
       localStorage.setItem('page', this.page.toString());
-      this._adminService.getAllVendors(this.page, this.limit).subscribe((res) => {
+      this._adminService.getAllVendors(this.page, this.limit,this.searchText).subscribe((res) => {
         if (res.success) {
           this.users = res.data;
         } else {
@@ -175,8 +179,11 @@ export class VendorManagementComponent {
           title:error.message
         })
       })
-
     }
+  }
+
+  searchUser() {
+    this.fetchUsers()
   }
 }
 

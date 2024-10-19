@@ -37,4 +37,8 @@
   </div>
 
 </form>
+<div class="mt-4 " >
+ <p class="text-white"  *ngIf="!showResend">Resend otp in <span class="text-red-500">{{timerLeft}}</span> seconds</p>
+ <button class="no-underline text-blue-600" (click)="resendOtp()"  *ngIf="showResend" >Resend Otp</button>
+</div>
 </div>

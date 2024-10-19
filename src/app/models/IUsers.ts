@@ -26,3 +26,5 @@ export interface UserDoc{
   isKYCVerified: true;
   lisence: string
 }
+
+

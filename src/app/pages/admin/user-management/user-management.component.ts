@@ -6,12 +6,14 @@ import { ApiRes } from '../../../models/IApiRes';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { UserDoc } from '../../../models/IUsers';
 import Swal from 'sweetalert2';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-user-management',
   standalone: true,
   imports: [
-    CommonModule
+    CommonModule,
+    FormsModule
   ],
   templateUrl: './user-management.component.html',
   styleUrl: './user-management.component.css'
@@ -21,6 +23,7 @@ export class UserManagementComponent implements OnInit {
   users: UserDoc[] = [];
   page: number = 1;
   limit: number = 5;
+  searchQuery:string=''
 
   constructor(private _adminService: AdminService, private _router: Router, @Inject(PLATFORM_ID) private paltform_id:string) {}
 
@@ -39,7 +42,7 @@ export class UserManagementComponent implements OnInit {
   fetchUsers() {
     if (isPlatformBrowser(this.paltform_id)) {
       localStorage.setItem('page', this.page.toString());
-      this._adminService.getAllUsers(this.page, this.limit).subscribe((res) => {
+      this._adminService.getAllUsers(this.page, this.limit,this.searchQuery).subscribe((res) => {
         if (res.success) {
           this.users = res.data;
         } else {
@@ -123,6 +126,11 @@ export class UserManagementComponent implements OnInit {
     }
 
     this.fetchUsers();
+  }
+
+
+  searchUser() {
+    this.fetchUsers()
   }
 }
 

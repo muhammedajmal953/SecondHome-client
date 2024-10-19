@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, throwError } from 'rxjs';
 import { ApiRes } from '../models/IApiRes';
+import { environments } from '../environment/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ export class VendorService {
 
   constructor(private _http: HttpClient) { }
 
-  api:string = 'http://localhost:5000/vendor'
+  api:string = `${environments.api}/vendor`
 
   vendorRegister(vendor: any): Observable<ApiRes> {
     return this._http.post<ApiRes>(`${this.api}/sign-up`, vendor)
@@ -55,6 +56,10 @@ export class VendorService {
 
   changePassword(data:any): Observable<ApiRes>{
     return this._http.put<ApiRes>(`${this.api}/changePassword`,data)
+  }
+
+  resendOtp(email: string): Observable<ApiRes>{
+    return this._http.post<ApiRes>(`${this.api}/resend-otp`,{email})
   }
 
 }

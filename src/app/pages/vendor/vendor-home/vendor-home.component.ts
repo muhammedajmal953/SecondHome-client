@@ -62,6 +62,7 @@ export class VendorHomeComponent implements OnInit {
 
   logout() {
     localStorage.removeItem('vendor')
+    localStorage.removeItem('vendorRefresh')
     window.location.reload();
   }
 }

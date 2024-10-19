@@ -3,13 +3,14 @@ import { Observable } from 'rxjs';
 import { ApiRes } from '../models/IApiRes';
 import { LoginUser, RegisterUser } from '../models/IUsers';
 import { HttpClient } from '@angular/common/http';
+import { environments } from '../environment/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-  api: string = 'http://localhost:5000'
+  api: string = environments.api
   constructor (private _http: HttpClient) { }
 
 
@@ -51,5 +52,9 @@ export class UserService {
 
   changePassword(data:any): Observable<ApiRes>{
     return this._http.put<ApiRes>(`${this.api}/changePassword`,data)
+  }
+
+  resendOtp(email: string): Observable<ApiRes>{
+    return this._http.post<ApiRes>(`${this.api}/resend-otp`,{email})
   }
 }

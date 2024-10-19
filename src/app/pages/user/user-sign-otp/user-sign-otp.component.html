@@ -3,8 +3,8 @@
 <section class="flex items-center justify-center min-h-screen bg-[#273142]">
 
 
-  <app-otp-form (otpSubmitted)="onSubmit($event)">
-
+  <app-otp-form (otpSubmitted)="onSubmit($event)" (otpResend)="resendOtp()">
+    
   </app-otp-form>
 
 </section>

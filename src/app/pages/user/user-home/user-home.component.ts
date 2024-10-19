@@ -44,8 +44,8 @@ export class UserHomeComponent implements OnInit {
 
   logout() {
     localStorage.removeItem('user')
+    localStorage.removeItem('userRefresh')
     window.location.reload();
-
   }
 
 

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, RouterModule } from '@angular/router';
 import { GoogleSigninButtonModule, SocialAuthService } from '@abacritt/angularx-social-login';
 import { UserService } from '../../../services/user.service';
 import Swal from 'sweetalert2';
@@ -15,7 +15,7 @@ import { CommonModule } from '@angular/common';
     ReactiveFormsModule,
     CommonModule,
     GoogleSigninButtonModule,
-    RouterLink
+    RouterModule
   ],
   templateUrl: './user-login.component.html',
   styleUrl: './user-login.component.css'

@@ -67,4 +67,25 @@ export class VendorOtpComponent {
       })
     }
   }
+
+  resendOtp() {
+    let email = localStorage.getItem('vendorEmail');
+    this._vendorService.resendOtp(email!).subscribe({
+      next: (res) => {
+        if (res.success) {
+          console.log(res.message)
+        }
+      }, error: (res) => {
+        Swal.fire({
+          position: 'top',
+          toast: true,
+          showConfirmButton: false,
+          title: 'error in resending Otp',
+          timer: 1500,
+          icon:'error'
+        })
+      }
+    })
+  }
+
 }
