@@ -5,6 +5,8 @@ import { ApiRes } from '../../../models/IApiRes';
 import { UserDoc } from '../../../models/IUsers';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import Swal from 'sweetalert2';
+import { icon } from 'leaflet';
 
 @Component({
   selector: 'app-profile',
@@ -28,7 +30,13 @@ export class ProfileComponent implements OnInit{
           res.data.Avatar?this.profileImage=res.data.Avatar:'https://www.dgvaishnavcollege.edu.in/dgvaishnav-c/uploads/2021/01/dummy-profile-pic.jpg'
 
         }
-      }
+      }, error:((err)=> {
+        Swal.fire({
+          toast: true,
+          title:err.message,
+          icon:'error'
+        })
+      })
     })
   }
 

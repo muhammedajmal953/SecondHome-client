@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { HostelCardComponent } from "../../../components/hostel-card/hostel-card.component";
 import { HostelService } from '../../../services/hostel.service';
 import { NgFor } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-landing',
@@ -24,7 +25,7 @@ export class LandingComponent{
   hostels$: any
 
 
-  constructor(private _hostelService:HostelService) {
+  constructor(private _hostelService:HostelService,private _router:Router) {
     this._hostelService.getAllHostel(1,'').subscribe({
       next: (res) => {
         this.hostels$=res.data
@@ -34,5 +35,9 @@ export class LandingComponent{
     })
   }
 
+  toHostels() {
+  this._router.navigate(['/user/home/hostels'])
+  }
 
+  
 }

@@ -15,6 +15,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
 import { HostelListingComponent } from './hostel-listing/hostel-listing.component';
+import { ViewHostelComponent } from './view-hostel/view-hostel.component';
 
 
 const routes: Routes = [
@@ -61,6 +62,10 @@ const routes: Routes = [
       {
         path: 'hostels',
         component:HostelListingComponent
+      },
+      {
+        path: 'hostelDetails/:id',
+        component:ViewHostelComponent
       }
     ]
   },
@@ -78,7 +83,7 @@ const routes: Routes = [
     path: 'forgot-password/change-password',
     canActivate:[loginGuard],
     component: UserSignForgotChangePassWordComponent,
-  }
+  },
 ];
 
 @NgModule({

@@ -112,7 +112,7 @@ export class AddAddressComponent {
     } else {
       console.log('No hostelForm1 found in localStorage');
     }
-
+    
     this.bedTypes.forEach((item) =>{
         bedTypeGroup[item]=this._fb.control('',[Validators.required,Validators.min(1)])
     })

@@ -57,4 +57,10 @@ export class UserService {
   resendOtp(email: string): Observable<ApiRes>{
     return this._http.post<ApiRes>(`${this.api}/resend-otp`,{email})
   }
+
+  getHostel(id: string):Observable<ApiRes> {
+    return this._http.get<ApiRes>(`${this.api}/getHostel/${id}`)
+  }
+
+  
 }

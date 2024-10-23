@@ -1,48 +1,134 @@
-<div class="bg-inherit min-h-screen p-4 m-4">
-  <!-- Header Section -->
-  <div class="max-w-7xl mx-auto">
-    <h1 class="text-2xl font-semibold mb-4">Hostels</h1>
-
-    <p class="text-gray-600 mb-6">
-      FindMyHostel is an online portal that helps you find the best hostels and PGs in Edappally and nearby areas. With
-      instant booking, you can easily find a hostel of PG that suits your needs and budget. The Website provides you with all the
-      information you need about the hostels and PG's listed on the site.
+<!-- Main Container -->
+<div class="min-h-screen bg-inherit p-8">
+  <!-- Header / Title -->
+  <div class="bg-green-200 p-6 rounded-lg text-center">
+    <h1 class="text-3xl font-bold text-[#2BAE66]">Hostels </h1>
+    <p class="mt-2 text-gray-600">
+      SecondHome helps you find the best hostels and PGs in nearby areas. Use the filters below to refine your search.
     </p>
+  </div>
+  <nav aria-label="breadcrumb" class="w-max my-2">
+    <ol class="flex w-full flex-wrap items-center rounded-md bg-slate-50 px-4 py-2">
+      <li
+        class="flex cursor-pointer items-center text-sm text-green-500 transition-colors duration-300 hover:text-slate-800">
+        <a routerLink="/user/home">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+            <path
+              d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z">
+            </path>
+          </svg>
+        </a>
+        <span class="pointer-events-none mx-2  text-green-500">
+          /
+        </span>
+      </li>
+      <li
+        class="flex cursor-pointer items-center text-sm text-green-500 transition-colors duration-300 hover:text-slate-800">
+        <a routerLinkActive="router-link-active" routerLink="/user/home/hostels">Hostels</a>
+      </li>
+    </ol>
+  </nav>
+  <!-- Filters Section -->
+  <div class="mt-8 bg-white p-4 rounded-lg shadow-md flex flex-wrap gap-4 justify-between">
+     <label class="input input-bordered flex items-center gap-2">
+      <input type="text" class="grow  border-white rounded-md" placeholder="Search" (keydown.enter)="searchButton()" [(ngModel)]="searchQuery"/>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 16 16"
+        fill="currentColor"
+        class="h-4 w-4 opacity-70">
+        <path
+          fill-rule="evenodd"
+          d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+          clip-rule="evenodd" />
+      </svg>
+    </label>
 
-    <!-- Filter Section -->
-    <div class="bg-emerald-200 rounded-lg p-4 mb-8">
-      <div class="flex flex-wrap gap-4 mb-4">
-        <button class="bg-emerald-500 text-white px-4 py-2 rounded-md hover:bg-emerald-600">
-          Search By Name
-        </button>
-        <button class="bg-emerald-500 text-white px-4 py-2 rounded-md hover:bg-emerald-600">
-          City
-        </button>
-        <button class="bg-emerald-500 text-white px-4 py-2 rounded-md hover:bg-emerald-600">
-          Place
-        </button>
-        <button class="bg-emerald-500 text-white px-4 py-2 rounded-md hover:bg-emerald-600">
-          Gender
-        </button>
-        <button class="bg-emerald-500 text-white px-4 py-2 rounded-md hover:bg-emerald-600">
-          Rooms
-        </button>
-        <button class="bg-emerald-500 text-white px-4 py-2 rounded-md hover:bg-emerald-600">
-          Amenities
-        </button>
-        <button class="bg-emerald-500 text-white px-4 py-2 rounded-md hover:bg-emerald-600">
-          Rent
-        </button>
-      </div>
-      <button class="text-emerald-700 hover:text-emerald-800">CLEAR ALL</button>
+    <div class="flex  items-center justify-between">
+      <select  class="select select-success" >
+        <option disabled selected>Sort-by</option>
+        <option value="low">Price Low to High</option>
+        <option value="high">Price High to low</option>
+        <option value="popular">Most Popular</option>
+        <option value="newly Added">Recently Added</option>
+      </select>
+
     </div>
 
-    <!-- Main Content -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+  </div>
 
-      
 
+
+  <!-- Hostel Listings & Map Section -->
+  <div class="mt-8 flex flex-wrap md:flex-nowrap flex-colmd:items-center gap-6" >
+    <div class="w-full md:w-64 h-screen p-4 bg-base-100 shadow-lg rounded-lg ">
+      <h2 class="text-xl font-semibold mb-4">Filter Options</h2>
+
+
+      <form action="" class="space-y-4">
+        <!-- Rooms Shared By -->
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">Rooms Shared By</span>
+          </label>
+          <select class="select select-success w-full">
+            <option disabled selected>Choose Option</option>
+            <option value="private">Private</option>
+            <option value="2 share">2 Share</option>
+            <option value="4 share">4 Share</option>
+            <option value="6 share">6 Share</option>
+          </select>
+        </div>
+
+        <!-- Category -->
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">Category</span>
+          </label>
+          <select class="select select-success w-full">
+            <option disabled selected>Choose Category</option>
+            <option>Men</option>
+            <option>Women</option>
+            <option>Mixed</option>
+          </select>
+        </div>
+        <!-- Buttons -->
+        <div class=" gap-4 mt-6">
+          <button type="reset" class="btn bg-gray-500 text-white px-4 py-2 rounded-lg w-full">Clear All</button>
+          <button type="submit" class="btn bg-green-500 text-white px-4 py-2 rounded-lg w-full">Apply</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Listings Column -->
+    <div class="flex flex-wrap md:flex-nowrap flex-col md:flex-row  gap-6">
+      <!-- Hostel Card 1 -->
+      <div class="p-4 max-w-md h-fit bg-white rounded-lg shadow-md mb-4 "  *ngFor="let hostel of hostels">
+        <div class="h-48 w-full bg-gray-200 rounded-md overflow-hidden">
+          <img src="{{hostel.photos[0]}}" alt="Hostel Image" class="object-cover h-full w-72" />
+        </div>
+        <div class="mt-4">
+          <h3 class="text-xl font-semibold">{{hostel.name}}</h3>
+          <p class="text-sm text-gray-500">₹ {{hostel.rates[0].price}} / month</p>
+          <div class="flex items-center mt-2">
+            <span class="text-yellow-500">★★★★☆</span>
+            <span class="ml-2 text-sm text-gray-500">(4.5/5)</span>
+          </div>
+          <div class="mt-2 flex items-center space-x-4 text-green-500">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M21 13h-6v-2h6v2zm-8-5v10h-2v-10h2zm2 3h6v2h-6v-2zm-12 5v-10h2v10h-2zm2-12v-2h14v2h-14z"></path>
+            </svg>
+            <span>WiFi</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M21 13h-6v-2h6v2zm-8-5v10h-2v-10h2zm2 3h6v2h-6v-2zm-12 5v-10h2v10h-2zm2-12v-2h14v2h-14z"></path>
+            </svg>
+            <span>Parking</span>
+          </div>
+          <div class="mt-4">
+            <button class="w-full bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600" (click)="showHostel(hostel._id)">Book now</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
-

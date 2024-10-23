@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -15,5 +15,11 @@ import { FormsModule } from '@angular/forms';
 export class HostelCardComponent {
   @Input() buttonName:string='Book Now'
   @Input() hosteDetails: any
-  stars:number[]=[1,2,3]
+  @Output() triggerButton=new EventEmitter()
+
+  stars: number[] = [1, 2, 3]
+
+  handleClick(id:string,isActive:boolean) {
+    this.triggerButton.emit({id,isActive})
+  }
 }

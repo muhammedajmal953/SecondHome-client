@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, Observable, throwError } from 'rxjs';
+import { catchError, Observable, ObservedValueOf, throwError } from 'rxjs';
 import { ApiRes } from '../models/IApiRes';
 import { environments } from '../environment/environment';
+import { Hostels } from '../models/IHostel';
 
 @Injectable({
   providedIn: 'root'
@@ -60,6 +61,14 @@ export class VendorService {
 
   resendOtp(email: string): Observable<ApiRes>{
     return this._http.post<ApiRes>(`${this.api}/resend-otp`,{email})
+  }
+
+  getAllHostels(page: number, searchQuery: string): Observable<ApiRes>{
+    return this._http.get<ApiRes>(`${this.api}/getAllHostels/${page}?searchQuery=${searchQuery}`)
+  }
+
+  editHostel(formData: any, id: string): Observable<ApiRes>{
+    return this._http.put<ApiRes>(`${this.api}/editHostel/${id}`,formData)
   }
 
 }

@@ -26,7 +26,7 @@ export class AdminDashboardComponent {
   logout():void {
     localStorage.removeItem('admin')
     localStorage.removeItem('adminRefresh')
-    window.location.reload()
+    window.location.replace('/admin')
   }
-  
+
 }

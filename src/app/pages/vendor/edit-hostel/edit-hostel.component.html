@@ -1,3 +1,4 @@
+
 <!-- hostel-details.component.html -->
 <div class="container mx-auto max-w-3xl p-4 bg-white rounded-lg shadow-md ">
   <h2 class="text-center bg-green-200 text-gray-700 py-2 rounded-md mb-6">Add hostel details</h2>
@@ -57,7 +58,7 @@
             <div class="pt-3 flex flex-wrap gap-2">
               <div *ngFor="let facility of facilities" class="bg-green-200 text-green-800 rounded-full px-4 py-1 flex items-center">
                 {{ facility }}
-                <button (click)="removeFacility(facility)" class="ml-2 text-green-600 focus:outline-none">&times;</button>
+                <button (click)="removeFacility(facility);$event.preventDefault()" class="ml-2 text-green-600 focus:outline-none">&times;</button>
               </div>
             </div>
         </div>
@@ -68,17 +69,6 @@
             <p class="text-red-500" *ngIf="hostelForm.get('name')?.hasError('required')&&hostelForm.get('policies')?.touched"> policies is required</p>
             <p class="text-red-500" *ngIf="hostelForm.get('name')?.hasError('pattern')&&hostelForm.get('policies')?.touched">please ensure to add Alphabets and avoid spaces last</p>
 
-        </div>
-        <div>
-          <label class="block text-green-500 mb-1">No of beds per Room</label>
-          <div formGroupName="noOfBedsPerRoom" class="flex justify-around items-center">
-            <div *ngFor="let type of bedTypes" class="bg-green-300 rounded-xl px-4 py-1">
-              <input type="checkbox" [formControlName]="type" [value]="type" id="{{type}}"
-                class="mr-2 leading-tight rounded-lg" />
-              <label for="{{type}}" class="text-gray-700">{{type}}</label>
-            </div>
-            <p class="text-red-500" *ngIf="hostelForm.get('noOfBedsPerRoom')?.hasError('noCheckboxSelected') && hostelForm.get('noOfBedsPerRoom')?.touched">Atleast one bed type should be selected</p>
-          </div>
         </div>
 
         <div>
@@ -103,7 +93,7 @@
             <div *ngFor="let item of nearbyPlaces "
               class="bg-green-200 text-green-800 w-fit  rounded-full px-4 py-1 mr-2 mb-2 flex items-center">
               {{ item }}
-              <button (click)="removeNearAcess(item)" class="ml-2 text-green-600 focus:outline-none">&times;</button>
+              <button (click)="removeNearAcess(item);$event.preventDefault()" class="ml-2 text-green-600 focus:outline-none">&times;</button>
             </div>
           </div>
         </div>
@@ -114,13 +104,63 @@
             <p class="text-red-500" *ngIf="hostelForm.get('advance')?.hasError('required')&&hostelForm.get('advance')?.touched">Advance is required</p>
             <p class="text-red-500" *ngIf="hostelForm.get('advance')?.hasError('pattern')&&hostelForm.get('advance')?.touched">Advance should be greater than 0</p>
         </div>
-        
+        <div>
+          <label class="block text-green-500 mb-1">Add Photos</label>
+          <input type="file" accept="image/*" (change)="onFileSelect($event)" class="" multiple>
+          <p class="text-red-500"
+            *ngIf="hostelForm.get('photos')?.hasError('mimeType') && hostelForm.get('photos')?.touched">Only
+            PNG, JPEG, JPG, and WEBP are allowed.</p>
+          <p class="text-red-500"
+            *ngIf="hostelForm.get('photos')?.hasError('exceedLimit') && hostelForm.get('photos')?.touched">
+            Please select less than 5 photos.</p>
+            <div class="flex gap-2 mt-5">
+              <div class="relative border border-black" *ngFor="let photo of photoUrls">
+                <button class="absolute right-0 bg-red-500 text-white rounded-full px-2 py-0 hover:bg-red-600" (click)="removePhoto(photo,$event);">X</button>
+                <img [src]="photo" class="w-24 h-24 object-cover">
+              </div>
+            </div>
+        </div>
       </div>
     </div>
+    <div>
+      <div>
+        <h3 class="text-green-500 mb-2">Rate Details</h3>
+        <div class="flex justify-between gap-3" formGroupName="rates">
+          <div *ngFor="let item of bedTypes; let i = index" class="w-full">
+            <label for="{{item.type}}" class="block text-green-500 mb-1">{{item.type}} Rate</label>
+            <input id="{{item.type}}" type="number"
+              class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+              [formControlName]="item.type" placeholder="Rate" value="{{item.price}}"/>
+            <p class="text-red-500"
+              *ngIf="hostelForm.get('rates')?.get(item.type)?.hasError('required')&&hostelForm.get('rates')?.get(item.type)?.touched">
+              rate is required</p>
+            <p class="text-red-500"
+              *ngIf="hostelForm.get('rates')?.get(item.type)?.hasError('min')&&hostelForm.get('rates')?.get(item.type)?.touched">
+              Rate is required and must be greater than 0.
+            </p>
+          </div>
+        </div>
+      </div>
 
-    <button type="submit" [disabled]="!hostelForm.valid"
+
+      <div>
+        <h3 class="text-green-500 mb-2">Food Rate</h3>
+        <div>
+          <label for="foodRate" class="block text-green-500 mb-1">Food Rate per Month</label>
+          <input id="foodRate" type="number" formControlName="foodRate" placeholder="Food Rate"
+            class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500">
+          <p class="text-red-500"
+            *ngIf="hostelForm.get('foodRate')?.hasError('required') && hostelForm.get('foodRate')?.touched">
+            Food rate is required.</p>
+          <p class="text-red-500"
+            *ngIf="hostelForm.get('foodRate')?.hasError('pattern') && hostelForm.get('foodRate')?.touched">
+            Food rate must be greater than 0.</p>
+        </div>
+      </div>
+    </div>
+    <button type="submit"
       class="w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 disabled:opacity-50 disabled:cursor-not-allowed">
-      Next
+     Edit Hostel
     </button>
   </form>
 </div>

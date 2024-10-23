@@ -22,7 +22,7 @@
 
  <div class=" mx-6 flex flex-wrap gap-4">
   <div  *ngFor="let hostel of hostels">
-    <app-hostel-card buttonName="Block Hostel" [hosteDetails]="hostel"></app-hostel-card>
+    <app-hostel-card buttonName="Block" (triggerButton)="manageHostel($event)" [hosteDetails]="hostel"></app-hostel-card>
   </div>
  </div>
 </section>

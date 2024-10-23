@@ -21,5 +21,9 @@ export class HostelService {
     return this._http.get<ApiRes>(`${this.api}/getAllHostel/${page}?searchQuery=${searchQuery}`)
   }
 
+  getHostel(id: string) {
+
+    return this._http.get<ApiRes>(`${this.api}/vendor/getHostel/${id}`)
+  }
 
 }

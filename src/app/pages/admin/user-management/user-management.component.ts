@@ -62,7 +62,8 @@ export class UserManagementComponent implements OnInit {
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, Block!',
-      icon:'warning'
+      icon: 'warning',
+      toast:true
     }).then((result) => {
 
       if (result.isConfirmed) {
@@ -76,7 +77,11 @@ export class UserManagementComponent implements OnInit {
               position: 'top',
               showConfirmButton:false
             })
-            this.fetchUsers();
+            this.users.forEach((user) => {
+              if (user._id === id) {
+                user.IsActive=false
+              }
+            })
           }
         }, (error) => {
           console.error('Error blocking user:', error);
@@ -96,6 +101,7 @@ export class UserManagementComponent implements OnInit {
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, Block!',
+      toast:true,
       icon:'warning'
     }).then((result) => {
       if (result.isConfirmed) {
@@ -109,7 +115,11 @@ export class UserManagementComponent implements OnInit {
               position: 'top',
               showConfirmButton:false
             })
-            this.fetchUsers();
+            this.users.forEach((user) => {
+              if (user._id === id) {
+                user.IsActive=true
+              }
+            })
           }
         }, (error) => {
           console.error('Error unblocking user:', error);

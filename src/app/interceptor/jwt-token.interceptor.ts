@@ -23,8 +23,7 @@ export const jwtTokenInterceptor: HttpInterceptorFn = (req, next) => {
 
     console.log(role);
 
-    // Skip login and signup routes from being intercepted
-    if (req.url.includes('login') || req.url.includes('signup')) {
+    if (req.url.includes('login') || req.url.includes('signup')|| req.url.includes('refresh-token')) {
       return next(req);
     }
 
@@ -37,11 +36,13 @@ export const jwtTokenInterceptor: HttpInterceptorFn = (req, next) => {
     return next(req);
   }
 
+
   //check is token expired
   if (isEpiredToken(token)) {
     console.warn('Access Token expired .Trying to refresh');
+    localStorage.removeItem(`${role}`)
 
-    if (refreshToken) {
+    if (refreshToken&&isEpiredToken(refreshToken)) {
       let newToken: string = '';
       let newRefreshToken: string = '';
       _authService.refreshToken(role, refreshToken).subscribe({
@@ -68,10 +69,8 @@ export const jwtTokenInterceptor: HttpInterceptorFn = (req, next) => {
       return next(req);
     }
   }
-
-  const modifiedReq = req.clone({
-    headers: req.headers.set('Authorization', 'Bearer ' + token),
-  });
-
-  return next(modifiedReq);
+    const modifiedReq = req.clone({
+      headers: req.headers.set('Authorization', 'Bearer ' + token),
+    });
+    return next(modifiedReq);
 };

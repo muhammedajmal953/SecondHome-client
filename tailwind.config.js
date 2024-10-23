@@ -8,7 +8,17 @@ module.exports = {
     extend: {},
   },
   plugins: [
-    require('flowbite/plugin')
+    require('daisyui'),
+    require('flowbite/plugin'),
   ],
+  daisyui: {
+    themes: true,
+    darkTheme: "dark",
+    base: true,
+    styled: true,
+    utils: true,
+    prefix: "",
+    logs: true,
+  },
 }
 

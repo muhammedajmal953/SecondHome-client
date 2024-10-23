@@ -43,4 +43,13 @@ export class AdminService {
   getAllHostel(page:number,searchQuery:string): Observable<ApiRes>{
     return this._http.get<ApiRes>(`${this.api}/admin/getAllHostel/${page}?searchQuery=${searchQuery}`)
   }
+
+  blockHostel(id: string): Observable<ApiRes>{
+    return this._http.put<ApiRes>(`${this.api}/admin/blockHostel`,{id})
+  }
+  unBlockHostel(id: string): Observable<ApiRes>{
+    return this._http.put<ApiRes>(`${this.api}/admin/unBlockHostel`,{id})
+  }
+
+
 }
