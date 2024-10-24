@@ -1,4 +1,4 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import { ApplicationConfig, provideZoneChangeDetection, isDevMode } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -6,20 +6,21 @@ import { provideClientHydration } from '@angular/platform-browser';
 import { GoogleLoginProvider, SocialAuthServiceConfig } from '@abacritt/angularx-social-login';
 import { HTTP_INTERCEPTORS, provideHttpClient, withFetch, withInterceptors, withInterceptorsFromDi } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { provideStore } from '@ngrx/store';
+import { provideState, provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { userReducer } from './state/user/user.reducer';
 import { jwtTokenInterceptor } from './interceptor/jwt-token.interceptor';
 import { UserEffects } from './state/user/user.effects';
+import { provideStoreDevtools } from '@ngrx/store-devtools';
+import { VendorEffects } from './state/vendor/vendor.effects';
+import { VendorReducer } from './state/vendor/vendor.reducer';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideClientHydration(),
-    provideHttpClient(withFetch(),
-      withInterceptors([jwtTokenInterceptor])
-    ),
+    provideHttpClient(withFetch(), withInterceptors([jwtTokenInterceptor])),
     {
         provide: 'SocialAuthServiceConfig',
         useValue: {
@@ -35,7 +36,8 @@ export const appConfig: ApplicationConfig = {
             }
         } as SocialAuthServiceConfig,
     }, provideAnimationsAsync(),
-    provideStore(),
-    provideEffects(),
+    provideStore({user:userReducer,vendor:VendorReducer}),
+    provideEffects([UserEffects,VendorEffects]),
+    provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() })
 ]
 };

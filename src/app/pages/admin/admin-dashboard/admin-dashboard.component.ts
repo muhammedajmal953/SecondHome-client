@@ -21,7 +21,11 @@ import { RouterModule, RouterOutlet } from '@angular/router';
   styleUrl: './admin-dashboard.component.css'
 })
 export class AdminDashboardComponent {
-   toggleShow:boolean=true
+  isSidebarOpen = false;
+
+  toggleSidebar() {
+    this.isSidebarOpen = !this.isSidebarOpen;
+  }
 
   logout():void {
     localStorage.removeItem('admin')

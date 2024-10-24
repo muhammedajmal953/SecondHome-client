@@ -6,6 +6,8 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { ApiRes } from '../../../models/IApiRes';
 import { CommonModule } from '@angular/common';
+import { Observable } from 'rxjs';
+import { UserDoc } from '../../../models/IUsers';
 
 
 interface User{
@@ -30,7 +32,7 @@ export class EditProfileComponent {
   editedForm!: FormGroup
   preview!: SafeUrl
   user!: User
-
+  user$!:Observable<UserDoc|null>
   constructor(private _userService: UserService,private _fb:FormBuilder ,private _sanitizer:DomSanitizer,private _router:Router) {
     this.editedForm = this._fb.group({
       First_name: ['', [Validators.required, Validators.pattern('^[a-zA-Z]{5,}$')]],
@@ -51,9 +53,6 @@ export class EditProfileComponent {
             Email: this.user.Email,
             Phone: this.user.Phone
           })
-
-
-
         }
       }
     })

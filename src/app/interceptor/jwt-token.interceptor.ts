@@ -4,6 +4,7 @@ import { inject, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { isEpiredToken } from '../shared/helpers/isExpiredJwt';
 import { AuthService } from '../services/auth.service';
+import { catchError, EMPTY, of, switchMap } from 'rxjs';
 
 export const jwtTokenInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
@@ -31,13 +32,11 @@ export const jwtTokenInterceptor: HttpInterceptorFn = (req, next) => {
     refreshToken = localStorage.getItem(`${role}Refresh`);
   }
 
-  // Proceed without modifying if no token is found
+
   if (!token) {
     return next(req);
   }
 
-
-  //check is token expired
   if (isEpiredToken(token)) {
     console.warn('Access Token expired .Trying to refresh');
     localStorage.removeItem(`${role}`)
@@ -45,28 +44,38 @@ export const jwtTokenInterceptor: HttpInterceptorFn = (req, next) => {
     if (refreshToken&&isEpiredToken(refreshToken)) {
       let newToken: string = '';
       let newRefreshToken: string = '';
-      _authService.refreshToken(role, refreshToken).subscribe({
-        next: (res) => {
+      _authService.refreshToken(role, refreshToken).pipe(
+        switchMap((res) => {
           if (res.success) {
-            newToken = res.data.accessToken;
-            newRefreshToken = res.data.refreshToken;
+            const newToken = res.data.accessToken;
+            const newRefreshToken = res.data.refreshToken;
+
+            localStorage.setItem(`${role}`, newToken);
+            localStorage.setItem(`${role}Refresh`, newRefreshToken);
+
+            const modifiedReq = req.clone({
+              headers: req.headers.set('Authorization', 'Bearer ' + newToken),
+            });
+
+            return next(modifiedReq);
+          } else {
+
+            console.warn('Token refresh failed, redirecting to login.');
+            void router.navigate([`/${role}/login`]);
+            return EMPTY
           }
-        },
-      });
-      if (newToken && newRefreshToken) {
-        localStorage.setItem(`${role}`, newToken);
-        localStorage.setItem(`${role}Refresh`, newRefreshToken);
+        }),
+        catchError((err) => {
+          console.error('Error fetching,toekn', err)
+          void router.navigate([`/${role}/login`])
+          return EMPTY
+        })
+      );
 
-        const modifiedReq = req.clone({
-          headers: req.headers.set('Authorization', 'Bearer ' + newToken),
-        });
-
-        return next(modifiedReq);
-      }
     } else {
       console.warn('No refresh token available, redirecting to login.');
-      void router.navigate(['/login']);
-      return next(req);
+      void router.navigate([`/${role}`]);
+      return EMPTY
     }
   }
     const modifiedReq = req.clone({

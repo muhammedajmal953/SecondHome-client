@@ -131,4 +131,31 @@
       </div>
     </div>
   </div>
+
+  <nav class="flex items-center justify-center gap-2 p-4">
+    <button (click)="changePage('decrement')"
+            class="p-2 rounded-lg text-[#2BAE66] hover:bg-white/10 transition-colors
+                   disabled:opacity-50 disabled:pointer-events-none">
+      <svg class="size-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+      </svg>
+    </button>
+
+    <div class="flex items-center gap-2">
+      <span class="min-w-[38px] h-9 flex justify-center items-center border
+                   border-gray-700 text-gray-600 rounded-lg">
+        {{page}}
+      </span>
+      <span class="text-gray-400">of</span>
+      <span class="text-gray-400"></span>
+    </div>
+
+    <button (click)="changePage('increment')"
+            class="p-2 rounded-lg text-[#2BAE66] hover:bg-white/10 transition-colors
+                   disabled:opacity-50 disabled:pointer-events-none">
+      <svg class="size-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+      </svg>
+    </button>
+  </nav>
 </div>

@@ -61,11 +61,6 @@ export class AddAddressComponent {
         formdata.append('policies', this.hostelForm1.policies)
         formdata.append('facilities',this.hostelForm1.facilities)
         formdata.append('nearByPlaces', this.hostelForm1.nearbyPlaces)
-
-       console.log(formdata.get('photos'));
-
-
-
         this._hostelService.addHostel(formdata).subscribe({
           next: (res) => {
             if (res.success) {
@@ -76,12 +71,10 @@ export class AddAddressComponent {
               })
               localStorage.removeItem('hostelForm1')
               this._router.navigate(['/vendor/home'])
-
-
             } else {
               Swal.fire({
                 icon: 'error',
-                text:'no response'
+                text:res.message
               })
             }
           }
@@ -92,8 +85,12 @@ export class AddAddressComponent {
       }
       this.addressRateForm.markAllAsTouched()
 
-    } catch (error) {
-        console.log(error);
+    } catch (error:any) {
+      console.log(error);
+      Swal.fire({
+        icon: 'error',
+        text:error?.error?.message
+      })
 
     }
   }
@@ -112,7 +109,7 @@ export class AddAddressComponent {
     } else {
       console.log('No hostelForm1 found in localStorage');
     }
-    
+
     this.bedTypes.forEach((item) =>{
         bedTypeGroup[item]=this._fb.control('',[Validators.required,Validators.min(1)])
     })

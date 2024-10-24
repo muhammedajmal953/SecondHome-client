@@ -3,6 +3,11 @@ import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { UserDoc } from '../../../models/IUsers';
 import { UserService } from '../../../services/user.service';
+import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+import * as UserActions from '../../../state/user/user.actions';
+import * as UserSelectors from '../../../state/user/user.selector';
+
 
 @Component({
   selector: 'app-user-home',
@@ -17,35 +22,22 @@ import { UserService } from '../../../services/user.service';
 })
 export class UserHomeComponent implements OnInit {
   toggleShow: boolean = false
+  user$: Observable<UserDoc | null>
   user: UserDoc | null = null
-  constructor(private _userService: UserService) {
+
+  constructor(private store: Store) {
+    this.user$=this.store.select(UserSelectors.selectUser)
   };
   toggleCollapse() {
     this.toggleShow = !this.toggleShow
   }
 
   ngOnInit(): void {
-
-    this._userService.getUser().subscribe({
-      next: (data) => {
-        if (data?.success) {
-          this.user = data?.data
-        }
-      },
-      complete: () => {
-        console.log('userDetails completed');
-      },
-      error: (error) => {
-        console.error('Error fetching user details:', error);
-      }
-    })
+    this.store.dispatch(UserActions.loadUserActions())
   }
 
-
   logout() {
-    localStorage.removeItem('user')
-    localStorage.removeItem('userRefresh')
-    window.location.replace('/user')
+   this.store.dispatch(UserActions.logout())
   }
 
 

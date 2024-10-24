@@ -13,6 +13,7 @@ export const loadUserFailureActions = createAction(
   '[User] Load User Failure',
   props<{ error: any }>()
 )
-export const deleteUserActions = createAction('[User] Delete User')
+export const logout = createAction('[User] Logout');
+export const logoutSuccess = createAction('[User] Logout Success');
 
 

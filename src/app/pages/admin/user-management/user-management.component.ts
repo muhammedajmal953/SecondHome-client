@@ -23,7 +23,8 @@ export class UserManagementComponent implements OnInit {
   users: UserDoc[] = [];
   page: number = 1;
   limit: number = 5;
-  searchQuery:string=''
+  searchQuery: string = ''
+  count!:number
 
   constructor(private _adminService: AdminService, private _router: Router, @Inject(PLATFORM_ID) private paltform_id:string) {}
 
@@ -31,7 +32,7 @@ export class UserManagementComponent implements OnInit {
     let storedPage: string
 
     if (isPlatformBrowser(this.paltform_id)) {
-      storedPage= localStorage.getItem('page')!;
+      storedPage= localStorage.getItem('aup')!;
     }
     if (storedPage!) {
       this.page = +storedPage;
@@ -41,10 +42,11 @@ export class UserManagementComponent implements OnInit {
 
   fetchUsers() {
     if (isPlatformBrowser(this.paltform_id)) {
-      localStorage.setItem('page', this.page.toString());
+      localStorage.setItem('aup', this.page.toString());
       this._adminService.getAllUsers(this.page, this.limit,this.searchQuery).subscribe((res) => {
         if (res.success) {
           this.users = res.data;
+          this.count=this.users.length
         } else {
           console.warn('Failed to fetch users');
         }
@@ -129,7 +131,7 @@ export class UserManagementComponent implements OnInit {
   }
 
   changePage(direction: 'increment' | 'decrement') {
-    if (direction === 'increment') {
+    if (direction === 'increment'&&this.count>0) {
       this.page++;
     } else if (direction === 'decrement' && this.page > 1) {
       this.page--;
@@ -142,5 +144,7 @@ export class UserManagementComponent implements OnInit {
   searchUser() {
     this.fetchUsers()
   }
+
+
 }
 

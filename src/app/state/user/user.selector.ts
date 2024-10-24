@@ -1,14 +1,18 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
-import { UserDoc } from "../../models/IUsers";
-
-export interface UserState{
-  user: UserDoc | null
-  error:string|null
-}
+import { UserState } from "./user.reducer";
 
 export const selectUserState = createFeatureSelector<UserState>('user')
 
-export const selectUserDetails = createSelector(
+export const selectUser = createSelector(
   selectUserState,
   (state: UserState) => state.user
 )
+export const selectUserLoading = createSelector(
+  selectUserState,
+  (state) => state.loading
+);
+
+export const selectUserError = createSelector(
+  selectUserState,
+  (state) => state.error
+);

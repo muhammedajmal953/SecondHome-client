@@ -6,7 +6,7 @@
   <!-- Hostel Card 1 -->
   <div class="p-4 max-w-md h-fit bg-white rounded-lg shadow-md mb-4 "   *ngFor="let hostel of hostels">
     <div class="h-48 w-full bg-gray-200 rounded-md overflow-hidden">
-      <img src="{{hostel?.photos?.[0]}}" alt="Hostel Image" class="object-cover h-full w-72" />
+      <img src="{{hostel?.photos?.[0]}}" alt="Hostel Image" class="object-cover h-full w-full" />
     </div>
     <div class="mt-4">
       <h3 class="text-xl font-semibold">{{hostel.name}}</h3>

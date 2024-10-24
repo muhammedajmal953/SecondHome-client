@@ -29,6 +29,7 @@ export class VendorManagementComponent {
   showModal: boolean = false;
   lisence: string = '';
   _id: string = '';
+  count!:number
 
   searchText:string=''
 
@@ -38,7 +39,7 @@ export class VendorManagementComponent {
     let storedPage: string
 
     if (isPlatformBrowser(this.paltform_id)) {
-      storedPage= localStorage.getItem('page')!;
+      storedPage= localStorage.getItem('avp')!;
     }
     if (storedPage!) {
       this.page = +storedPage;
@@ -48,10 +49,11 @@ export class VendorManagementComponent {
 
   fetchUsers() {
     if (isPlatformBrowser(this.paltform_id)) {
-      localStorage.setItem('page', this.page.toString());
+      localStorage.setItem('avp', this.page.toString());
       this._adminService.getAllVendors(this.page, this.limit,this.searchText).subscribe((res) => {
         if (res.success) {
           this.users = res.data;
+          this.count=this.users.length
         } else {
           console.warn('Failed to fetch users');
         }
@@ -144,7 +146,7 @@ export class VendorManagementComponent {
   }
 
   changePage(direction: 'increment' | 'decrement') {
-    if (direction === 'increment') {
+    if (direction === 'increment'&& this.count>0) {
       this.page++;
     } else if (direction === 'decrement' && this.page > 1) {
       this.page--;
@@ -200,7 +202,7 @@ export class VendorManagementComponent {
     this.fetchUsers()
   }
 
-  
+
 
 
 }

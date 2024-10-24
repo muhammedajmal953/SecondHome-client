@@ -1,34 +1,43 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, map, mergeMap, of, switchMap } from 'rxjs';
-import {
-  loadUserActions,
-  loadUserFailureActions,
-  loadUserSuccessActions,
-} from './user.actions';
-import { ApiRes } from '../../models/IApiRes';
+import { catchError, map, mergeMap, of, tap } from 'rxjs';
+import * as UserActions from './user.actions';
 
 @Injectable()
 export class UserEffects {
-  constructor(private actions$: Actions, private userService: UserService) {
-    console.log(this.actions$);
+  actions$  = inject(Actions);
+  constructor(private userService: UserService) {}
 
-  }
   loadUser$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(loadUserActions),
+      ofType(UserActions.loadUserActions),
       mergeMap(() =>
         this.userService.getUser().pipe(
-          map((apires: ApiRes) => {
-            if (apires.success && apires.data != null) {
-              return loadUserSuccessActions({ user: apires.data });
+          map(apires => {
+            if (apires.success) {
+              return UserActions.loadUserSuccessActions({ user: apires.data });
             } else {
-              return loadUserFailureActions({ error: apires.message });
+              return UserActions.loadUserFailureActions({ error: 'failed to loadUser' });
             }
-          })
+          }),
+          catchError(error =>
+            of(UserActions.loadUserFailureActions({ error: error.message }))
+          )
         )
       )
+    )
+  );
+
+  logout$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(UserActions.logout),
+      tap(() => {
+        localStorage.removeItem('user');
+        localStorage.removeItem('userRefresh');
+        window.location.replace('/user');
+      }),
+      map(() => UserActions.logoutSuccess())
     )
   );
 }

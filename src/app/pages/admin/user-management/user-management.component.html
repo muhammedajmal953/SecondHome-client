@@ -1,80 +1,95 @@
-<section class=" justify-center min-h-screen w-screen text-white bg-[#273142]">
+<section class="justify-center min-h-screen w-full text-white bg-[#273142]">
+  <!-- Header Section - Stack on mobile -->
+  <div class="flex flex-col sm:flex-row items-center justify-between p-4 gap-4">
+    <h1 class="text-2xl sm:text-4xl font-bold">User Management</h1>
 
-  <div class="max-w-[1150px] flex items-center justify-between p-4">
-
-    <h1 class="text-4xl">User Management</h1>
-
-    <div class="relative">
-      <div class="absolute inset-y-0 start-0 flex items-center pointer-events-none z-20 ps-3.5">
-        <svg class="shrink-0 size-4 text-white dark:text-white" xmlns="http://www.w3.org/2000/svg" width="24"
-          height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-          stroke-linejoin="round">
+    <!-- Search Bar - Full width on mobile -->
+    <div class="relative w-full sm:w-auto min-w-[250px]">
+      <div class="absolute inset-y-0 start-0 flex items-center ps-3.5">
+        <svg class="shrink-0 size-4 text-white" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
           <circle cx="11" cy="11" r="8"></circle>
           <path d="m21 21-4.3-4.3"></path>
         </svg>
       </div>
       <input
-        class="py-3 ps-10 pe-4 block w-full text-gray-800 border-gray-200 rounded-lg text-sm  focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-gray-500 dark:border-neutral-700 dark:text-gray-300 dark:placeholder-neutral-800 dark:focus:ring-neutral-600"
-        type="text" role="combobox" aria-expanded="false" placeholder="Search Users" [(ngModel)]="searchQuery" (keydown.enter)="searchUser()" data-hs-combo-box-input="">
+        class="w-full py-3 ps-10 pe-4 bg-gray-500 text-gray-300 rounded-lg text-sm
+               focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
+        type="text"
+        [(ngModel)]="searchQuery"
+        (keydown.enter)="searchUser()"
+        placeholder="Search Users"
+      />
     </div>
   </div>
 
-
-  <div class="flex p-5 w-screen max-w-4xl">
-
-    <div class="-m-1.5 ">
-      <div class="p-1.5 min-w-full inline-block align-middle ">
-        <div class="rounded-lg border border-gray-200 shadow-md">
-          <table class=" divide-y divide-gray-200 w-[70rem]">
-            <thead>
-              <tr>
-                <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">id</th>
-                <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">First name</th>
-                <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Email</th>
-                <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Phone</th>
-                <th scope="col" class="px-6 py-3 text-end text-xs font-medium text-gray-500 uppercase">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let user of users" class="odd:bg-gray-600 even:bg-gray-800  text-white">
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">{{user._id}}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm">{{user.First_name}}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm ">{{user.Email}}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm  font-medium">{{user.Phone}}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
-                  <button *ngIf="user.IsActive===true" (click)="blockUser(user._id)" type="button"
-                    class="inline-flex items-center gap-x-2 text-sm bg-red-700 p-2 font-semibold rounded-lg border border-transparent text-white hover:text-blue-800 focus:outline-none disabled:opacity-50 disabled:pointer-events-none">Block</button>
-                  <button *ngIf="user.IsActive===false" (click)="unblockUser(user._id)" type="button"
-                    class="inline-flex items-center gap-x-2 text-sm bg-green-700 p-2 font-semibold rounded-lg border border-transparent text-white hover:text-blue-800 focus:outline-none disabled:opacity-50 disabled:pointer-events-none">Un-Block</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+  <!-- Table Container with horizontal scroll -->
+  <div class="px-4 w-full overflow-x-auto">
+    <div class="min-w-full inline-block align-middle">
+      <div class="rounded-lg border border-gray-200 shadow-md overflow-hidden">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-700">
+            <tr>
+              <th scope="col" class="px-4 sm:px-6 py-3 text-start text-xs font-medium text-gray-300 uppercase">ID</th>
+              <th scope="col" class="px-4 sm:px-6 py-3 text-start text-xs font-medium text-gray-300 uppercase">Name</th>
+              <th scope="col" class="px-4 sm:px-6 py-3 text-start text-xs font-medium text-gray-300 uppercase hidden sm:table-cell">Email</th>
+              <th scope="col" class="px-4 sm:px-6 py-3 text-start text-xs font-medium text-gray-300 uppercase hidden md:table-cell">Phone</th>
+              <th scope="col" class="px-4 sm:px-6 py-3 text-end text-xs font-medium text-gray-300 uppercase">Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200">
+            <tr *ngFor="let user of users" class="odd:bg-gray-600 even:bg-gray-800">
+              <td class="px-4 sm:px-6 py-4 text-sm">{{user._id}}</td>
+              <td class="px-4 sm:px-6 py-4 text-sm">{{user.First_name}}</td>
+              <td class="px-4 sm:px-6 py-4 text-sm hidden sm:table-cell">{{user.Email}}</td>
+              <td class="px-4 sm:px-6 py-4 text-sm hidden md:table-cell">{{user.Phone}}</td>
+              <td class="px-4 sm:px-6 py-4 text-end">
+                <button *ngIf="user.IsActive"
+                        (click)="blockUser(user._id)"
+                        class="px-3 py-2 text-sm font-semibold rounded-lg text-white
+                               bg-red-700 hover:bg-red-800 transition-colors">
+                  Block
+                </button>
+                <button *ngIf="!user.IsActive"
+                        (click)="unblockUser(user._id)"
+                        class="px-3 py-2 text-sm font-semibold rounded-lg text-white
+                               bg-green-700 hover:bg-green-800 transition-colors">
+                  Un-Block
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
 
-  <!-- Pagination -->
-<nav class="flex items-center justify-center  pb-4 gap-x-1 " aria-label="Pagination">
-  <button (click)="changePage('decrement')" type="button" class="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10" aria-label="Previous">
-    <svg class="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="m15 18-6-6 6-6"></path>
-    </svg>
-    <span class="sr-only">Previous</span>
-  </button>
-  <div class="flex items-center gap-x-1">
-    <span class="min-h-[38px] min-w-[38px] flex justify-center items-center border border-gray-200 text-gray-800 py-2 px-3 text-sm rounded-lg focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:border-neutral-700 dark:text-white dark:focus:bg-white/10">1</span>
-    <span class="min-h-[38px] flex justify-center items-center text-gray-500 py-2 px-1.5 text-sm dark:text-neutral-500">of</span>
-    <span class="min-h-[38px] flex justify-center items-center text-gray-500 py-2 px-1.5 text-sm dark:text-neutral-500">3</span>
-  </div>
-  <button (click)="changePage('increment')" type="button" class="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10" aria-label="Next">
-    <span class="sr-only">Next</span>
-    <svg class="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="m9 18 6-6-6-6"></path>
-    </svg>
-  </button>
-</nav>
+  <!-- Pagination - Centered and responsive -->
+  <nav class="flex items-center justify-center gap-2 p-4">
+    <button (click)="changePage('decrement')"
+            class="p-2 rounded-lg text-white hover:bg-white/10 transition-colors
+                   disabled:opacity-50 disabled:pointer-events-none">
+      <svg class="size-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+      </svg>
+    </button>
 
+    <div class="flex items-center gap-2">
+      <span class="min-w-[38px] h-9 flex justify-center items-center border
+                   border-gray-700 text-white rounded-lg">
+        {{page}}
+      </span>
+      <span class="text-gray-400">of</span>
+      <span class="text-gray-400"></span>
+    </div>
 
+    <button (click)="changePage('increment')"
+            class="p-2 rounded-lg text-white hover:bg-white/10 transition-colors
+                   disabled:opacity-50 disabled:pointer-events-none">
+      <svg class="size-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+      </svg>
+    </button>
+  </nav>
 </section>

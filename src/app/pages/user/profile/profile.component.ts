@@ -6,7 +6,10 @@ import { UserDoc } from '../../../models/IUsers';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
-import { icon } from 'leaflet';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import * as UserActions from '../../../state/user/user.actions';
+import * as UserSelectors from '../../../state/user/user.selector';
 
 @Component({
   selector: 'app-profile',
@@ -20,29 +23,19 @@ import { icon } from 'leaflet';
 })
 export class ProfileComponent implements OnInit{
   user!: UserDoc
+  user$!:Observable<UserDoc|null>
 
-  constructor(private _userService: UserService,private _router:Router){}
+  constructor(private _userService: UserService,private _router:Router,private _store:Store){}
   ngOnInit(): void {
-    this._userService.getUser().subscribe({
-      next: (res:ApiRes) => {
-        if(res.success) {
-          this.user = res.data;
-          res.data.Avatar?this.profileImage=res.data.Avatar:'https://www.dgvaishnavcollege.edu.in/dgvaishnav-c/uploads/2021/01/dummy-profile-pic.jpg'
-
-        }
-      }, error:((err)=> {
-        Swal.fire({
-          toast: true,
-          title:err.message,
-          icon:'error'
-        })
-      })
+    this._store.dispatch(UserActions.loadUserActions())
+    this.user$=this._store.select(UserSelectors.selectUser)
+    this.user$.subscribe((data:any) => {
+      if (data) {
+        this.profileImage=data.Avatar?data.Avatar:'https://www.dgvaishnavcollege.edu.in/dgvaishnav-c/uploads/2021/01/dummy-profile-pic.jpg'
+        this.user=data
+      }
     })
   }
-
-
-
-
     profileImage:string='https://www.dgvaishnavcollege.edu.in/dgvaishnav-c/uploads/2021/01/dummy-profile-pic.jpg'
     editProfile() {
     this._router.navigate(['/user/home/edit-profile'])

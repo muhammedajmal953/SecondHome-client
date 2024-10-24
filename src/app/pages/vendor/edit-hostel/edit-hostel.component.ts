@@ -74,7 +74,7 @@ export class EditHostelComponent implements OnInit {
         [Validators.required, Validators.pattern('^[1-9][0-9]*$')],
       ],
       rates: this._fb.group(this.bedTypeGroup),
-      photos: ['', [this.mimeTypeValidator(this.photoUrls)]],
+      photos: [[], [this.mimeTypeValidator(this.photoUrls)]],
     });
   }
 
@@ -158,6 +158,15 @@ export class EditHostelComponent implements OnInit {
               text:res.message
               })
             }
+        },
+        error: (err) => {
+          Swal.fire({
+            icon: 'error',
+            showConfirmButton: false,
+            toast: true,
+            timer: 1500,
+            text:err.error.message
+            })
         }
       })
     }
@@ -171,12 +180,15 @@ export class EditHostelComponent implements OnInit {
       this.facilities.push(newFacility);
       this.hostelForm.get('facilities')?.reset();
       this.hostelForm.get('facilities')?.updateValueAndValidity();
+      this.hostelForm.get('facilities')?.setErrors(this.facilityValidator(this.hostelForm.get('facilities')!));
     }
   }
   removeFacility(facility: string) {
     const index = this.facilities.indexOf(facility);
     if (index >= 0) {
       this.facilities.splice(index, 1);
+      this.hostelForm.get('facilities')?.updateValueAndValidity();
+      this.hostelForm.get('facilities')?.setErrors(this.facilityValidator(this.hostelForm.get('facilities')!));
     }
   }
 
@@ -185,23 +197,32 @@ export class EditHostelComponent implements OnInit {
     if (newPlace) {
       this.nearbyPlaces.push(newPlace);
       this.hostelForm.get('nearByAccess')?.reset();
+      this.hostelForm.get('nearByAccess')?.reset();
+      this.hostelForm.get('nearByAccess')?.updateValueAndValidity();
+      this.hostelForm.get('nearByAccess')?.setErrors(this.nearByAccessValidator(this.hostelForm.get('nearByAccess')!));
     }
   }
   removeNearAcess(item: string) {
     const index = this.nearbyPlaces.indexOf(item);
     if (index >= 0) {
       this.nearbyPlaces.splice(index, 1);
+      this.hostelForm.get('nearByAccess')?.reset();
+      this.hostelForm.get('nearByAccess')?.updateValueAndValidity();
+      this.hostelForm.get('nearByAccess')?.setErrors(this.nearByAccessValidator(this.hostelForm.get('nearByAccess')!));
     }
   }
 
-  facilityValidator(control: FormControl): ValidationErrors | null {
-    if (this.facilities.length === 0) {
+  facilityValidator(control: AbstractControl): ValidationErrors | null {
+    const facilitiesControl = control as FormControl;
+    if (this.facilities.length < 1) {
       return { facility: true };
     }
     return null;
   }
 
-  nearByAccessValidator(control: FormControl): ValidationErrors | null {
+  nearByAccessValidator(control: AbstractControl): ValidationErrors | null {
+    const nearByAccessControl = control as FormControl;
+
     if (this.nearbyPlaces.length === 0) {
       return { nearByAccess: true };
     }
@@ -241,26 +262,23 @@ export class EditHostelComponent implements OnInit {
       })
       this.hostelForm.patchValue({
         photos: this.selectedFiles
-      })
-     ;
+      });
+
+    this.hostelForm.get('photos')?.updateValueAndValidity();
     }
+    this.hostelForm.get('photos')?.markAsTouched();
   }
   mimeTypeValidator(existingPhotos: string[]): ValidatorFn  {
     return (control: AbstractControl): ValidationErrors | null => {
-      if (control.value&&Array.isArray(control.value)) {
-        const files = control.value;
-
+      const files = control.value;
+      if (files&&Array.isArray(control.value)) {
         const validMimes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
         for (const file of files) {
           if (!validMimes.includes(file.type)) {
             return { mimeType: true };
           }
         }
-
-
-
-        // Calculate total files (existing + newly selected)
-        const totalFileCount = existingPhotos.length + files.length;
+        const totalFileCount = this.photoUrls.length + files.length;
         if (totalFileCount > 5||totalFileCount<=0) {
           return { exceedLimit: true };
         }

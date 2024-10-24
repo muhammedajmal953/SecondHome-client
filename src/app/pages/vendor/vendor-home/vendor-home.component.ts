@@ -3,11 +3,14 @@ import { HeaderNameComponent } from "../../../components/header-name/header-name
 import { CommonModule } from '@angular/common';
 import { UserDoc } from '../../../models/IUsers';
 
-import { catchError, of, timeout } from 'rxjs';
+import { catchError, Observable, of, timeout } from 'rxjs';
 import { RouterModule } from '@angular/router';
 import Swal from 'sweetalert2';
 import { ApiRes } from '../../../models/IApiRes';
 import { VendorService } from '../../../services/vendor.service';
+import { Store } from '@ngrx/store';
+import * as VendorSelector from '../../../state/vendor/vendor.selecters';
+import * as VendorActions from '../../../state/vendor/vendor.actions';
 
 @Component({
   selector: 'app-vendor-home',
@@ -24,8 +27,10 @@ export class VendorHomeComponent implements OnInit {
   toggleShow: boolean = false
   user: UserDoc | null = null
   kycVerified: boolean = true
+  vendor$!:Observable<UserDoc|null>
 
-  constructor(private _vendorService: VendorService) {
+  constructor(private _vendorService: VendorService, private _store: Store) {
+    this.vendor$=this._store.select(VendorSelector.selectVendor)
   }
 
   toggleCollapse() {
@@ -33,37 +38,12 @@ export class VendorHomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this._vendorService.vendorDetails().pipe(
-      timeout(3000),
-      catchError((error) => {
-        console.error('Error or timeout in vendorDetails:', error);
-        return of(null);
-      })
-    ).subscribe({
-      next: (data) => {
-        if(data?.success) {
-          this.user = data?.data;
-          this.kycVerified = this.user?.isKYCVerified! ;
-        }
-      },
-      complete: () => {
-        console.log('vendorDetails completed');
-      },
-      error: (error) => {
-        console.error('Error fetching vendor details:', error);
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Failed to fetch vendor details',
-        })
-      }
-    });
+    this._store.dispatch(VendorActions.loadVendor())
   }
 
   logout() {
-    localStorage.removeItem('vendor')
-    localStorage.removeItem('vendorRefresh')
-    window.location.reload();
+    this._store.dispatch(VendorActions.logout())
+
   }
 }
 

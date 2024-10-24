@@ -1,25 +1,48 @@
-import { createReducer, on } from "@ngrx/store";
+import { createReducer, on } from '@ngrx/store';
+import  {UserDoc}  from '../../models/IUsers'
+import * as UserActions from './user.actions';
 
-import * as UserActions from './user.actions'
 
 
-
-let intialState = {};
+export interface UserState {
+  user: UserDoc | null;
+  loading: boolean;
+  error: any;
+}
+let intialState: UserState = {
+  user: null,
+  loading: false,
+  error:null
+};
 
 export const userReducer = createReducer(
   intialState,
 
-  on(UserActions.loadUserSuccessActions, (state, action) => {
-    return {
+  on(UserActions.loadUserActions, state => ({
+
       ...state,
-      user: action.user
-    }
-  }),
-  on(UserActions.deleteUserActions, (state, action) => {
-    return {
+      loading: true
+
+  })),
+  on(UserActions.loadUserSuccessActions, (state, { user }) => ({
+
       ...state,
-      user:null
-    }
-  }),
+      user,
+      loading: false,
+      error: null
+
+  })),
+  on(UserActions.loadUserFailureActions, (state, { error }) => ({
+
+      ...state,
+      loading: false,
+      error: null
+
+  })),
+  on(UserActions.logoutSuccess, state => ({
+    ...state,
+    user: null
+  }))
+
 )
 
