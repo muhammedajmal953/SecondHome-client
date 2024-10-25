@@ -1,45 +1,47 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { Component, Inject, PLATFORM_ID } from '@angular/core';
+import {
+  Component,
+  Inject,
+  OnDestroy,
+  OnInit,
+  PLATFORM_ID,
+} from '@angular/core';
 import { AdminService } from '../../../services/admin.service';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import {  Subject, takeUntil } from 'rxjs';
 import Swal from 'sweetalert2';
-import { ApiRes } from '../../../models/IApiRes';
 import { UserDoc } from '../../../models/IUsers';
 import { FormsModule, NgModel, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-vendor-management',
   standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    CommonModule,
-    FormsModule
-  ],
+  imports: [CommonModule, ReactiveFormsModule, CommonModule, FormsModule],
   templateUrl: './vendor-management.component.html',
-  styleUrl: './vendor-management.component.css'
+  styleUrl: './vendor-management.component.css',
 })
-export class VendorManagementComponent {
-
-  users$: Observable<ApiRes> | undefined;
+export class VendorManagementComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
   users: UserDoc[] = [];
   page: number = 1;
   limit: number = 5;
   showModal: boolean = false;
   lisence: string = '';
   _id: string = '';
-  count!:number
+  count!: number;
+  searchText: string = '';
 
-  searchText:string=''
-
-  constructor(private _adminService: AdminService, private _router: Router, @Inject(PLATFORM_ID) private paltform_id:string) {}
+  constructor(
+    private _adminService: AdminService,
+    private _router: Router,
+    @Inject(PLATFORM_ID) private paltform_id: string
+  ) {}
 
   ngOnInit(): void {
-    let storedPage: string
+    let storedPage: string;
 
     if (isPlatformBrowser(this.paltform_id)) {
-      storedPage= localStorage.getItem('avp')!;
+      storedPage = localStorage.getItem('avp')!;
     }
     if (storedPage!) {
       this.page = +storedPage;
@@ -50,25 +52,31 @@ export class VendorManagementComponent {
   fetchUsers() {
     if (isPlatformBrowser(this.paltform_id)) {
       localStorage.setItem('avp', this.page.toString());
-      this._adminService.getAllVendors(this.page, this.limit,this.searchText).subscribe((res) => {
-        if (res.success) {
-          this.users = res.data;
-          this.count=this.users.length
-        } else {
-          console.warn('Failed to fetch users');
-        }
-      }, (error) => {
-        Swal.fire({
-          icon: 'error',
-          toast: true,
-          position: 'top',
-          showConfirmButton: false,
-          timer: 1500,
-          title:error.message
-        })
-        console.error('Error fetching users:', error);
-      });
-   }
+      this._adminService
+        .getAllVendors(this.page, this.limit, this.searchText)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(
+          (res) => {
+            if (res.success) {
+              this.users = res.data;
+              this.count = this.users.length;
+            } else {
+              console.warn('Failed to fetch users');
+            }
+          },
+          (error) => {
+            Swal.fire({
+              icon: 'error',
+              toast: true,
+              position: 'top',
+              showConfirmButton: false,
+              timer: 1500,
+              title: error.message,
+            });
+            console.error('Error fetching users:', error);
+          }
+        );
+    }
   }
 
   blockUser(id: string) {
@@ -79,35 +87,39 @@ export class VendorManagementComponent {
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, Block!',
-      toast:true,
-      icon:'warning'
+      toast: true,
+      icon: 'warning',
     }).then((result) => {
-
       if (result.isConfirmed) {
-        this._adminService.blockUser(id).subscribe((res) => {
-          if (res.success) {
-            Swal.fire({
-              icon: 'success',
-              title: 'User Blocked',
-              toast:true,
-              timer: 1500,
-              position: 'top',
-              showConfirmButton:false
-            })
-            this.users.forEach((user) => {
-              if (user._id === id) {
-                user.IsActive=false
+        this._adminService
+          .blockUser(id)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(
+            (res) => {
+              if (res.success) {
+                Swal.fire({
+                  icon: 'success',
+                  title: 'User Blocked',
+                  toast: true,
+                  timer: 1500,
+                  position: 'top',
+                  showConfirmButton: false,
+                });
+                this.users.forEach((user) => {
+                  if (user._id === id) {
+                    user.IsActive = false;
+                  }
+                });
               }
-            })
-          }
-        }, (error) => {
-          console.error('Error blocking user:', error);
-        });
+            },
+            (error) => {
+              console.error('Error blocking user:', error);
+            }
+          );
       } else {
-
-        console.log('')
+        console.log('');
       }
-    })
+    });
   }
 
   unblockUser(id: string) {
@@ -119,34 +131,40 @@ export class VendorManagementComponent {
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, Block!',
       icon: 'warning',
-      toast: true
+      toast: true,
     }).then((result) => {
       if (result.isConfirmed) {
-        this._adminService.unBlockUser(id).subscribe((res) => {
-          if (res.success) {
-            Swal.fire({
-              icon: 'success',
-              title: 'User UnBlocked',
-              toast:true,
-              timer: 1500,
-              position: 'top',
-              showConfirmButton:false
-            })
-            this.users.forEach((user) => {
-              if (user._id === id) {
-                user.IsActive=true
+        this._adminService
+          .unBlockUser(id)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(
+            (res) => {
+              if (res.success) {
+                Swal.fire({
+                  icon: 'success',
+                  title: 'User UnBlocked',
+                  toast: true,
+                  timer: 1500,
+                  position: 'top',
+                  showConfirmButton: false,
+                });
+                this.users.forEach((user) => {
+                  if (user._id === id) {
+                    user.IsActive = true;
+                  }
+                });
               }
-            })
-          }
-        }, (error) => {
-          console.error('Error unblocking user:', error);
-        });
+            },
+            (error) => {
+              console.error('Error unblocking user:', error);
+            }
+          );
       }
-    })
+    });
   }
 
   changePage(direction: 'increment' | 'decrement') {
-    if (direction === 'increment'&& this.count>0) {
+    if (direction === 'increment' && this.count > 0) {
       this.page++;
     } else if (direction === 'decrement' && this.page > 1) {
       this.page--;
@@ -155,56 +173,61 @@ export class VendorManagementComponent {
     this.fetchUsers();
   }
 
-  giveApproval(id: string,license: string) {
+  giveApproval(id: string, license: string) {
     this._id = id;
     this.lisence = license;
     this.showModal = true;
   }
 
-  closeModal(){
+  closeModal() {
     this.showModal = false;
   }
 
   verifyUser() {
     if (this._id && this.lisence) {
-      this._adminService.verifyVendor(this._id).subscribe((res) => {
-        if (res.success) {
-          Swal.fire({
-            icon: 'success',
-            title: 'Vendor Verified',
-            toast:true,
-            timer: 1500,
-            position: 'top',
-            showConfirmButton:false
-          })
-          this.users.forEach((user) => {
-            if (this._id === user._id) {
-              user.isKYCVerified=true
+      this._adminService
+        .verifyVendor(this._id)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(
+          (res) => {
+            if (res.success) {
+              Swal.fire({
+                icon: 'success',
+                title: 'Vendor Verified',
+                toast: true,
+                timer: 1500,
+                position: 'top',
+                showConfirmButton: false,
+              });
+              this.users.forEach((user) => {
+                if (this._id === user._id) {
+                  user.isKYCVerified = true;
+                }
+              });
+              this.showModal = false;
             }
-          })
-          this.showModal = false;
-        }
-      }, (error) => {
-        console.error('Error verifying user:', error);
-        Swal.fire({
-          icon: 'error',
-          toast: true,
-          position: 'top',
-          showConfirmButton: false,
-          timer: 1500,
-          title:error.message
-        })
-      })
+          },
+          (error) => {
+            console.error('Error verifying user:', error);
+            Swal.fire({
+              icon: 'error',
+              toast: true,
+              position: 'top',
+              showConfirmButton: false,
+              timer: 1500,
+              title: error.message,
+            });
+          }
+        );
     }
   }
 
   searchUser() {
-    this.fetchUsers()
+    this.fetchUsers();
   }
 
-
-
-
+  ngOnDestroy(): void {
+    this.destroy$.next()
+    this.destroy$.complete()
+  }
 }
-
-

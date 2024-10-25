@@ -24,43 +24,39 @@ import { Router } from '@angular/router';
 export class AddAddressComponent {
   onSubmit() {
     try {
-
       if (this.addressRateForm.valid) {
-        let formdata = new FormData()
+        let formdata = new FormData();
 
         Object.entries(this.addressRateForm.value).forEach(([key, value]) => {
           if (key === 'photos') {
-
             (value as File[]).forEach((file: File) => {
               formdata.append('photos', file);
             });
           } else if (key === 'rates') {
             let arr: { [key: string]: any }[] = [];
-            Object.entries(value as { [key: string]: any }).forEach(([item, price]) => {
-              arr.push({
-                type: item,
-                price: price
-              });
-            });
-
-            // Append the array as a JSON string to formdata
+            Object.entries(value as { [key: string]: any }).forEach(
+              ([item, price]) => {
+                arr.push({
+                  type: item,
+                  price: price,
+                });
+              }
+            );
             formdata.append('rates', JSON.stringify(arr));
-
-          }else {
+          } else {
             formdata.append(key, value as any);
           }
         });
 
+        formdata.append('name', this.hostelForm1.name);
+        formdata.append('advance', this.hostelForm1.advance);
 
-        formdata.append('name', this.hostelForm1.name)
-        formdata.append('advance', this.hostelForm1.advance)
-
-        formdata.append('phone',this.hostelForm1.phone)
-        formdata.append('email',this.hostelForm1.email)
-        formdata.append('category',this.hostelForm1.category)
-        formdata.append('policies', this.hostelForm1.policies)
-        formdata.append('facilities',this.hostelForm1.facilities)
-        formdata.append('nearByPlaces', this.hostelForm1.nearbyPlaces)
+        formdata.append('phone', this.hostelForm1.phone);
+        formdata.append('email', this.hostelForm1.email);
+        formdata.append('category', this.hostelForm1.category);
+        formdata.append('policies', this.hostelForm1.policies);
+        formdata.append('facilities', this.hostelForm1.facilities);
+        formdata.append('nearByPlaces', this.hostelForm1.nearbyPlaces);
         this._hostelService.addHostel(formdata).subscribe({
           next: (res) => {
             if (res.success) {
@@ -68,39 +64,47 @@ export class AddAddressComponent {
               Swal.fire({
                 icon: 'success',
                 text: res.message,
-              })
-              localStorage.removeItem('hostelForm1')
-              this._router.navigate(['/vendor/home'])
+              });
+              localStorage.removeItem('hostelForm1');
+              this._router.navigate(['/vendor/home']);
             } else {
               Swal.fire({
                 icon: 'error',
-                text:res.message
-              })
+                text: res.message,
+              });
             }
-          }
-        })
-
-
-
+          },
+          error: (error) => {
+            Swal.fire({
+              position: 'top',
+              icon: 'error',
+              text: error.error.message || 'Something went wrong',
+              showConfirmButton: false,
+              timer: 1500,
+              toast: true,
+            });
+          },
+        });
       }
-      this.addressRateForm.markAllAsTouched()
-
-    } catch (error:any) {
+      this.addressRateForm.markAllAsTouched();
+    } catch (error: any) {
       console.log(error);
       Swal.fire({
         icon: 'error',
-        text:error?.error?.message
-      })
-
+        text: error?.error?.message,
+      });
     }
   }
   hostelForm1;
   addressRateForm: FormGroup;
   bedTypes: string[] = [];
 
-
-  constructor(private _fb: FormBuilder,private _hostelService:HostelService,private _router:Router) {
-    const bedTypeGroup:{[key:string]:FormControl}={}
+  constructor(
+    private _fb: FormBuilder,
+    private _hostelService: HostelService,
+    private _router: Router
+  ) {
+    const bedTypeGroup: { [key: string]: FormControl } = {};
     const hostelFormData = localStorage.getItem('hostelForm1');
     if (hostelFormData) {
       this.hostelForm1 = JSON.parse(hostelFormData); // Parse string into object
@@ -110,10 +114,12 @@ export class AddAddressComponent {
       console.log('No hostelForm1 found in localStorage');
     }
 
-    this.bedTypes.forEach((item) =>{
-        bedTypeGroup[item]=this._fb.control('',[Validators.required,Validators.min(1)])
-    })
-
+    this.bedTypes.forEach((item) => {
+      bedTypeGroup[item] = this._fb.control('', [
+        Validators.required,
+        Validators.min(1),
+      ]);
+    });
 
     this.addressRateForm = this._fb.group({
       city: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]{2,}$')]],
@@ -133,19 +139,14 @@ export class AddAddressComponent {
     });
   }
 
-
-
   onFileSelect($event: Event) {
     const target = $event.target as HTMLInputElement;
     const files = target.files;
 
     if (files) {
-
       this.addressRateForm.patchValue({
         photos: Array.from(files),
       });
-
-
     }
   }
   mimeTypeValidator(control: FormControl): ValidationErrors | null {
@@ -169,6 +170,4 @@ export class AddAddressComponent {
     }
     return null;
   }
-
-
 }

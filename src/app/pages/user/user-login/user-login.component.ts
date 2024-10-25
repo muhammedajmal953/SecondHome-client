@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink, RouterModule } from '@angular/router';
 import { GoogleSigninButtonModule, SocialAuthService } from '@abacritt/angularx-social-login';
@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 import { LoginUser } from '../../../models/IUsers';
 import { HeaderNameComponent } from "../../../components/header-name/header-name.component";
 import { CommonModule } from '@angular/common';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-user-login',
@@ -20,8 +21,9 @@ import { CommonModule } from '@angular/common';
   templateUrl: './user-login.component.html',
   styleUrl: './user-login.component.css'
 })
-export class UserLoginComponent {
+export class UserLoginComponent implements OnInit,OnDestroy{
   formdata
+  destroy$=new Subject<void>()
 
   constructor( private _userServices:UserService,private _authservice:SocialAuthService,private _router:Router) {
     this.formdata =new FormGroup({
@@ -36,8 +38,7 @@ export class UserLoginComponent {
     })
   }
   ngOnInit(): void {
-    this._authservice.authState.subscribe((user) => {
-      console.log(user);
+    this._authservice.authState.pipe(takeUntil(this.destroy$)).subscribe((user) => {
       this._userServices.loginWithGoogle(user.idToken).subscribe((res)=>{
         if(!res.success){
           Swal.fire({
@@ -79,7 +80,7 @@ export class UserLoginComponent {
         Password: this.formdata.value.Password!
       }
 
-      this._userServices.userLogin(data).subscribe((res)=>{
+      this._userServices.userLogin(data).pipe(takeUntil(this.destroy$)).subscribe((res)=>{
         if (!res.success) {
           Swal.fire({
             position: 'top',
@@ -123,5 +124,9 @@ export class UserLoginComponent {
     }
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next()
+    this.destroy$.complete()
+  }
 
 }

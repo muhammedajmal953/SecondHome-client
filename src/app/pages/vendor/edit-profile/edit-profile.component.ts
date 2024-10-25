@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { VendorService } from '../../../services/vendor.service';
 import { ApiRes } from '../../../models/IApiRes';
 import {
@@ -15,7 +15,7 @@ import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { UserDoc } from '../../../models/IUsers';
 import * as VendorSelector from '../../../state/vendor/vendor.selecters';
 import * as VendorActions from '../../../state/vendor/vendor.actions';
@@ -35,11 +35,12 @@ interface User {
   templateUrl: './edit-profile.component.html',
   styleUrl: './edit-profile.component.css',
 })
-export class EditProfileComponent implements OnInit {
+export class EditProfileComponent implements OnInit,OnDestroy {
   editedForm!: FormGroup;
   preview!: SafeUrl;
   user!: User;
   vendor$!: Observable<UserDoc | null>;
+  destroy$=new Subject<void>()
 
   constructor(
     private _vendorService: VendorService,
@@ -72,7 +73,7 @@ export class EditProfileComponent implements OnInit {
 
     this.vendor$ = this._store.select(VendorSelector.selectVendor);
 
-    this.vendor$.subscribe((data: any) => {
+    this.vendor$.pipe(takeUntil(this.destroy$)).subscribe((data: any) => {
       if (data) {
         this.user = data;
         this.editedForm.patchValue({
@@ -127,7 +128,7 @@ export class EditProfileComponent implements OnInit {
 
       console.log(formData);
 
-      this._vendorService.vendorEditProfile(formData).subscribe({
+      this._vendorService.vendorEditProfile(formData).pipe(takeUntil(this.destroy$)).subscribe({
         next: (res) => {
           if (res.success) {
             Swal.fire({
@@ -154,5 +155,10 @@ export class EditProfileComponent implements OnInit {
         },
       });
     }
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next()
+    this.destroy$.complete()
   }
 }

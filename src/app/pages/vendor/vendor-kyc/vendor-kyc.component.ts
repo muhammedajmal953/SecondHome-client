@@ -19,37 +19,32 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-vendor-kyc',
   standalone: true,
-  imports: [
-    HeaderNameComponent,
-    ReactiveFormsModule,
-    CommonModule
-  ],
+  imports: [HeaderNameComponent, ReactiveFormsModule, CommonModule],
   templateUrl: './vendor-kyc.component.html',
   styleUrl: './vendor-kyc.component.css',
 })
 export class VendorKycComponent {
   kycForm: FormGroup;
-  constructor(private _vendorService: VendorService,private _fb:FormBuilder,private _router:Router) {
+  constructor(
+    private _vendorService: VendorService,
+    private _fb: FormBuilder,
+    private _router: Router
+  ) {
     this.kycForm = this._fb.group({
-      license: [null, [Validators.required,this.mimeType]]
+      license: [null, [Validators.required, this.mimeType]],
     });
   }
   onFileSelect($event: any) {
     const target = $event.target as HTMLInputElement;
     const file = target.files?.[0];
 
-
-
     if (file) {
-
       this.kycForm.patchValue({
-        license: file
-  })
-      this.kycForm.get('license')?.updateValueAndValidity()
+        license: file,
+      });
+      this.kycForm.get('license')?.updateValueAndValidity();
     }
   }
-
-
 
   onSubmit() {
     if (this.kycForm.valid) {
@@ -61,48 +56,46 @@ export class VendorKycComponent {
       formData.append('email', email);
 
       console.log(formData);
-      this._vendorService.vendorKYC(formData).subscribe((res: ApiRes) => {
-        if (res.success) {
+      this._vendorService.vendorKYC(formData).subscribe({
+        next: (res: ApiRes) => {
+          if (res.success) {
+            Swal.fire({
+              position: 'top',
+              icon: 'success',
+              title: 'License uploaded successfully',
+              showConfirmButton: false,
+              timer: 1500,
+              toast: true,
+            });
+
+            localStorage.removeItem('vendorEmail');
+            this._router.navigate(['/vendor/home']);
+          } else {
+            console.log('no data arrived');
+          }
+        },
+        error: (error) => {
           Swal.fire({
-            position: 'top',
-            icon: 'success',
-            title: 'License uploaded successfully',
-            showConfirmButton: false,
-            timer: 1500,
-            toast: true,
-          })
-
-          localStorage.removeItem('vendorEmail');
-          this._router.navigate(['/vendor/home']);
-        } else {
-          console.log('no data arrived');
-
-        }
-      }, error => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: error.error.message
-        })
-
-      })
-
+            icon: 'error',
+            title: 'Error',
+            text: error.error.message,
+          });
+        },
+        complete: () => {},
+      });
     } else {
       console.log('Form is invalid');
-
     }
   }
 
-
-  mimeType(control: FormControl):ValidationErrors|null {
-    const file = control.value ;
+  mimeType(control: FormControl): ValidationErrors | null {
+    const file = control.value;
     if (file && typeof file === 'object') {
-      const validMimes = ['image/jpeg','image/png', 'application/pdf']
+      const validMimes = ['image/jpeg', 'image/png', 'application/pdf'];
       if (!validMimes.includes(file.type)) {
-        return {mimeType:true}
+        return { mimeType: true };
       }
-
     }
-    return null
+    return null;
   }
 }

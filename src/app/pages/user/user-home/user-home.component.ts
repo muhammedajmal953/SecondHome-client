@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { UserDoc } from '../../../models/IUsers';
-import { UserService } from '../../../services/user.service';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import * as UserActions from '../../../state/user/user.actions';
 import * as UserSelectors from '../../../state/user/user.selector';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -20,10 +20,11 @@ import * as UserSelectors from '../../../state/user/user.selector';
   templateUrl: './user-home.component.html',
   styleUrl: './user-home.component.css'
 })
-export class UserHomeComponent implements OnInit {
+export class UserHomeComponent implements OnInit,OnDestroy {
   toggleShow: boolean = false
   user$: Observable<UserDoc | null>
   user: UserDoc | null = null
+  private subscription=new Subscription()
 
   constructor(private store: Store) {
     this.user$=this.store.select(UserSelectors.selectUser)
@@ -34,11 +35,27 @@ export class UserHomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.dispatch(UserActions.loadUserActions())
+
+    this.subscription=this.user$.subscribe((res) => {
+      if (res) {
+        this.user=res
+      }
+      if (this.user?.IsActive === false) {
+        Swal.fire({
+          icon: 'error',
+          toast: true,
+          text:'You are Blocked By Admin'
+        })
+        this.store.dispatch(UserActions.logout())
+      }
+    })
   }
 
   logout() {
    this.store.dispatch(UserActions.logout())
   }
 
-
+ ngOnDestroy(): void {
+     this.subscription.unsubscribe()
+ }
 }

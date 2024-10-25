@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { GoogleSigninButtonModule, SocialAuthService } from '@abacritt/angularx-social-login';
@@ -7,6 +7,8 @@ import { LoginUser } from '../../../models/IUsers';
 import { VendorService } from '../../../services/vendor.service';
 import { CommonModule } from '@angular/common';
 import { HeaderNameComponent } from "../../../components/header-name/header-name.component";
+import { Subject, takeUntil } from 'rxjs';
+import { unsubscribe } from 'diagnostics_channel';
 
 @Component({
   selector: 'app-vendor-login',
@@ -21,8 +23,9 @@ import { HeaderNameComponent } from "../../../components/header-name/header-name
   templateUrl: './vendor-login.component.html',
   styleUrl: './vendor-login.component.css'
 })
-export class VendorLoginComponent {
+export class VendorLoginComponent implements OnDestroy{
   formdata
+  destroy$=new Subject<void>()
 
   constructor(private _vendorServices:VendorService,private _authservice:SocialAuthService,private _router:Router) {
     this.formdata =new FormGroup({
@@ -39,7 +42,7 @@ export class VendorLoginComponent {
 
 
   ngOnInit(): void {
-    this._authservice.authState.subscribe((user) => {
+    this._authservice.authState.pipe(takeUntil(this.destroy$)).subscribe((user) => {
       console.log(user.idToken);
 
       this._vendorServices.googleAuthVendor(user.idToken).subscribe((res)=>{
@@ -114,5 +117,8 @@ export class VendorLoginComponent {
     }
   }
 
-
+ ngOnDestroy(): void {
+   this.destroy$.next()
+   this.destroy$.complete()
+ }
 }

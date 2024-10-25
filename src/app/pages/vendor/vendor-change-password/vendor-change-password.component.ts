@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { HeaderNameComponent } from "../../../components/header-name/header-name.component";
 import { CahangePasswordFormComponent } from "../../../components/cahange-password-form/cahange-password-form.component";
 import Swal from 'sweetalert2';
@@ -6,6 +6,7 @@ import { VendorService } from '../../../services/vendor.service';
 import { Router } from '@angular/router';
 import { ApiRes } from '../../../models/IApiRes';
 import { ResetPasswordComponent } from "../../../components/reset-password/reset-password.component";
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-vendor-change-password',
@@ -14,13 +15,12 @@ import { ResetPasswordComponent } from "../../../components/reset-password/reset
   templateUrl: './vendor-change-password.component.html',
   styleUrl: './vendor-change-password.component.css'
 })
-export class VendorChangePasswordComponent {
+export class VendorChangePasswordComponent implements OnDestroy{
+  private subscription:Subscription=new Subscription()
   constructor(private _vendorServices: VendorService,private _router:Router){}
   onSubmit(password:string) {
     if (password) {
       let email = localStorage.getItem('vendorEmail')!;
-      console.log('email', email);
-
       this._vendorServices.vendorChangePassword(email, password).subscribe((res: ApiRes) => {
         if (res.success == true) {
           Swal.fire({
@@ -51,7 +51,7 @@ export class VendorChangePasswordComponent {
             position: 'top',
             icon: 'error',
             text: error.error.message,
-            showConfirmButton: false,
+            showConfirmButton: false, 
             timer: 1500,
             toast: true,
           })
@@ -67,5 +67,8 @@ export class VendorChangePasswordComponent {
         toast: true,
       })
     }
- }
+  }
+  ngOnDestroy(): void {
+      this.subscription.unsubscribe()
+  }
 }

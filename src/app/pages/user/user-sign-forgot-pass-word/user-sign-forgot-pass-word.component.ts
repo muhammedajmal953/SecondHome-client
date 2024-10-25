@@ -18,41 +18,46 @@ export class UserSignForgotPassWordComponent {
   onSubmit(formData: any): void {
     if (formData) {
 
-      this._userServices.forgotPassword(formData).subscribe((res) => {
+      this._userServices.forgotPassword(formData).subscribe({
+        next: (res) => {
 
-        if (!res.success) {
-          Swal.fire({
-            position: 'top',
-            icon: 'error',
-            text: res.message,
-            showConfirmButton: false,
-            timer: 1500,
-            toast: true,
-          });
-        } else {
-          Swal.fire({
-            position: 'top',
-            icon: 'success',
-            text: res.message,
-            showConfirmButton: false,
-            timer: 1500,
-            toast: true,
-          });
-          localStorage.setItem('email', formData.Email);
-          this._router.navigate(['/user/forgot-password/otp']);
+          if (!res.success) {
+            Swal.fire({
+              position: 'top',
+              icon: 'error',
+              text: res.message,
+              showConfirmButton: false,
+              timer: 1500,
+              toast: true,
+            });
+          } else {
+            Swal.fire({
+              position: 'top',
+              icon: 'success',
+              text: res.message,
+              showConfirmButton: false,
+              timer: 1500,
+              toast: true,
+            });
+            localStorage.setItem('email', formData.Email);
+            this._router.navigate(['/user/forgot-password/otp']);
+          }
+        },
+          error:(error) => {
+            Swal.fire({
+              position: 'top',
+              icon: 'error',
+              text: error.error.message||'something went wrong',
+              showConfirmButton: false,
+              timer: 1500,
+              toast: true,
+            })
+        },
+
+        complete: () => {
+          console.log('Forgot password request completed.');
         }
-      },
-        (error) => {
-          Swal.fire({
-            position: 'top',
-            icon: 'error',
-            text: error.error.message,
-            showConfirmButton: false,
-            timer: 1500,
-            toast: true,
-          })
-        }
-      )
+      })
     } else {
       Swal.fire({
         position: 'top',

@@ -35,6 +35,9 @@ export class HostelManagementComponent implements OnInit {
           this.hostels = res.data;
         }
       },
+      complete: () => {
+
+      }
     });
   }
 
@@ -73,6 +76,9 @@ export class HostelManagementComponent implements OnInit {
                 });
               }
             },
+            complete: () => {
+
+            }
           });
         }
       });
@@ -107,6 +113,7 @@ export class HostelManagementComponent implements OnInit {
                 });
               }
             },
+            complete: () => { }
           });
         }
       })

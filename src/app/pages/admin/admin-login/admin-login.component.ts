@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AdminService } from '../../../services/admin.service';
 import { Router } from '@angular/router';
 import { LoginUser } from '../../../models/IUsers';
 import Swal from 'sweetalert2';
 import { CommonModule } from '@angular/common';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-admin-login',
@@ -17,9 +18,12 @@ import { CommonModule } from '@angular/common';
   templateUrl: './admin-login.component.html',
   styleUrl: './admin-login.component.css'
 })
-export class AdminLoginComponent {
+export class AdminLoginComponent implements OnDestroy{
   formdata:FormGroup
-  loggedIn:boolean=false
+  loggedIn: boolean = false
+  private subscription: Subscription = new Subscription();
+
+
   constructor(private _adminService: AdminService, private _router: Router) {
 
     this.formdata =new FormGroup({
@@ -33,6 +37,9 @@ export class AdminLoginComponent {
       ])
     })
   }
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe()
+  }
 
 
   onSubmit(): void {
@@ -43,7 +50,7 @@ export class AdminLoginComponent {
           Password: this.formdata.value.Password!
         }
 
-        this._adminService.adminLogin(data).subscribe((res)=>{
+        this.subscription=this._adminService.adminLogin(data).subscribe((res)=>{
           if (!res.success) {
             Swal.fire({
               position: 'top',

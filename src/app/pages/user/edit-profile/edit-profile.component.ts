@@ -15,7 +15,8 @@ interface User{
   Last_name: string;
   Email: string;
   Phone: string;
-  Avatar:string
+  Avatar: string
+  isActive:boolean
 }
 
 @Component({
@@ -56,6 +57,11 @@ export class EditProfileComponent {
         }
       }
     })
+    if (this.user.isActive===false) {
+      localStorage.removeItem('user'),
+      localStorage.removeItem('userRefresh')
+      window.location.replace('/user')
+    }
   }
 
 

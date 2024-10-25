@@ -30,8 +30,8 @@ export class VendorOtpComponent {
       let email: string = localStorage.getItem('vendorEmail')!
       console.log(email);
 
-      this._vendorService.verifyVendor(email, otp).subscribe((res: ApiRes) => {
-        if(res.success == true&&res.data==null){
+      this._vendorService.verifyVendor(email, otp).subscribe({next:(res: ApiRes) => {
+        if (res.success == true && res.data == null) {
           Swal.fire({
             position: 'top',
             icon: 'success',
@@ -64,7 +64,18 @@ export class VendorOtpComponent {
             toast: true,
           })
         }
-      })
+      }, error: (error) => {
+        Swal.fire({
+          position: 'top',
+          icon: 'error',
+          text: error.error.message || 'Something went wrong',
+          showConfirmButton: false,
+          timer: 1500,
+          toast: true,
+        });
+        },
+        complete:()=>{}
+    })
     }
   }
 
@@ -84,7 +95,7 @@ export class VendorOtpComponent {
           timer: 1500,
           icon:'error'
         })
-      }
+      },complete:()=>{}
     })
   }
 

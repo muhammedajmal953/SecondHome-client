@@ -59,10 +59,11 @@ export class HostelListingComponent implements OnInit{
             text: 'Internal server error'
           })
         }
-      }
+      },
+      complete:()=>{}
     })
   }
-
+ 
   searchButton() {
     this.fetchHostels()
   }

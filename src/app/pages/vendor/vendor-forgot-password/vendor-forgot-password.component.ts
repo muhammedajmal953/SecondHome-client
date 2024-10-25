@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { HeaderNameComponent } from "../../../components/header-name/header-name.component";
 import { ForgotPasswordFormComponent } from "../../../components/forgot-password-form/forgot-password-form.component";
 import Swal from 'sweetalert2';
 import { VendorService } from '../../../services/vendor.service';
 import { Router } from '@angular/router';
 import { ResetPasswordComponent } from "../../../components/reset-password/reset-password.component";
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-vendor-forgot-password',
@@ -13,13 +14,14 @@ import { ResetPasswordComponent } from "../../../components/reset-password/reset
   templateUrl: './vendor-forgot-password.component.html',
   styleUrl: './vendor-forgot-password.component.css'
 })
-export class VendorForgotPasswordComponent {
+export class VendorForgotPasswordComponent implements OnDestroy{
+  private subscription:Subscription=new Subscription()
   constructor(private _router:Router,private _vendorServices:VendorService) {
   }
   onSubmit(formData: any): void {
     if (formData) {
 
-      this._vendorServices.vendorForgotPassword(formData).subscribe((res) => {
+      this.subscription=this._vendorServices.vendorForgotPassword(formData).subscribe((res) => {
 
         if (!res.success) {
           Swal.fire({
@@ -65,4 +67,10 @@ export class VendorForgotPasswordComponent {
       })
     }
   }
+  ngOnDestroy(): void {
+    if (this.subscription) {
+        this.subscription.unsubscribe()
+      }
+  }
+  
 }

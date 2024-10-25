@@ -33,16 +33,16 @@ export class ChangePasswordComponent {
 
           }
         },
-        error: (res) => {
+        error: (error) => {
           Swal.fire({
-            icon: 'error',
-            title: res.message,
             position: 'top',
-            toast: true,
+            icon: 'error',
+            text: error.error.message || 'Something went wrong',
             showConfirmButton: false,
-            timer:1500
-          })
-        }
+            timer: 1500,
+            toast: true,
+          });
+        },complete:()=>{}
       })
 
     }

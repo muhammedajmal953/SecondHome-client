@@ -28,67 +28,79 @@ export class UserSignOtpComponent {
       });
     } else {
       let email: string = localStorage.getItem('email')!;
-      this._userService.verifyUser(email, otp).subscribe((res: ApiRes) => {
-        if (res.success == true && res.data == null) {
-          Swal.fire({
-            position: 'top',
-            icon: 'success',
-            text: 'OTP verified successfully you you can Change the password',
-            showConfirmButton: false,
-            timer: 1500,
-            toast: true,
-          });
-          this._router.navigate(['/user/forgot-password/change-password']);
-        } else if (res.success == true) {
-          Swal.fire({
-            position: 'top',
-            icon: 'success',
-            text: 'OTP verified successfully',
-            showConfirmButton: false,
-            timer: 1500,
-            toast: true,
-          });
-          console.log(res.data);
+      this._userService.verifyUser(email, otp).subscribe({
+        next: (res: ApiRes) => {
+          if (res.success == true && res.data == null) {
+            Swal.fire({
+              position: 'top',
+              icon: 'success',
+              text: 'OTP verified successfully you you can Change the password',
+              showConfirmButton: false,
+              timer: 1500,
+              toast: true,
+            });
+            this._router.navigate(['/user/forgot-password/change-password']);
+          } else if (res.success == true) {
+            Swal.fire({
+              position: 'top',
+              icon: 'success',
+              text: 'OTP verified successfully',
+              showConfirmButton: false,
+              timer: 1500,
+              toast: true,
+            });
+            console.log(res.data);
 
-          localStorage.setItem('user', res.data.token);
-          localStorage.setItem('userRefresh', res.data.refreshToken);
-          localStorage.removeItem('email');
-          this._router.navigate(['/user/home']);
-        } else {
+            localStorage.setItem('user', res.data.token);
+            localStorage.setItem('userRefresh', res.data.refreshToken);
+            localStorage.removeItem('email');
+            this._router.navigate(['/user/home']);
+          } else {
+            Swal.fire({
+              position: 'top',
+              icon: 'error',
+              text: res.message,
+              showConfirmButton: false,
+              timer: 1500,
+              toast: true,
+            });
+          }
+        },
+        error: (error) => {
           Swal.fire({
             position: 'top',
             icon: 'error',
-            text: res.message,
+            text: error.error.message || 'Something went wrong',
             showConfirmButton: false,
             timer: 1500,
             toast: true,
           });
-        }
+        },
+        complete: () => {},
       });
     }
   }
 
   resendOtp() {
     let email = localStorage.getItem('email');
-    let success:boolean=false
+    let success: boolean = false;
     this._userService.resendOtp(email!).subscribe({
       next: (res) => {
         if (res.success) {
-          console.log(res.message)
+          console.log(res.message);
         }
-      }, error: (res) => {
+      },
+      error: (res) => {
         Swal.fire({
           position: 'top',
           toast: true,
           showConfirmButton: false,
           title: 'error in resending Otp',
           timer: 1500,
-          icon:'error'
-        })
-      }
-    })
-
+          icon: 'error',
+        });
+      },
+      complete: () => {},
+    });
   }
-
-
 }

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { HostelCardComponent } from "../../../components/hostel-card/hostel-card.component";
+import { HostelCardComponent } from '../../../components/hostel-card/hostel-card.component';
 import { HostelService } from '../../../services/hostel.service';
 import { NgFor } from '@angular/common';
 import { Router } from '@angular/router';
@@ -7,14 +7,11 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [
-    HostelCardComponent,
-    NgFor
-  ],
+  imports: [HostelCardComponent, NgFor],
   templateUrl: './landing.component.html',
-  styleUrl: './landing.component.css'
+  styleUrl: './landing.component.css',
 })
-export class LandingComponent{
+export class LandingComponent {
   title: string = 'Welcome to Our App';
   description: string = 'Experience the power of our innovative solution.';
   primaryButtonText: string = 'Get Started';
@@ -22,22 +19,18 @@ export class LandingComponent{
   secondaryButtonText: string = 'Learn More';
   secondaryButtonLink: string = '#';
   appName: string = 'Your App Name';
-  hostels$: any
+  hostels$: any;
 
-
-  constructor(private _hostelService:HostelService,private _router:Router) {
-    this._hostelService.getAllHostel(1,'').subscribe({
+  constructor(private _hostelService: HostelService, private _router: Router) {
+    this._hostelService.getAllHostel(1, '').subscribe({
       next: (res) => {
-        this.hostels$=res.data
-          console.log(this.hostels$);
-
-      }
-    })
+        this.hostels$ = res.data;
+      },
+      complete: () => {},
+    });
   }
 
   toHostels() {
-  this._router.navigate(['/user/home/hostels'])
+    this._router.navigate(['/user/home/hostels']);
   }
-
-  
 }

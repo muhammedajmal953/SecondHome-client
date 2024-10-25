@@ -1,12 +1,12 @@
-import {Component, Inject, OnInit,PLATFORM_ID } from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit,PLATFORM_ID } from '@angular/core';
 import { AdminService } from '../../../services/admin.service';
 import { Router } from '@angular/router';
-import { Observable} from 'rxjs';
-import { ApiRes } from '../../../models/IApiRes';
+import { Subject, Subscription, takeUntil} from 'rxjs';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { UserDoc } from '../../../models/IUsers';
 import Swal from 'sweetalert2';
 import { FormsModule } from '@angular/forms';
+
 
 @Component({
   selector: 'app-user-management',
@@ -18,8 +18,8 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './user-management.component.html',
   styleUrl: './user-management.component.css'
 })
-export class UserManagementComponent implements OnInit {
-  users$: Observable<ApiRes> | undefined;
+export class UserManagementComponent implements OnInit,OnDestroy {
+  destroy$=new Subject<void>()
   users: UserDoc[] = [];
   page: number = 1;
   limit: number = 5;
@@ -43,7 +43,7 @@ export class UserManagementComponent implements OnInit {
   fetchUsers() {
     if (isPlatformBrowser(this.paltform_id)) {
       localStorage.setItem('aup', this.page.toString());
-      this._adminService.getAllUsers(this.page, this.limit,this.searchQuery).subscribe((res) => {
+      this._adminService.getAllUsers(this.page, this.limit,this.searchQuery).pipe(takeUntil(this.destroy$)).subscribe((res) => {
         if (res.success) {
           this.users = res.data;
           this.count=this.users.length
@@ -69,7 +69,7 @@ export class UserManagementComponent implements OnInit {
     }).then((result) => {
 
       if (result.isConfirmed) {
-        this._adminService.blockUser(id).subscribe((res) => {
+        this._adminService.blockUser(id).pipe(takeUntil(this.destroy$)).subscribe((res) => {
           if (res.success) {
             Swal.fire({
               icon: 'success',
@@ -107,7 +107,7 @@ export class UserManagementComponent implements OnInit {
       icon:'warning'
     }).then((result) => {
       if (result.isConfirmed) {
-        this._adminService.unBlockUser(id).subscribe((res) => {
+        this._adminService.unBlockUser(id).pipe(takeUntil(this.destroy$)).subscribe((res) => {
           if (res.success) {
             Swal.fire({
               icon: 'success',
@@ -145,6 +145,9 @@ export class UserManagementComponent implements OnInit {
     this.fetchUsers()
   }
 
-
+  ngOnDestroy(): void {
+    this.destroy$.next()
+    this.destroy$.complete()
+  }
 }
 

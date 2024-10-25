@@ -116,7 +116,16 @@ export class EditHostelComponent implements OnInit {
           this.hostelForm.get('facilities')?.updateValueAndValidity();
           this.hostelForm.get('nearByAccess')?.updateValueAndValidity();
         }
-      },
+      }, error: (error) => {
+        Swal.fire({
+          position: 'top',
+          icon: 'error',
+          text: error.error.message || 'Something went wrong',
+          showConfirmButton: false,
+          timer: 1500,
+          toast: true,
+        });
+      },complete:()=>{}
     });
   }
 
@@ -167,7 +176,7 @@ export class EditHostelComponent implements OnInit {
             timer: 1500,
             text:err.error.message
             })
-        }
+        },complete:()=>{}
       })
     }
     this.hostelForm.markAllAsTouched();

@@ -30,13 +30,15 @@ export class VendorProfileComponent implements OnInit {
   ngOnInit(): void {
     this.store.dispatch(VendorActions.loadVendor());
 
-    this.user$.subscribe((data: any) => {
-      if (data) {
-        this.profileImage = data.Avatar
-          ? data.Avatar
-          : 'https://www.dgvaishnavcollege.edu.in/dgvaishnav-c/uploads/2021/01/dummy-profile-pic.jpg';
-        this.user = data;
-      }
+    this.user$.subscribe({
+      next: (data: any) => {
+        if (data) {
+          this.profileImage = data.Avatar
+            ? data.Avatar
+            : 'https://www.dgvaishnavcollege.edu.in/dgvaishnav-c/uploads/2021/01/dummy-profile-pic.jpg';
+          this.user = data;
+        }
+      },complete:()=>{}
     });
   }
 
