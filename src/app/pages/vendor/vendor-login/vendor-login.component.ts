@@ -111,6 +111,15 @@ export class VendorLoginComponent implements OnDestroy{
           localStorage.setItem('vendorRefresh', res.data.refreshToken)
           this._router.navigate(['/vendor/home'])
         }
+      }, (error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Login failed',
+          text: error.error.message,
+          showConfirmButton: false,
+          timer: 1500,
+          toast: true,
+        })
       })
     } else{
       this.formdata.markAllAsTouched();

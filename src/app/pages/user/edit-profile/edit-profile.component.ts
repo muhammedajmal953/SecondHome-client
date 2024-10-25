@@ -8,6 +8,7 @@ import { ApiRes } from '../../../models/IApiRes';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
 import { UserDoc } from '../../../models/IUsers';
+import { error } from 'console';
 
 
 interface User{
@@ -55,6 +56,15 @@ export class EditProfileComponent {
             Phone: this.user.Phone
           })
         }
+      }, error: (error) => {
+        Swal.fire({
+          position: 'top',
+          icon: 'error',
+          text: error.error.message,
+          showConfirmButton: false,
+          timer: 1500,
+          toast: true,
+        });
       }
     })
     if (this.user.isActive===false) {

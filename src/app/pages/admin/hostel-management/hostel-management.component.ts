@@ -34,6 +34,15 @@ export class HostelManagementComponent implements OnInit {
         if (res) {
           this.hostels = res.data;
         }
+      }, error: (error) => {
+        Swal.fire({
+          position: 'top',
+          icon: 'error',
+          text: error.error.message,
+          showConfirmButton: false,
+          timer: 1500,
+          toast: true,
+        });
       },
       complete: () => {
 

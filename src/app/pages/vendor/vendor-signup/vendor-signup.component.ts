@@ -79,7 +79,17 @@ export class VendorSignupComponent {
               toast: true,
             });
           }
-        },complete:()=>{}
+        }, error: (error) => {
+          Swal.fire({
+            position: 'top',
+            icon: 'error',
+            text: error.error.message,
+            showConfirmButton: false,
+            timer: 1500,
+            toast: true,
+          });
+        }
+        , complete: () => { }
       });
       console.log(this.formData.value);
     } else {

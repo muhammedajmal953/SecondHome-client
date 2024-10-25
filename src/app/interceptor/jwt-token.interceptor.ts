@@ -4,7 +4,9 @@ import { inject, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { isEpiredToken } from '../shared/helpers/isExpiredJwt';
 import { AuthService } from '../services/auth.service';
-import { catchError, EMPTY, of, switchMap } from 'rxjs';
+import { BehaviorSubject, catchError, EMPTY, of, switchMap } from 'rxjs';
+
+
 
 export const jwtTokenInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
@@ -22,7 +24,8 @@ export const jwtTokenInterceptor: HttpInterceptorFn = (req, next) => {
       role = 'user';
     }
 
-    console.log(role);
+
+    console.log(`Role detected: ${role}`);
 
     if (req.url.includes('login') || req.url.includes('signup')|| req.url.includes('refresh-token')) {
       return next(req);
@@ -41,9 +44,11 @@ export const jwtTokenInterceptor: HttpInterceptorFn = (req, next) => {
     console.warn('Access Token expired .Trying to refresh');
     localStorage.removeItem(`${role}`)
 
-    if (refreshToken&&isEpiredToken(refreshToken)) {
-      let newToken: string = '';
-      let newRefreshToken: string = '';
+    if (!refreshToken || isEpiredToken(refreshToken)) {
+      console.warn('Refresh token expired or not available, redirecting to login.');
+      void router.navigate([`/${role}/login`]);
+      return EMPTY;
+    }
       _authService.refreshToken(role, refreshToken).pipe(
         switchMap((res) => {
           if (res.success) {
@@ -64,6 +69,7 @@ export const jwtTokenInterceptor: HttpInterceptorFn = (req, next) => {
             void router.navigate([`/${role}/login`]);
             return EMPTY
           }
+
         }),
         catchError((err) => {
           console.error('Error fetching,toekn', err)
@@ -72,14 +78,10 @@ export const jwtTokenInterceptor: HttpInterceptorFn = (req, next) => {
         })
       );
 
-    } else {
-      console.warn('No refresh token available, redirecting to login.');
-      void router.navigate([`/${role}`]);
-      return EMPTY
-    }
+
   }
     const modifiedReq = req.clone({
-      headers: req.headers.set('Authorization', 'Bearer ' + token),
+      headers: req.headers.set('Authorization', `Bearer ${token}`),
     });
     return next(modifiedReq);
 };

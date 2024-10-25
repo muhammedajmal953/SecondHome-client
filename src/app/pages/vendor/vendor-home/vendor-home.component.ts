@@ -55,6 +55,13 @@ export class VendorHomeComponent implements OnInit,OnDestroy {
         })
         this._store.dispatch(VendorActions.logout())
       }
+    }, error => {
+      Swal.fire({
+        icon: 'error',
+        toast: true,
+
+        text:error.error.message
+      })
     })
   }
 

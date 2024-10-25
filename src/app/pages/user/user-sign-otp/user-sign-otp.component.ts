@@ -95,7 +95,7 @@ export class UserSignOtpComponent {
           position: 'top',
           toast: true,
           showConfirmButton: false,
-          title: 'error in resending Otp',
+          title: res.error.message||'error in resending Otp',
           timer: 1500,
           icon: 'error',
         });

@@ -5,6 +5,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { UserService } from '../../../services/user.service';
 import { Hostels } from '../../../models/IHostel';
 import { ToFirstCapitalPipe } from '../../../pipe/to-first-capital.pipe';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-view-hostel',
@@ -45,7 +46,14 @@ ngOnInit(): void {
       },
       error: (err) => {
         console.log(err);
-
+        Swal.fire({
+          position: 'top',
+          icon: 'error',
+          text: err.error.message,
+          showConfirmButton: false,
+          timer: 1500,
+          toast: true,
+        });
       },
       complete: () => {
         console.log('request completed');

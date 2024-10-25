@@ -35,6 +35,15 @@ export class ProfileComponent implements OnInit,OnDestroy{
         this.profileImage=data.Avatar?data.Avatar:'https://www.dgvaishnavcollege.edu.in/dgvaishnav-c/uploads/2021/01/dummy-profile-pic.jpg'
         this.user=data
       }
+    }, error => {
+      Swal.fire({
+        position: 'top',
+        icon: 'error',
+        text: error.error.message,
+        showConfirmButton: false,
+        timer: 1500,
+        toast: true,
+      });
     })
     if (this.user?.IsActive === false) {
       Swal.fire({

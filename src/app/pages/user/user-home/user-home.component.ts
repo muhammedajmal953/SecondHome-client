@@ -48,6 +48,15 @@ export class UserHomeComponent implements OnInit,OnDestroy {
         })
         this.store.dispatch(UserActions.logout())
       }
+    }, error => {
+      Swal.fire({
+        position: 'top',
+        icon: 'error',
+        text: error.error.message,
+        showConfirmButton: false,
+        timer: 1500,
+        toast: true,
+      });
     })
   }
 

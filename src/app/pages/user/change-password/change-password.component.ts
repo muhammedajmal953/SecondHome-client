@@ -46,7 +46,7 @@ export class ChangePasswordComponent implements OnDestroy{
         error: (res) => {
           Swal.fire({
             icon: 'error',
-            title: res.message,
+            title: res.error.message,
             position: 'top',
             toast: true,
             showConfirmButton: false,

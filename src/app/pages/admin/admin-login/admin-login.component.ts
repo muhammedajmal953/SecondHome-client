@@ -77,6 +77,15 @@ export class AdminLoginComponent implements OnDestroy{
             this._router.navigate(['/admin/home'])
 
           }
+        }, (error) => {
+          Swal.fire({
+            position: 'top',
+            icon: 'error',
+            text: error.error.message,
+            showConfirmButton: false,
+            timer: 1500,
+            toast: true,
+          });
         })
       } else{
         this.formdata.markAllAsTouched();

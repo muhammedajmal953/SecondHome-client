@@ -69,6 +69,15 @@ export class UserLoginComponent implements OnInit,OnDestroy{
 
 
       })
+    },error => {
+      Swal.fire({
+        position: 'top',
+        icon: 'error',
+        text: error.error.message,
+        showConfirmButton: false,
+        timer: 1500,
+        toast: true,
+      });
     })
   }
 

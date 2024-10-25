@@ -144,13 +144,12 @@ export class EditProfileComponent implements OnInit,OnDestroy {
               icon: 'error',
               title: res.message,
             });
-            console.log(res.message);
           }
         },
         error: (err) => {
           Swal.fire({
             icon: 'error',
-            title: err.message,
+            title: err.error.message,
           });
         },
       });

@@ -1,14 +1,18 @@
 
-export function isEpiredToken(token: string): boolean{
-  let payload
- if (token) {
-   payload = JSON.parse(atob(token.split('.')[1]))
- }
-  if (payload?.exp) {
-    const expireTime = payload.exp * 1000
+export function isEpiredToken(token: string): boolean {
+  try {
+    if (!token) return true;
 
-    if (expireTime > Date.now()) return false
-    return true
+    const payload = JSON.parse(atob(token.split('.')[1]));
+
+    if (payload?.exp) {
+      const expireTime = payload.exp * 1000;
+      return expireTime <= Date.now();
+    }
+
+    return true;
+  } catch (error) {
+    console.error('Invalid token format:', error);
+    return true;  
   }
-  return false
 }

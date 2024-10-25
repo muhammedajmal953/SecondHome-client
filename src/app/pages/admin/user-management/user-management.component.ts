@@ -125,6 +125,14 @@ export class UserManagementComponent implements OnInit,OnDestroy {
           }
         }, (error) => {
           console.error('Error unblocking user:', error);
+          Swal.fire({
+            position: 'top',
+            icon: 'error',
+            text: error.error.message,
+            showConfirmButton: false,
+            timer: 1500,
+            toast: true,
+          });
         });
       }
     })

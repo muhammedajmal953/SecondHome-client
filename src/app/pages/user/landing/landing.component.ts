@@ -3,6 +3,8 @@ import { HostelCardComponent } from '../../../components/hostel-card/hostel-card
 import { HostelService } from '../../../services/hostel.service';
 import { NgFor } from '@angular/common';
 import { Router } from '@angular/router';
+import { error } from 'console';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-landing',
@@ -25,6 +27,15 @@ export class LandingComponent {
     this._hostelService.getAllHostel(1, '').subscribe({
       next: (res) => {
         this.hostels$ = res.data;
+      }, error: (error) => {
+        Swal.fire({
+          position: 'top',
+          icon: 'error',
+          text: error.error.message,
+          showConfirmButton: false,
+          timer: 1500,
+          toast: true,
+        });
       },
       complete: () => {},
     });

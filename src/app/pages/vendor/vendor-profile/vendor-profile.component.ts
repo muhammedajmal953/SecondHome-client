@@ -9,6 +9,8 @@ import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import * as VendorSelector from '../../../state/vendor/vendor.selecters';
 import * as VendorActions from '../../../state/vendor/vendor.actions';
+import Swal from 'sweetalert2';
+import { error } from 'console';
 
 @Component({
   selector: 'app-vendor-profile',
@@ -38,7 +40,14 @@ export class VendorProfileComponent implements OnInit {
             : 'https://www.dgvaishnavcollege.edu.in/dgvaishnav-c/uploads/2021/01/dummy-profile-pic.jpg';
           this.user = data;
         }
-      },complete:()=>{}
+      }, error: (error) => {
+        Swal.fire({
+          icon: 'error',
+          toast: true,
+          text:error.error.message
+        })
+      }
+      , complete: () => { }
     });
   }
 

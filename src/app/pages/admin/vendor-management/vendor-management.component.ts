@@ -71,7 +71,7 @@ export class VendorManagementComponent implements OnInit, OnDestroy {
               position: 'top',
               showConfirmButton: false,
               timer: 1500,
-              title: error.message,
+              title: error.error.message,
             });
             console.error('Error fetching users:', error);
           }
@@ -114,6 +114,14 @@ export class VendorManagementComponent implements OnInit, OnDestroy {
             },
             (error) => {
               console.error('Error blocking user:', error);
+              Swal.fire({
+                position: 'top',
+                icon: 'error',
+                text: error.error.message,
+                showConfirmButton: false,
+                timer: 1500,
+                toast: true,
+              });
             }
           );
       } else {
@@ -157,6 +165,14 @@ export class VendorManagementComponent implements OnInit, OnDestroy {
             },
             (error) => {
               console.error('Error unblocking user:', error);
+              Swal.fire({
+                position: 'top',
+                icon: 'error',
+                text: error.error.message,
+                showConfirmButton: false,
+                timer: 1500,
+                toast: true,
+              });
             }
           );
       }
@@ -210,12 +226,12 @@ export class VendorManagementComponent implements OnInit, OnDestroy {
           (error) => {
             console.error('Error verifying user:', error);
             Swal.fire({
-              icon: 'error',
-              toast: true,
               position: 'top',
+              icon: 'error',
+              text: error.error.message,
               showConfirmButton: false,
               timer: 1500,
-              title: error.message,
+              toast: true,
             });
           }
         );

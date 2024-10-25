@@ -5,6 +5,7 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
+import { error } from 'console';
 
 @Component({
   selector: 'app-hostel-listing',
@@ -59,11 +60,20 @@ export class HostelListingComponent implements OnInit{
             text: 'Internal server error'
           })
         }
+      }, error: (error) => {
+        Swal.fire({
+          position: 'top',
+          icon: 'error',
+          text: error.error.message,
+          showConfirmButton: false,
+          timer: 1500,
+          toast: true,
+        });
       },
       complete:()=>{}
     })
   }
- 
+
   searchButton() {
     this.fetchHostels()
   }
