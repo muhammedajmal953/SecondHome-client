@@ -13,6 +13,31 @@
             *ngIf="addressRateForm.get('street')?.hasError('required') && addressRateForm.get('street')?.touched">Street
             is required.</p>
         </div>
+        <div>
+          <label for="street" class="block text-green-500 mb-1">Live Location</label>
+          <button class="btn btn-success text-white" (click)="getCurrentLocation();$event.preventDefault()">
+            Click to add the live location
+          </button>
+        </div>
+
+        <div>
+          <label for="street" class="block text-green-500 mb-1">Latitude</label>
+          <input id="street" formControlName="latitude" placeholder="Street" readonly
+            class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500">
+          <p class="text-red-500"
+            *ngIf="addressRateForm.get('latitude')?.hasError('required') && addressRateForm.get('latitude')?.touched">
+            Street
+            is required.</p>
+        </div>
+        <div>
+          <label for="street" class="block text-green-500 mb-1">Longtitude</label>
+          <input id="street" formControlName="longtitude" placeholder="Street" readonly
+            class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500">
+          <p class="text-red-500"
+            *ngIf="addressRateForm.get('longtitude')?.hasError('required') && addressRateForm.get('longtitude')?.touched">
+            Street
+            is required.</p>
+        </div>
 
         <div>
           <label for="city" class="block text-green-500 mb-1">City</label>
@@ -74,22 +99,32 @@
       <div>
         <h3 class="text-green-500 mb-2">Rate Details</h3>
         <div class="flex justify-around gap-3" formGroupName="rates">
-          <div *ngFor="let type of bedTypes; let i = index" class="w-full">
+          <div *ngFor="let type of bedTypes; let i = index" class="w-full" [formGroupName]="type">
             <label for="{{type}}" class="block text-green-500 mb-1">{{type}} Rate</label>
-            <input id="{{type}}" type="number"
+            <input id="{{type}}Rate" type="number"
               class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500"
-              [formControlName]="type" placeholder="Rate" />
+              formControlName="rate" placeholder="Rate" />
             <p class="text-red-500"
-              *ngIf="addressRateForm.get('rates')?.get(type)?.hasError('required')&&addressRateForm.get('rates')?.get(type)?.touched">
+              *ngIf="addressRateForm.get('rates')?.get(type)?.get('rate')?.hasError('required')&&addressRateForm.get('rates')?.get(type)?.get('rate')?.touched">
               rate is required</p>
             <p class="text-red-500"
-              *ngIf="addressRateForm.get('rates')?.get(type)?.hasError('min')&&addressRateForm.get('rates')?.get(type)?.touched">
+              *ngIf="addressRateForm.get('rates')?.get(type)?.get('rate')?.hasError('min')&&addressRateForm.get('rates')?.get(type)?.get('rate')?.touched">
+              Rate is required and must be greater than 0.
+            </p>
+            <label for="{{type}}" class="block text-green-500 mb-1">{{type}} Quantity</label>
+            <input id="{{type}}Qty" type="number"
+              class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+              formControlName="quantity" placeholder="Quantity" />
+            <p class="text-red-500"
+              *ngIf="addressRateForm.get('rates')?.get(type)?.get('quantity')?.hasError('required')&&addressRateForm.get('rates')?.get(type)?.get('quantity')?.touched">
+              rate is required</p>
+            <p class="text-red-500"
+              *ngIf="addressRateForm.get('rates')?.get(type)?.get('quantity')?.hasError('min')&&addressRateForm.get('rates')?.get(type)?.get('quantity')?.touched">
               Rate is required and must be greater than 0.
             </p>
           </div>
         </div>
       </div>
-
 
       <div>
         <h3 class="text-green-500 mb-2">Food Rate</h3>

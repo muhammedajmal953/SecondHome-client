@@ -126,17 +126,28 @@
       <div>
         <h3 class="text-green-500 mb-2">Rate Details</h3>
         <div class="flex justify-between gap-3" formGroupName="rates">
-          <div *ngFor="let item of bedTypes; let i = index" class="w-full">
+          <div *ngFor="let item of bedTypes; let i = index" class="w-full" [formGroupName]="item.type">
             <label for="{{item.type}}" class="block text-green-500 mb-1">{{item.type}} Rate</label>
             <input id="{{item.type}}" type="number"
               class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500"
-              [formControlName]="item.type" placeholder="Rate" value="{{item.price}}"/>
+              formControlName="price" placeholder="Rate" value="{{item.price}}"/>
             <p class="text-red-500"
-              *ngIf="hostelForm.get('rates')?.get(item.type)?.hasError('required')&&hostelForm.get('rates')?.get(item.type)?.touched">
+              *ngIf="hostelForm.get('rates')?.get(item.type)?.get('price')?.hasError('required')&&hostelForm.get('rates')?.get(item.type)?.get('price')?.touched">
               rate is required</p>
             <p class="text-red-500"
-              *ngIf="hostelForm.get('rates')?.get(item.type)?.hasError('min')&&hostelForm.get('rates')?.get(item.type)?.touched">
+              *ngIf="hostelForm.get('rates')?.get(item.type)?.get('price')?.hasError('min')&&hostelForm.get('rates')?.get(item.type)?.get('price')?.touched">
               Rate is required and must be greater than 0.
+            </p>
+            <label for="{{item.type}}" class="block text-green-500 mb-1">{{item.type}} Qty</label>
+            <input id="{{item.type}} Qty" type="number"
+              class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+              formControlName="quantity" placeholder="quantity" value="{{item.quantity}}"/>
+            <p class="text-red-500"
+              *ngIf="hostelForm.get('rates')?.get(item.type)?.get('quantity')?.hasError('required')&&hostelForm.get('rates')?.get(item.type)?.get('quantity')?.touched">
+              Quantity is required</p>
+            <p class="text-red-500"
+              *ngIf="hostelForm.get('rates')?.get(item.type)?.get('quantity')?.hasError('min')&&hostelForm.get('rates')?.get(item.type)?.get('quantity')?.touched">
+              Quantity is required and must be greater than 0.
             </p>
           </div>
         </div>
@@ -158,7 +169,7 @@
         </div>
       </div>
     </div>
-    <button type="submit" 
+    <button type="submit"
       class="w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 disabled:opacity-50 disabled:cursor-not-allowed">
      Edit Hostel
     </button>

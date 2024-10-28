@@ -22,7 +22,6 @@ export class HostelService {
   }
 
   getHostel(id: string) {
-
     return this._http.get<ApiRes>(`${this.api}/vendor/getHostel/${id}`)
   }
 

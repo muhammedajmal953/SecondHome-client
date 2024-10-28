@@ -34,11 +34,12 @@ export class AddAddressComponent {
             });
           } else if (key === 'rates') {
             let arr: { [key: string]: any }[] = [];
-            Object.entries(value as { [key: string]: any }).forEach(
-              ([item, price]) => {
+            Object.entries(value as { [key: string]:{price:number,quantity:number} }).forEach(
+              ([item, details]) => {
                 arr.push({
                   type: item,
-                  price: price,
+                  price: details.price,
+                  quantity:details.quantity
                 });
               }
             );
@@ -104,7 +105,7 @@ export class AddAddressComponent {
     private _hostelService: HostelService,
     private _router: Router
   ) {
-    const bedTypeGroup: { [key: string]: FormControl } = {};
+    const bedTypeGroup: { [key: string]: FormGroup } = {};
     const hostelFormData = localStorage.getItem('hostelForm1');
     if (hostelFormData) {
       this.hostelForm1 = JSON.parse(hostelFormData); // Parse string into object
@@ -115,10 +116,10 @@ export class AddAddressComponent {
     }
 
     this.bedTypes.forEach((item) => {
-      bedTypeGroup[item] = this._fb.control('', [
-        Validators.required,
-        Validators.min(1),
-      ]);
+      bedTypeGroup[item] = this._fb.group({
+        price: ['', [Validators.required, Validators.min(1)]],
+        quantity: ['', [Validators.required, Validators.min(1)]],
+      });
     });
 
     this.addressRateForm = this._fb.group({
@@ -136,6 +137,8 @@ export class AddAddressComponent {
       ],
       rates: this._fb.group(bedTypeGroup),
       photos: ['', [Validators.required, this.mimeTypeValidator]],
+      latitude:['',[Validators.required]],
+      longtitude:['',[Validators.required]]
     });
   }
 
@@ -169,5 +172,20 @@ export class AddAddressComponent {
       }
     }
     return null;
+  }
+
+  getCurrentLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          this.addressRateForm.patchValue(
+            {latitude:position.coords.latitude})
+          this.addressRateForm.patchValue(
+            {longtitude:position.coords.longitude})
+        }, error => {
+          console.error('Geolocation error:',error)
+        }
+      );
+    }
   }
 }

@@ -3,9 +3,11 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { UserService } from '../../../services/user.service';
-import { Hostels } from '../../../models/IHostel';
 import { ToFirstCapitalPipe } from '../../../pipe/to-first-capital.pipe';
 import Swal from 'sweetalert2';
+import { environments } from '../../../environment/environment';
+import { DomSanitizer, SafeHtml, SafeResourceUrl } from '@angular/platform-browser';
+import {GoogleMapsModule} from '@angular/google-maps'
 
 @Component({
   selector: 'app-view-hostel',
@@ -14,22 +16,29 @@ import Swal from 'sweetalert2';
     FormsModule,
     CommonModule,
     ToFirstCapitalPipe,
-    RouterModule
+    RouterModule,
+    GoogleMapsModule
   ],
   templateUrl: './view-hostel.component.html',
   styleUrl: './view-hostel.component.css'
 })
 export class ViewHostelComponent implements OnInit{
- hostel$!:any
-  constructor(private _router: Router, private _userService: UserService,private _activeRoute:ActivatedRoute) { }
+  hostel$!: any
+  googleUrl!: string
+  protectedUrl!:SafeResourceUrl
+  apiKey: string = environments.googleApiKey
+
+  rate!: number
+  Qty!: number
+  bedType!:string
+
+  lat: number=11.2602402
+  lng:number=76.034563
+  directionsUrl!: string;
+
+  constructor(private _router: Router, private _userService: UserService,private _activeRoute:ActivatedRoute,private _sanitizer:DomSanitizer) { }
 
 
-
-spaceDetails: any;
-selectedImageIndex: any;
-averageRating: any;
-ratingBreakdown: any;
-similarSpaces: any;
 
 ngOnInit(): void {
   this._activeRoute.params.subscribe(params => {
@@ -41,7 +50,17 @@ ngOnInit(): void {
     this._userService.getHostel(id).subscribe({
       next: (res) => {
         if (res.success) {
-          this.hostel$=res.data
+          this.hostel$ = res.data
+          this.rate = this.hostel$.rates[0].price
+          this.Qty = this.hostel$.rates[0].quantity
+          this.bedType=this.hostel$.rates[0].type
+
+          this.googleUrl = `https://www.google.com/maps/embed/v1/place?key=${this.apiKey}&q=${Number(this.hostel$.address.latitude)},${Number(this.hostel$.address.longtitude)}`
+          this.protectedUrl = this._sanitizer.bypassSecurityTrustResourceUrl(this.googleUrl)
+          this.directionsUrl = `https://www.google.com/maps/dir/?api=1&origin=Current+Location&destination=${this.hostel$.address.latitude},${this.hostel$.address.longtitude}`
+
+          this.lat = Number(this.hostel$.address.latitude)
+          this.lng=Number(this.hostel$.address.longitude)
         }
       },
       error: (err) => {
@@ -61,5 +80,23 @@ ngOnInit(): void {
       }
     })
   }
+  openDirection() {
+    console.log('open direction clicked');
+    window.open(this.directionsUrl,'_blank')
+  }
+
+
+  changeType(event:Event) {
+    if (event.target) {
+      const target = event.target as HTMLSelectElement
+      this.hostel$.rates.forEach((rate:{type:string,price:number,quantity:number}) => {
+        if (rate.type === target.value) {
+          this.rate = rate.price
+          this.Qty=rate.quantity
+        }
+      })
+    }
+  }
+
 
 }

@@ -1,3 +1,6 @@
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDjRR2q2ai0Xa3-D26pnN2ZdEoibW_IJYQ"></script>
+
+
 <div class="max-w-7xl mx-auto p-4 ">
   <!-- breadcrumbs -->
   <nav aria-label="breadcrumb" class="w-max my-2">
@@ -50,8 +53,7 @@
           <h2 class="text-lg font-bold">Location / Contacts</h2>
           <div class="h-48 bg-gray-200 rounded-lg">
             <!-- Add map embed here -->
-            <iframe src="https://maps.google.com/maps?q=Kozhikkode&t=&z=13&ie=UTF8&iwloc=&output=embed"
-              class="w-full h-full rounded-lg" frameborder="0" allowfullscreen></iframe>
+             <iframe [src]="protectedUrl" class="w-full h-full rounded-lg"></iframe>
           </div>
           <div class="flex flex-col justify-between space-y-4 md:space-y-0 md:flex-row md:space-x-6 p-6">
 
@@ -70,7 +72,7 @@
             <div class="flex flex-col items-center justify-center space-y-4 md:space-y-0 md:space-x-4 md:flex-row">
 
               <!-- Edit Button -->
-              <button class="rounded-full p-3 bg-gradient-to-r from-green-400 to-green-600 shadow-lg text-white transition-transform transform hover:scale-105">
+              <button  class="rounded-full p-3 bg-gradient-to-r from-green-400 to-green-600 shadow-lg text-white transition-transform transform hover:scale-105">
                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="white">
                   <path d="M240-400h320v-80H240v80Zm0-120h480v-80H240v80Zm0-120h480v-80H240v80ZM80-80v-720q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H240L80-80Zm126-240h594v-480H160v525l46-45Zm-46 0v-480 480Z"/>
                 </svg>
@@ -87,7 +89,7 @@
           <div class="mt-2 space-y-2 w-full flex items-center justify-between">
             <button class="bg-gradient-to-r from-green-400 to-green-600 text-white py-2 px-6 font-semibold rounded-full shadow-lg transition-transform transform hover:scale-105 hover:shadow-2xl">Book Now</button>
 
-            <button class="bg-gradient-to-r from-red-400 to-red-600 flex text-white py-2 px-6 font-semibold rounded-full shadow-lg transition-transform transform hover:scale-105 hover:shadow-2xl">navigate
+            <button (click)="openDirection()" class="bg-gradient-to-r from-red-400 to-red-600 flex text-white py-2 px-6 font-semibold rounded-full shadow-lg transition-transform transform hover:scale-105 hover:shadow-2xl">navigate
               <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
                 fill="#e8eaed">
                 <path
@@ -108,15 +110,26 @@
         <h1 class="text-2xl text-[#2BAE66] font-bold">{{hostel$.name}}</h1>
         <p class="text-sm text-gray-500">2877+744, {{hostel$.address.street}}, {{hostel$.address.city}},
           {{hostel$.address.district}}, {{hostel$.address.state}} {{hostel$.address.pincode}}</p>
-
         <!-- Rent Section -->
+
+        <div>
+          <select class="select border-2 border-[#2BAE66]" (change)="changeType($event)" name="" id="">
+            <option [value]="bedType">{{bedType}}</option>
+            <option [value]="item.type" *ngFor="let item of hostel$?.rates">{{item.type}}</option>
+          </select>
+        </div>
         <div class="bg-green-100 p-4 rounded-lg shadow-md">
           <div class="flex justify-between items-center">
             <span class="text-gray-700">Rent</span>
-            <span class="text-xl font-bold text-[#2BAE66]">₹{{hostel$.rates[0].price}} / month</span>
+            <span class="text-xl font-bold text-[#2BAE66]">₹{{rate}} / month</span>
           </div>
+         <div class="flex justify-between">
           <p class="text-gray-500" *ngIf="!hostel$.foodRate">Meals not included</p>
-          <p class="text-gray-500" *ngIf="hostel$.foodRate">₹{{hostel$.foodRate}}/month extra for food</p>
+          <p class="text-gray-500" *ngIf="hostel$.foodRate">₹{{hostel$.foodRate}} for food</p>
+          <h4 class="font-extrabold text-red-500 transition-all duration-300 transform hover:scale-110 animate-bounce">
+            only <span class="text-yellow-500">{{ Qty }}</span> beds available
+          </h4>
+         </div>
         </div>
 
         <!-- Facilities Section -->
@@ -181,10 +194,6 @@
           </div>
         </div>
       </div>
-
     </div>
-
   </div>
-
-
 </div>

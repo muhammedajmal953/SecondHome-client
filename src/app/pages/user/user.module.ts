@@ -16,6 +16,7 @@ import { EditProfileComponent } from './edit-profile/edit-profile.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
 import { HostelListingComponent } from './hostel-listing/hostel-listing.component';
 import { ViewHostelComponent } from './view-hostel/view-hostel.component';
+import { WishlistComponent } from './wishlist/wishlist.component';
 
 
 const routes: Routes = [
@@ -66,6 +67,10 @@ const routes: Routes = [
       {
         path: 'hostelDetails/:id',
         component:ViewHostelComponent
+      },
+      {
+        path: 'wishlist',
+        component:WishlistComponent
       }
     ]
   },

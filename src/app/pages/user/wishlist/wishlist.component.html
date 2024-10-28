@@ -1,0 +1,28 @@
+<div class="mt-10 flex-col justify-center items-center">
+  <h1 class="text-[#2BAE66] text-5xl font-extrabold mb-12 transition-transform duration-500 transform hover:scale-105 flex justify-center items-center gap-3">
+    Your Favorite Hostels <span><img src="assets/icon.png" alt=""></span>
+  </h1>
+  <div class="flex flex-wrap gap-6 justify-center items-start">
+
+    <div *ngFor="let hostel of hostels$ " class="relative transition-transform transform hover:scale-105 rounded-xl shadow-lg hover:shadow-2xl overflow-hidden">
+      <!-- Close Button -->
+      <button (click)="unSave(hostel._id)" class="absolute top-4 right-0 z-10 btn btn-circle btn-ghost transition duration-200 ease-in-out text-red-600 hover:bg-[red] hover:text-white">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+
+      <!-- Hostel Card Component -->
+      <app-hostel-card [hosteDetails]="hostel" class="p-4 transition duration-500 ease-in-out hover:bg-[#f7fafc] rounded-lg"></app-hostel-card>
+    </div>
+  </div>
+</div>

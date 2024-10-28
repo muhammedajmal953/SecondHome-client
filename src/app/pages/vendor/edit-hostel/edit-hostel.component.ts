@@ -28,10 +28,10 @@ export class EditHostelComponent implements OnInit {
   nearbyPlaces: string[] = [];
   categories: string[] = ['MEN', 'WOMEN', 'MIXED'];
   hostelForm: FormGroup;
-  bedTypes:  { type: string; price: number }[] = [];
+  bedTypes:  { type: string; price: number,quantity:number }[] = [];
   photoUrls: string[] = [];
   existingPhotos: string[] = [];
-  bedTypeGroup: { [key: string]: FormControl } = {};
+  bedTypeGroup: { [key: string]: FormGroup } = {};
   selectedFiles: File[] = []
   id!:string
 
@@ -43,10 +43,10 @@ export class EditHostelComponent implements OnInit {
     private _hostelService: HostelService
   ) {
     this.bedTypes.forEach((item) => {
-      this.bedTypeGroup[item.type] = this._fb.control(item.price, [
-        Validators.required,
-        Validators.min(1),
-      ]);
+      this.bedTypeGroup[item.type] = this._fb.group({
+        price: ['', [Validators.required, Validators.min(1)]],
+        quantity:['',[Validators.required,Validators.min(1)]]
+      });
     });
     this.hostelForm = this._fb.group({
       name: [
@@ -104,12 +104,12 @@ export class EditHostelComponent implements OnInit {
           this.nearbyPlaces = [...hostel.nearbyPlaces];
           this.photoUrls = hostel.photos;
           this.existingPhotos = hostel.photos;
-          hostel.rates.forEach((item: { type: string; price: number }) => {
+          hostel.rates.forEach((item: { type: string; price: number ,quantity:number}) => {
             this.bedTypes.push(item);
-            this.bedTypeGroup[item.type] = this._fb.control(item.price, [
-              Validators.required,
-              Validators.min(1),
-            ]);
+            this.bedTypeGroup[item.type] = this._fb.group({
+              price: [item.price, [Validators.required, Validators.min(1)]],
+              quantity:[item.quantity,[Validators.required,Validators.min(1)]]
+            });
           });
 
           this.hostelForm.setControl('rates', this._fb.group(this.bedTypeGroup));
@@ -125,7 +125,10 @@ export class EditHostelComponent implements OnInit {
           timer: 1500,
           toast: true,
         });
-      },complete:()=>{}
+      }, complete: () => {
+
+
+      }
     });
   }
 
@@ -144,7 +147,6 @@ export class EditHostelComponent implements OnInit {
         nearbyPlaces:[ ...this.nearbyPlaces],
         existingPhotos: this.existingPhotos
       };
-
 
       this._vendorService.editHostel(formData, this.id).subscribe({
         next: (res) => {
