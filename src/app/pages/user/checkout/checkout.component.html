@@ -1,0 +1,130 @@
+<div class="max-w-6xl mx-auto p-8 space-y-8 bg-white rounded-lg shadow-lg">
+  <nav aria-label="breadcrumb" class="w-max my-2">
+    <ol class="flex w-full items-center rounded-md bg-slate-50 px-4 py-2 shadow-md">
+      <li class="flex items-center text-sm text-green-500">
+        <a routerLink="/user/home" class="flex items-center text-sm">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="currentColor">
+            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+          </svg>
+        </a>
+        <span class="mx-2">/</span>
+      </li>
+      <li class="text-green-500">Booking Checkout</li>
+    </ol>
+  </nav>
+  <!-- Page Heading -->
+  <h2 class="text-3xl font-bold text-[#2BAE66] mb-8 text-center">Complete Your Booking</h2>
+
+  <div class="flex items-center space-x-4 p-4 bg-green-50 rounded-lg shadow-md" >
+    <img [src]="hostel$.photos[0]" alt="Hostel Image" class="w-24 h-24 rounded-md object-cover shadow-lg" />
+    <div>
+      <h3 class="text-xl font-semibold text-green-700">{{ hostel$.name }}</h3>
+      <p class="text-sm text-gray-500">{{ hostel$.address.street}},{{hostel$.address.city}}</p>
+    </div>
+  </div>
+  <div class="grid lg:grid-cols-2 gap-8">
+    <!-- Left Column: User & Booking Details -->
+    <div class="bg-green-50 p-6 rounded-lg shadow-md space-y-6">
+      <!-- User Details Section -->
+      <div class="space-y-4">
+        <h3 class="text-xl font-semibold text-green-700">User Details</h3>
+        <div>
+          <label for="fullName" class="block text-sm font-semibold text-gray-700">Full Name</label>
+          <input type="text" readonly id="fullName" [value]="user.First_name" class="w-full border-2 border-green-400 rounded-lg p-2 transition-transform duration-300 hover:shadow-md focus:border-green-600" placeholder="Your Name" />
+        </div>
+        <div>
+          <label for="email"  class="block text-sm font-semibold text-gray-700">Email</label>
+          <input type="email" readonly id="email" [value]="user.Email" class="w-full border-2 border-green-400 rounded-lg p-2 transition-transform duration-300 hover:shadow-md focus:border-green-600" placeholder="Your Email" />
+        </div>
+        <div>
+          <label for="phone"  class="block text-sm font-semibold text-gray-700">Email</label>
+          <input type="number" readonly id="phone" [value]="user.Phone" class="w-full border-2 border-green-400 rounded-lg p-2 transition-transform duration-300 hover:shadow-md focus:border-green-600" placeholder="Your Email" />
+        </div>
+      </div>
+
+      <!-- Date & Guest Selection -->
+      <div class="space-y-4">
+        <h3 class="text-xl font-semibold text-green-700">Select Dates & Guests</h3>
+        <div class="flex flex-row gap-4 items-center">
+          <div class="w-1/2">
+            <label for="checkInDate" class="block text-sm font-semibold text-gray-700">Check-in Date</label>
+            <input type="date" (change)="dateValidate()" [(ngModel)]="checkInDate" id="checkInDate" class="w-full border-2 border-green-400 rounded-lg p-2 transition-transform hover:shadow-md focus:border-green-600" />
+          </div>
+          <div class="w-1/2">
+            <label for="bedType" class="block text-sm font-semibold text-gray-700">Bed Type</label>
+            <select class="w-full border-2 border-[#2BAE66] rounded-lg p-2" (change)="changeType($event)" id="bedType">
+              <option value="" selected disabled>Select bed type</option>
+              <option [value]="item.type" *ngFor="let item of hostel$?.rates">{{item.type}}</option>
+            </select>
+          </div>
+        </div>
+
+
+        <!-- Number of Guests -->
+        <div>
+          <label for="numPersons" class="block text-sm font-semibold text-gray-700">Number of Guests</label>
+          <p class="text-rose-500 animate-pulse" *ngIf="!Qty">please select a bedtype</p>
+          <div *ngIf="Qty" class="flex items-center justify-between border-2 border-green-400 rounded-full p-2 mt-4 w-28">
+            <button
+              (click)="decrementGuest()" [disabled]="numberOfGuests<=1"
+              class="p-1 text-lg font-semibold text-gray-600 hover:bg-green-200 rounded-full transition-all duration-200">
+              -
+            </button>
+            <span class="text-lg font-semibold text-green-600">{{ numberOfGuests }}</span>
+            <button
+              (click)="incrementGuest()" [disabled]="numberOfGuests>=Qty"
+              class="p-1 text-lg font-semibold text-gray-600 hover:bg-green-200 rounded-full transition-all duration-200">
+              +
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Payment Options -->
+    <div class="bg-green-50 p-6 rounded-lg shadow-md space-y-6">
+      <h3 class="text-xl font-semibold text-green-700">Payment Details</h3>
+
+      <!-- Payment Type Selection -->
+      <div class="space-y-4">
+        <label for="paymentType" class="block text-sm font-semibold text-gray-700">Payment Type</label>
+        <select id="paymentType" (change)="paymentType($event)" class="w-full border-2 border-green-400 rounded-lg p-2 transition-transform hover:shadow-md focus:border-green-600">
+          <option value="fullMonth">One Month Rent</option>
+          <option value="advance">Pay Advance</option>
+        </select>
+      </div>
+
+      <!-- Food Option -->
+      <div class="space-y-4">
+        <label for="foodOption" class="block text-sm font-semibold text-gray-700">Add Meals</label>
+        <select id="foodOption" (change)="selectFood($event)" class="w-full border-2 border-green-400 rounded-lg p-2 transition-transform hover:shadow-md focus:border-green-600">
+          <option value=0>No, I don't need meals</option>
+          <option [value]="hostel$.foodRate">Yes, add meals (₹{{hostel$.foodRate}})</option>
+        </select>
+      </div>
+
+      <!-- Price Summary -->
+      <div class="bg-green-100 p-4 rounded-lg shadow-inner">
+        <h4 class="text-lg font-semibold text-gray-700">Summary</h4>
+        <div class="flex justify-between mt-2">
+          <span>Booking Price:</span>
+          <span class="font-bold text-green-600">₹{{totalPrice}}</span>
+        </div>
+        <div class="flex justify-between">
+          <span>Food:</span>
+          <span class="font-bold text-gray-500">₹{{foodPrice*numberOfGuests}}</span>
+        </div>
+        <div class="flex justify-between border-t pt-2 mt-2">
+          <span class="font-semibold">Total:</span>
+          <span class="text-2xl font-bold text-green-700">₹{{totalAmount}}</span>
+        </div>
+      </div>
+
+      <!-- Confirm Booking Button -->
+      <button (click)="confirmBooking()" class="w-full py-3 bg-gradient-to-r from-green-500 to-green-700 text-white font-semibold rounded-full shadow-lg transition-transform hover:scale-105 hover:shadow-xl focus:outline-none">
+        Make the Payment
+      </button>
+    </div>
+  </div>
+</div>

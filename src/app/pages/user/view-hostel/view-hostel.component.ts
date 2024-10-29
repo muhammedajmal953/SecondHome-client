@@ -27,7 +27,6 @@ export class ViewHostelComponent implements OnInit{
   googleUrl!: string
   protectedUrl!:SafeResourceUrl
   apiKey: string = environments.googleApiKey
-
   rate!: number
   Qty!: number
   bedType!:string
@@ -55,7 +54,7 @@ ngOnInit(): void {
           this.Qty = this.hostel$.rates[0].quantity
           this.bedType=this.hostel$.rates[0].type
 
-          this.googleUrl = `https://www.google.com/maps/embed/v1/place?key=${this.apiKey}&q=${Number(this.hostel$.address.latitude)},${Number(this.hostel$.address.longtitude)}`
+          this.googleUrl = `https://www.google.com/maps/embed/v1/place?key=${this.apiKey}&q=${Number(this.hostel$.address.latitude)},${Number(this.hostel$.address.longtitude)}&zoom=18&maptype=roadmap`
           this.protectedUrl = this._sanitizer.bypassSecurityTrustResourceUrl(this.googleUrl)
           this.directionsUrl = `https://www.google.com/maps/dir/?api=1&origin=Current+Location&destination=${this.hostel$.address.latitude},${this.hostel$.address.longtitude}`
 
@@ -98,5 +97,12 @@ ngOnInit(): void {
     }
   }
 
+  bookNow(id:string) {
+    if (id) {
+      this._router.navigate([`/user/home/hostels/checkout/${id}`])
+    }
+  }
+
+  
 
 }
