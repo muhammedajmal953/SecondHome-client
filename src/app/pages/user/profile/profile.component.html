@@ -38,19 +38,40 @@
     <div class="p-6 border-t border-gray-200">
       <h3 class="text-xl font-semibold text-gray-800 mb-4">BOOKINGS</h3>
       <div class="space-y-4">
-        <div *ngFor="let booking of bookings" class="flex flex-col sm:flex-row items-center justify-between bg-gray-50 p-4 rounded-lg">
+        <div *ngFor="let booking of bookings;index as i" class="flex flex-col sm:flex-row items-center justify-between bg-gray-50 p-4 rounded-lg">
           <div class="flex items-center mb-4 sm:mb-0">
-            <img [src]="booking.image" alt="Booking Image" class="w-16 h-16 object-cover rounded-md mr-4">
-            <span class="font-semibold text-gray-700">{{ booking.status }}</span>
+            <img [src]="booking.hostelDetails[0].photos[0]" alt="Booking Image" class="w-16 h-16 object-cover rounded-md mr-4">
+
+            <div>
+              <h4>{{booking.hostelDetails[0].name}}</h4>
+              <span class="font-semibold text-gray-700">{{ booking.bedType }}</span>
+            </div>
           </div>
           <div class="flex flex-col sm:flex-row gap-2">
-            <button (click)="editBooking(booking)" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
-              EDIT INFORMATION
+            <button (click)="editBooking(booking._id)" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+              View INFORMATION
             </button>
-            <button (click)="cancelBooking(booking)" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
+            <button (click)="openModal(i)" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
               Cancel Booking
             </button>
           </div>
+          <dialog id="my_modal_5{{i}}" class="modal modal-bottom sm:modal-middle bg-gray-800 bg-opacity-90">
+            <div class="modal-box bg-white rounded-lg shadow-lg p-6">
+              <h3 class="text-2xl font-semibold text-gray-800 mb-4">Reason to Cancel the Booking</h3>
+              <p class="text-gray-600 mb-4">Please let us know why you are canceling this Booking to help us improve our service.</p>
+
+              <textarea id="reason{{i}}"
+                class="w-full h-24 p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500 transition duration-200 resize-none mb-6"
+                placeholder="Type your reason here..."
+              ></textarea>
+
+              <div class="modal-action flex justify-end space-x-2">
+                <button class="btn btn-success px-4 py-2 rounded-lg text-white font-medium" (click)="cancelBooking(booking._id,i);$event.preventDefault()">Confirm</button>
+                <button class="btn px-4 py-2 rounded-lg text-gray-600 border  border-gray-300 hover:bg-gray-100 transition duration-200" (click)="closeModal(i)">Close</button>
+              </div>
+            </div>
+          </dialog>
+
         </div>
       </div>
     </div>

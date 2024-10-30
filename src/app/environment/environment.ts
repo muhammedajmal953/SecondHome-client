@@ -6,7 +6,7 @@ export const environments={
 
   googleApiKey: 'AIzaSyDjRR2q2ai0Xa3-D26pnN2ZdEoibW_IJYQ',
 
-  razorPay_id: 'rzp_test_IBWkIF9nEmVRIJ',
+  RazorPay_id: 'rzp_test_JOXsnyoqeaGjGC' ,
 
-  razorPay_secret:'YvjXgkYG6V3ibKVwVh8KwWcp'
+  RazorPay_secret:'fWWaWp94fg8ufppDox8sPeAJ'
 }

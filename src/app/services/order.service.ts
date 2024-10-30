@@ -19,4 +19,11 @@ export class OrderService {
     return this._http.post<ApiRes>(`${this.apiUrl}/save-booking`, bookingData)
   }
 
+  getBookings(page:number) {
+    return this._http.get<ApiRes>(`${this.apiUrl}/get-bookings/${page}`)
+  }
+
+  cancelBooking(reason: string, id: string): Observable<ApiRes>{
+    return this._http.put<ApiRes>(`${this.apiUrl}/cancel-booking?id=${id}` ,reason)
+  }
 }

@@ -10,6 +10,7 @@ import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import * as UserActions from '../../../state/user/user.actions';
 import * as UserSelectors from '../../../state/user/user.selector';
+import { OrderService } from '../../../services/order.service';
 
 @Component({
   selector: 'app-profile',
@@ -26,7 +27,7 @@ export class ProfileComponent implements OnInit,OnDestroy{
   user$!: Observable<UserDoc | null>
   destroy$=new Subscription()
 
-  constructor(private _userService: UserService,private _router:Router,private _store:Store){}
+  constructor(private _userService: UserService,private _router:Router,private _store:Store,private _orderService:OrderService){}
   ngOnInit(): void {
     this._store.dispatch(UserActions.loadUserActions())
     this.user$=this._store.select(UserSelectors.selectUser)
@@ -53,6 +54,27 @@ export class ProfileComponent implements OnInit,OnDestroy{
       })
       this._store.dispatch(UserActions.logout())
     }
+
+    this.fetchBookings()
+  }
+
+
+  fetchBookings() {
+    this._orderService.getBookings(1).subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.bookings = res.data
+
+          console.log(this.bookings);
+
+        }
+      }, error: err => {
+        console.log(err.error);
+
+      }, complete: () => {
+
+      }
+    })
   }
     profileImage:string='https://www.dgvaishnavcollege.edu.in/dgvaishnav-c/uploads/2021/01/dummy-profile-pic.jpg'
     editProfile() {
@@ -71,16 +93,40 @@ export class ProfileComponent implements OnInit,OnDestroy{
   debit() {
   throw new Error('Method not implemented.');
   }
-  bookings: any;
+  bookings:any;
   editBooking(_t23: any) {
   throw new Error('Method not implemented.');
   }
-  cancelBooking(_t23: any) {
-  throw new Error('Method not implemented.');
+  cancelBooking(id: string, i: number) {
+    console.log('clicked');
+
+    const textArea = document.getElementById(`reason${i}`) as HTMLTextAreaElement
+    const reason=textArea.value
+    if (reason.trim()) {
+      this._orderService.cancelBooking(reason.trim(), id).subscribe({
+        next: (res) =>{
+          if (res.success) {
+            console.log(res.message);
+            const modal:any = document.getElementById(`my_modal_5${i}`)
+            modal?.close()
+          }
+        }
+      })
+    }
+
   }
 
   ngOnDestroy(): void {
     this.destroy$.unsubscribe()
   }
 
+  openModal(i:any) {
+    const modal:any = document.getElementById(`my_modal_5${i}`)
+    modal.showModal()
+  }
+
+  closeModal(i: any) {
+    const modal:any = document.getElementById(`my_modal_5${i}`)
+    modal?.close()
+  }
 }

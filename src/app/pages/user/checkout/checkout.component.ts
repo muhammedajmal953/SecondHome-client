@@ -11,7 +11,17 @@ import * as UserSelectors from '../../../state/user/user.selector';
 import { CommonModule } from '@angular/common';
 import { error } from 'console';
 import { OrderService } from '../../../services/order.service';
+import { environments } from '../../../environment/environment';
 
+declare var Razorpay: any;
+
+
+
+export interface RazorpayResponse {
+  razorpay_payment_id: string;
+  razorpay_order_id: string;
+  razorpay_signature: string;
+}
 
 @Component({
   selector: 'app-checkout',
@@ -45,6 +55,7 @@ export class CheckoutComponent implements OnInit {
   calcualatedValue:number=this.rate
   Qty!: number;
   payment: string = 'fullmonth'
+  advance!:number
   id!:string
 
   ngOnInit(): void {
@@ -117,9 +128,11 @@ export class CheckoutComponent implements OnInit {
 
 
     if (value === 'fullMonth') {
-      this.calcualatedValue=this.rate
+      this.calcualatedValue = this.rate
+      this.advance=0
     } else {
       if (this.hostel$.advance) {
+        this.advance=this.hostel$.advance
         this.calcualatedValue=this.hostel$.advance
       } else {
         this.calcualatedValue=this.rate
@@ -188,7 +201,7 @@ export class CheckoutComponent implements OnInit {
     }).subscribe({
       next: (res) => {
         if (res.success) {
-          console.log(res.data);
+
 
           this.openRazorPayModal(res.data)
         }
@@ -201,10 +214,86 @@ export class CheckoutComponent implements OnInit {
 
 
   openRazorPayModal(data: Record<string,unknown>) {
-    console.log('opening razor pay ui....',data);
-    alert('opening razor pay ui....')
+    const options = {
+      key: environments.RazorPay_id,
+      amount: this.totalAmount * 100,
+      currency: 'INR',
+      name: this.hostel$.name,
+      description: this.bedType,
+      order_id: data['id'],
+      prefill: {
+        name: this.user.First_name,
+        email: this.user.Email,
+        contact:this.user.Phone
+      },
+      handler: (response: RazorpayResponse) => {
+        this.handlePaymentSuccess(response)
+      },
+      modal: {
+        ondismiss: () => {
+          Swal.fire({
+            icon: 'error',
+            toast: true,
+            text: 'Failed to Payment please book again',
+            showConfirmButton: false,
+            timer: 2000
+          });
+        }
+      },
+      confirm_close: true,
+      escape: true,
+      animation: true
+    }
+    const razorpayInstance = new Razorpay(options)
+    razorpayInstance.open()
+  }
 
- }
+  handlePaymentSuccess(response: RazorpayResponse) {
+    Swal.fire({
+      icon: 'success',
+      toast: true,
+      text: 'Booking confirmed successfully!',
+      showConfirmButton: false,
+      timer: 2000
+    });
+    const bookingData = {
+      hostelId: this.hostel$._id,
+      userId: this.user._id,
+      checkInDate:this.checkInDate,
+      bedType: this.bedType,
+      foodRatePerGuest: this.foodPrice,
+      numberOfGuests: this.numberOfGuests,
+      totalAmount: this.totalAmount,
+      advancePerGuest: this.advance||0,
+      paymentDetails: {
+        razorpay_payment_id: response.razorpay_payment_id,
+        razorpay_order_id: response.razorpay_order_id,
+        razorpay_signature: response.razorpay_signature
+      }
+    }
+
+    this._orderService.saveBooking(bookingData).subscribe({
+      next: (res) => {
+        Swal.fire({
+          icon: 'success',
+          toast: true,
+          text: 'Booking confirmed successfully!',
+          showConfirmButton: false,
+          timer: 2000
+        });
+        this._router.navigate([`/user/home/hostels/booking-success/${res.data._id}`]);
+      },
+      error: (err) => {
+        Swal.fire({
+          icon: 'error',
+          toast: true,
+          text: 'Failed to save booking',
+          showConfirmButton: false,
+          timer: 2000
+        });
+      }
+    })
+  }
 
   validateBooking():boolean {
     if (!this.checkInDate) {

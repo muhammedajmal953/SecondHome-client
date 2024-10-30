@@ -18,6 +18,7 @@ import { HostelListingComponent } from './hostel-listing/hostel-listing.componen
 import { ViewHostelComponent } from './view-hostel/view-hostel.component';
 import { WishlistComponent } from './wishlist/wishlist.component';
 import { CheckoutComponent } from './checkout/checkout.component';
+import { BookingSuccessfullComponent } from './booking-successfull/booking-successfull.component';
 
 
 const routes: Routes = [
@@ -76,6 +77,10 @@ const routes: Routes = [
       {
         path: 'hostels/checkout/:id',
         component:CheckoutComponent
+      },
+      {
+        path: 'hostels/booking-success/:id',
+        component:BookingSuccessfullComponent
       }
     ]
   },
@@ -94,6 +99,7 @@ const routes: Routes = [
     canActivate:[loginGuard],
     component: UserSignForgotChangePassWordComponent,
   },
+
 ];
 
 @NgModule({
