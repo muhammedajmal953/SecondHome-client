@@ -9,6 +9,7 @@ import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
 import { UserDoc } from '../../../models/IUsers';
 import { error } from 'console';
+import { patters } from '../../../shared/constants/regexConstants';
 
 
 interface User{
@@ -37,10 +38,10 @@ export class EditProfileComponent {
   user$!:Observable<UserDoc|null>
   constructor(private _userService: UserService,private _fb:FormBuilder ,private _sanitizer:DomSanitizer,private _router:Router) {
     this.editedForm = this._fb.group({
-      First_name: ['', [Validators.required, Validators.pattern('^[a-zA-Z]{5,}$')]],
-      Last_name: ['', [Validators.required, Validators.pattern('^[a-zA-Z]{3,}$')]],
-      Email: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')]],
-      Phone: ['', [Validators.required, Validators.pattern('^[5-9][0-9]{9}$')]],
+      First_name: ['', [Validators.required, Validators.pattern(patters.FIRST_NAME)]],
+      Last_name: ['', [Validators.required, Validators.pattern(patters.LAST_NAME)]],
+      Email: ['', [Validators.required, Validators.pattern(patters.EMAIL)]],
+      Phone: ['', [Validators.required, Validators.pattern(patters.PHONE)]],
       avatar: [null, [this.mimeType]]
     })
   }

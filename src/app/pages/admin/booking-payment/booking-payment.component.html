@@ -1,0 +1,99 @@
+<section class="justify-center min-h-screen w-full text-white bg-[#273142]">
+  <!-- Header Section - Stack on mobile -->
+  <div class="flex flex-col sm:flex-row items-center justify-between p-4 gap-4">
+    <h1 class="text-2xl sm:text-4xl font-bold">Bookings/Payments</h1>
+
+    <!-- Search Bar - Full width on mobile -->
+    <!-- <div class="relative w-full sm:w-auto min-w-[250px]">
+      <div class="absolute inset-y-0 start-0 flex items-center ps-3.5">
+        <svg class="shrink-0 size-4 text-white" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.3-4.3"></path>
+        </svg>
+      </div>
+      <input
+        class="w-full py-3 ps-10 pe-4 bg-gray-500 text-gray-300 rounded-lg text-sm
+               focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
+        type="text"
+        [(ngModel)]="searchText"
+        (keydown.enter)="searchUser()"
+        placeholder="Search Users"
+      />
+    </div> -->
+  </div>
+
+  <!-- Table Container with horizontal scroll -->
+  <div class="px-4 w-full overflow-x-auto">
+    <div class="min-w-full inline-block align-middle">
+      <div class="rounded-lg border border-gray-200 shadow-md overflow-hidden">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-700">
+            <tr>
+              <th scope="col" class="px-4 sm:px-6 py-3 text-start text-xs font-medium text-gray-300 uppercase">ID</th>
+              <th scope="col" class="px-4 sm:px-6 py-3 text-start text-xs font-medium text-gray-300 uppercase">HostelID</th>
+              <th scope="col" class="px-4 sm:px-6 py-3 text-start text-xs font-medium text-gray-300 uppercase hidden sm:table-cell">User</th>
+              <th scope="col" class="px-4 sm:px-6 py-3 text-start text-xs font-medium text-gray-300 uppercase hidden md:table-cell">Vendor</th>
+              <th scope="col" class="px-4 sm:px-6 py-3 text-start text-xs font-medium text-gray-300 uppercase hidden md:table-cell">BedType</th>
+              <th scope="col" class="px-4 sm:px-6 py-3 text-start text-xs font-medium text-gray-300 uppercase hidden md:table-cell">number Of Quests</th>
+              <th scope="col" class="px-4 sm:px-6 py-3 text-end text-xs font-medium text-gray-300 uppercase">Status</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200">
+            <tr *ngFor="let booking of bookings" class="odd:bg-gray-600  even:bg-gray-800">
+              <td class="px-4 sm:px-6 py-4 text-sm">{{booking._id}}</td>
+              <td class="px-4 sm:px-6 py-4 text-sm">{{booking.hostelDetails[0].name}}</td>
+              <td class="px-4 sm:px-6 py-4 text-sm hidden sm:table-cell">{{booking.userDetails[0].First_name}}</td>
+              <td class="px-4 sm:px-6 py-4 text-sm hidden md:table-cell">{{booking.vedorDetails?.[0]?.First_name}}</td>
+              <td class="px-4 sm:px-6 py-4 text-sm hidden md:table-cell">{{booking.bedType}}</td>
+              <td class="px-4 sm:px-6 py-4 text-sm hidden md:table-cell">{{booking.numberOfGuests}}</td>
+              <td class="px-4 sm:px-6 py-4 text-end">
+                <button *ngIf="!booking.isActive && booking.isCancelled"
+
+                        class="px-3 py-2 text-sm font-semibold rounded-lg text-red-600
+                               btn btn-ghost hover:btn-outline transition-colors">
+                  Cancelled
+                </button>
+                <button *ngIf="booking.isActive && !booking.isCancelled"
+
+                        class="px-3 py-2 text-sm font-semibold rounded-lg text-green-800
+                               hover:bg-green-800 transition-colors">
+                  Active
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pagination - Centered and responsive -->
+  <nav class="flex items-center justify-center gap-2 p-4">
+    <button (click)="changePage('decrement')"
+            class="p-2 rounded-lg text-white hover:bg-white/10 transition-colors
+                   disabled:opacity-50 disabled:pointer-events-none">
+      <svg class="size-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+      </svg>
+    </button>
+
+    <div class="flex items-center gap-2">
+      <span class="min-w-[38px] h-9 flex justify-center items-center border
+                   border-gray-700 text-white rounded-lg">
+        {{page}}
+      </span>
+      <span class="text-gray-400">of</span>
+      <span class="text-gray-400"></span>
+    </div>
+
+    <button (click)="changePage('increment')"
+            class="p-2 rounded-lg text-white hover:bg-white/10 transition-colors
+                   disabled:opacity-50 disabled:pointer-events-none">
+      <svg class="size-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+      </svg>
+    </button>
+  </nav>
+</section>

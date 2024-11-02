@@ -71,4 +71,12 @@ export class VendorService {
     return this._http.put<ApiRes>(`${this.api}/editHostel/${id}`,formData)
   }
 
+  vendorBookings(page:number):Observable<ApiRes> {
+    return this._http.get<ApiRes>(`${this.api}/get-bookings/${page}`)
+  }
+
+  cancelConform(id: string):Observable<ApiRes> {
+    return this._http.put<ApiRes>(`${this.api}/confirm-cancel?id=${id}`,{})
+  }
+
 }

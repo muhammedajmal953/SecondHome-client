@@ -13,6 +13,7 @@ import {
 import { HostelService } from '../../../services/hostel.service';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
+import { patters } from '../../../shared/constants/regexConstants';
 
 @Component({
   selector: 'app-add-address',
@@ -123,17 +124,17 @@ export class AddAddressComponent {
     });
 
     this.addressRateForm = this._fb.group({
-      city: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]{2,}$')]],
-      street: ['', Validators.required],
-      state: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]],
-      district: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]],
+      city: ['', [Validators.required, Validators.pattern(patters.PLACE)]],
+      street: ['', [Validators.required,Validators.pattern(patters.PLACE)]],
+      state: ['', [Validators.required, Validators.pattern(patters.PLACE)]],
+      district: ['', [Validators.required, Validators.pattern(patters.PLACE)]],
       pincode: [
         '',
-        [Validators.required, Validators.pattern('^[1-9][0-9]{5}$')],
+        [Validators.required, Validators.pattern(patters.PINCODE)],
       ],
       foodRate: [
         '',
-        [Validators.required, Validators.pattern('^[1-9][0-9]*$')],
+        [Validators.required, Validators.pattern(patters.RATE)],
       ],
       rates: this._fb.group(bedTypeGroup),
       photos: ['', [Validators.required, this.mimeTypeValidator]],

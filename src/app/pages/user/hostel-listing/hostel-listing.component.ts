@@ -5,8 +5,8 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
-import { error } from 'console';
 import { WishlistService } from '../../../services/wishlist.service';
+import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-hostel-listing',
@@ -28,6 +28,7 @@ export class HostelListingComponent implements OnInit {
   searchQuery: string = '';
   page: number = 1;
   count!: number;
+  private _searchSubject=new Subject<string>()
 
   ngOnInit(): void {
     let storedPage: string;
@@ -39,6 +40,15 @@ export class HostelListingComponent implements OnInit {
       this.page = +storedPage;
     }
     this.fetchHostels();
+
+    this._searchSubject.pipe(
+      debounceTime(300),
+      distinctUntilChanged()
+    ).subscribe((searchTerm) => {
+      this.searchQuery = searchTerm
+      this.page = 1
+      this.fetchHostels()
+    })
   }
 
   changePage(direction: 'increment' | 'decrement') {
@@ -79,8 +89,11 @@ export class HostelListingComponent implements OnInit {
     });
   }
 
-  searchButton() {
-    this.fetchHostels();
+  searchButton(searchTerm: Event) {
+    const target = searchTerm.target as HTMLInputElement
+
+    const value=target.value
+      this._searchSubject.next(value)
   }
 
   showHostel(id: string) {
@@ -116,4 +129,6 @@ export class HostelListingComponent implements OnInit {
       }
     })
   }
+
+
 }

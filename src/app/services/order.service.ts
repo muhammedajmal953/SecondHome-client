@@ -24,6 +24,8 @@ export class OrderService {
   }
 
   cancelBooking(reason: string, id: string): Observable<ApiRes>{
-    return this._http.put<ApiRes>(`${this.apiUrl}/cancel-booking?id=${id}` ,reason)
+    console.log(reason);
+
+    return this._http.put<ApiRes>(`${this.apiUrl}/cancel-booking?id=${id}` ,{reason})
   }
 }

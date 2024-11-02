@@ -8,6 +8,7 @@ import {
   ValidationErrors,
   Validators,
 } from '@angular/forms';
+import { patters } from '../../shared/constants/regexConstants';
 
 @Component({
   selector: 'app-reset-password',
@@ -26,7 +27,7 @@ export class ResetPasswordComponent {
         newPassword: new FormControl('', [
           Validators.required,
           Validators.pattern(
-            '^(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{8,}$'
+            patters.PASSWORD
           ),
         ]),
         confirmPassword: new FormControl('', [Validators.required]),

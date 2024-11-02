@@ -8,6 +8,7 @@ import { loginGuard } from '../../guards/login.guard';
 import { VendorManagementComponent } from './vendor-management/vendor-management.component';
 import { authGuard } from '../../guards/auth.guard';
 import { HostelManagementComponent } from './hostel-management/hostel-management.component';
+import { BookingPaymentComponent } from './booking-payment/booking-payment.component';
 
 
 const routes: Routes = [
@@ -33,6 +34,10 @@ const routes: Routes = [
         path: 'hostels',
         component:HostelManagementComponent
       },
+      {
+        path: 'bookings',
+        component:BookingPaymentComponent
+      }
     ]
   },
 ];

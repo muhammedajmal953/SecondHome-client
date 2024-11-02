@@ -13,6 +13,7 @@ import { ApiRes } from '../../../models/IApiRes';
 import Swal from 'sweetalert2';
 import { CommonModule } from '@angular/common';
 import { HeaderNameComponent } from '../../../components/header-name/header-name.component';
+import { patters } from '../../../shared/constants/regexConstants';
 @Component({
   selector: 'app-vendor-signup',
   standalone: true,
@@ -28,27 +29,27 @@ export class VendorSignupComponent {
       {
         Email: new FormControl('', [
           Validators.required,
-          Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$'),
+          Validators.pattern(patters.EMAIL),
         ]),
         First_name: new FormControl('', [
           Validators.required,
-          Validators.pattern('^[a-zA-Z]{5,}$'),
+          Validators.pattern(patters.FIRST_NAME),
         ]),
         Last_name: new FormControl('', [
           Validators.required,
-          Validators.pattern('^[a-zA-Z]{3,}$'),
+          Validators.pattern(patters.LAST_NAME),
         ]),
         Password: new FormControl('', [
           Validators.required,
           Validators.pattern(
-            '^(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{8,}$'
+           patters.PASSWORD
           ),
         ]),
         ConfirmPassword: new FormControl('', [Validators.required]),
         Gender: new FormControl('', [Validators.required]),
         Phone: new FormControl('', [
           Validators.required,
-          Validators.pattern('^[5-9][0-9]{9}$'),
+          Validators.pattern(patters.PHONE),
         ]),
       },
       { validators: this.passwordsMatchValidator }

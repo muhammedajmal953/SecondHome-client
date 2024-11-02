@@ -48,12 +48,16 @@
             </div>
           </div>
           <div class="flex flex-col sm:flex-row gap-2">
-            <button (click)="editBooking(booking._id)" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
-              View INFORMATION
-            </button>
-            <button (click)="openModal(i)" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
+            <button (click)="openModal(i)" *ngIf="booking.isActive&&!booking.isCancelled" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
               Cancel Booking
             </button>
+            <button *ngIf="booking.isActive===true && booking.isCancelled===true" class=" text-red-500 font-bold py-2 px-4 rounded">
+              Waiting For Cancel Aproval
+            </button>
+            <button *ngIf="!booking.isActive===true && booking.isCancelled===true" class=" text-rose-500 font-bold py-2 px-4 rounded">
+              Booking Cancelled
+            </button>
+
           </div>
           <dialog id="my_modal_5{{i}}" class="modal modal-bottom sm:modal-middle bg-gray-800 bg-opacity-90">
             <div class="modal-box bg-white rounded-lg shadow-lg p-6">

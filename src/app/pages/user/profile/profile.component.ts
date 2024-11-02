@@ -107,8 +107,12 @@ export class ProfileComponent implements OnInit,OnDestroy{
         next: (res) =>{
           if (res.success) {
             console.log(res.message);
-            const modal:any = document.getElementById(`my_modal_5${i}`)
-            modal?.close()
+            this.closeModal(i)
+            this.bookings.forEach((booking:any) => {
+              if (booking._id === id) {
+                booking.isCancelled=true
+              }
+            })
           }
         }
       })

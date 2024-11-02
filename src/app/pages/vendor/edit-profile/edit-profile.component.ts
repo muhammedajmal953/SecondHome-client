@@ -19,6 +19,7 @@ import { Observable, Subject, takeUntil } from 'rxjs';
 import { UserDoc } from '../../../models/IUsers';
 import * as VendorSelector from '../../../state/vendor/vendor.selecters';
 import * as VendorActions from '../../../state/vendor/vendor.actions';
+import { patters } from '../../../shared/constants/regexConstants';
 
 interface User {
   First_name: string;
@@ -51,20 +52,20 @@ export class EditProfileComponent implements OnInit,OnDestroy {
     this.editedForm = this._fb.group({
       First_name: [
         '',
-        [Validators.required, Validators.pattern('^[a-zA-Z]{5,}$')],
+        [Validators.required, Validators.pattern(patters.FIRST_NAME)],
       ],
       Last_name: [
         '',
-        [Validators.required, Validators.pattern('^[a-zA-Z]{3,}$')],
+        [Validators.required, Validators.pattern(patters.LAST_NAME)],
       ],
       Email: [
         '',
         [
           Validators.required,
-          Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$'),
+          Validators.pattern(patters.EMAIL),
         ],
       ],
-      Phone: ['', [Validators.required, Validators.pattern('^[5-9][0-9]{9}$')]],
+      Phone: ['', [Validators.required, Validators.pattern(patters.PHONE)]],
       avatar: [null, [this.mimeType]],
     });
   }

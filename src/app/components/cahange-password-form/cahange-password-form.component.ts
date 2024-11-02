@@ -2,6 +2,7 @@ import { Component, Output } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { patters } from '../../shared/constants/regexConstants';
 
 @Component({
   selector: 'app-cahange-password-form',
@@ -21,11 +22,11 @@ export class CahangePasswordFormComponent {
     this.formData = new FormGroup({
       oldPassword: new FormControl('', [
         Validators.required,
-        Validators.pattern('^(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{8,}$')
+        Validators.pattern(patters.PASSWORD)
       ]),
       newPassword: new FormControl('', [
         Validators.required,
-        Validators.pattern('^(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{8,}$')
+        Validators.pattern(patters.PASSWORD)
       ]),
       confirmPassword: new FormControl('', [Validators.required]),
     }, { validators: this.passwordsMatchValidator });

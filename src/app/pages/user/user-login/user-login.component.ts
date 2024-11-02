@@ -8,6 +8,7 @@ import { LoginUser } from '../../../models/IUsers';
 import { HeaderNameComponent } from "../../../components/header-name/header-name.component";
 import { CommonModule } from '@angular/common';
 import { Subject, takeUntil } from 'rxjs';
+import { patters } from '../../../shared/constants/regexConstants';
 
 @Component({
   selector: 'app-user-login',
@@ -29,11 +30,11 @@ export class UserLoginComponent implements OnInit,OnDestroy{
     this.formdata =new FormGroup({
       Email: new FormControl<string | null>("",
         [Validators.required,
-          Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
+          Validators.pattern(patters.EMAIL)
         ]),
       Password: new FormControl<string|null>("", [
         Validators.required,
-        Validators.pattern('^(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{8,}$')
+        Validators.pattern(patters.PASSWORD)
       ])
     })
   }

@@ -3,15 +3,13 @@ import { HeaderNameComponent } from "../../../components/header-name/header-name
 import { CommonModule } from '@angular/common';
 import { UserDoc } from '../../../models/IUsers';
 
-import { catchError, Observable, of, Subscription, timeout } from 'rxjs';
+import {  Observable, Subscription, } from 'rxjs';
 import { RouterModule } from '@angular/router';
 import Swal from 'sweetalert2';
-import { ApiRes } from '../../../models/IApiRes';
 import { VendorService } from '../../../services/vendor.service';
 import { Store } from '@ngrx/store';
 import * as VendorSelector from '../../../state/vendor/vendor.selecters';
 import * as VendorActions from '../../../state/vendor/vendor.actions';
-import { error } from 'console';
 
 @Component({
   selector: 'app-vendor-home',

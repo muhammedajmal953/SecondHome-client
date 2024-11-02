@@ -15,6 +15,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { VendorService } from '../../../services/vendor.service';
 import { HostelService } from '../../../services/hostel.service';
 import Swal from 'sweetalert2';
+import { patters } from '../../../shared/constants/regexConstants';
+import { parseArgs } from 'util';
 
 @Component({
   selector: 'app-edit-hostel',
@@ -51,27 +53,27 @@ export class EditHostelComponent implements OnInit {
     this.hostelForm = this._fb.group({
       name: [
         '',
-        [Validators.required, Validators.pattern('^[a-zA-Z]+( [a-zA-Z]+)*$')],
+        [Validators.required, Validators.pattern(patters.TEXT_CONTENT)],
       ],
-      phone: ['', [Validators.required, Validators.pattern('^[5-9][0-9]{9}$')]],
+      phone: ['', [Validators.required, Validators.pattern(patters.PHONE)]],
       email: [
         '',
         [
           Validators.required,
-          Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$'),
+          Validators.pattern(patters.EMAIL),
         ],
       ],
       facilities: [[], this.facilityValidator.bind(this)],
       nearByAccess: [[], this.nearByAccessValidator.bind(this)],
       policies: [
         '',
-        [Validators.required, Validators.pattern('^[a-zA-Z]+( [a-zA-Z]+)*$')],
+        [Validators.required, Validators.pattern(patters.TEXT_CONTENT)],
       ],
       category: ['', Validators.required],
-      advance: ['', [Validators.required, Validators.pattern('^[1-9][0-9]*$')]],
+      advance: ['', [Validators.required, Validators.pattern(patters.RATE)]],
       foodRate: [
         '',
-        [Validators.required, Validators.pattern('^[1-9][0-9]*$')],
+        [Validators.required, Validators.pattern(patters.RATE)],
       ],
       rates: this._fb.group(this.bedTypeGroup),
       photos: [[], [this.mimeTypeValidator(this.photoUrls)]],

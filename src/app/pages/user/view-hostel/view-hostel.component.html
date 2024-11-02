@@ -116,6 +116,13 @@
             <span class="text-gray-700">Rent</span>
             <span class="text-xl font-bold text-[#2BAE66]">₹{{rate}} / month</span>
           </div>
+          <div class="my-2  w-1/2">
+            <label for="bedType" class="block text-sm font-semibold text-gray-700">Bed Type</label>
+            <select class="w-fit border-2 border-[#2BAE66] rounded-lg p-2" (change)="changeType($event)" id="bedType">
+              <option value="" selected disabled>Select bed type</option>
+              <option [value]="item._id" *ngFor="let item of hostel$?.rates">{{item.type}}</option>
+            </select>
+          </div>
          <div class="flex justify-between">
           <p class="text-gray-500" *ngIf="!hostel$.foodRate">Meals not included</p>
           <p class="text-gray-500" *ngIf="hostel$.foodRate">₹{{hostel$.foodRate}} for food</p>

@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, retry } from 'rxjs';
 import { ApiRes } from '../models/IApiRes';
 import { environments } from '../environment/environment';
 
@@ -51,5 +51,8 @@ export class AdminService {
     return this._http.put<ApiRes>(`${this.api}/admin/unBlockHostel`,{id})
   }
 
+  getAllBookings(page: number): Observable<ApiRes>{
+    return this._http.get<ApiRes>(`${this.api}/admin/getAllBookings/${page}`)
+  }
 
 }

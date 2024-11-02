@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, Output ,EventEmitter} from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { patters } from '../../shared/constants/regexConstants';
 
 
 @Component({
@@ -21,7 +22,7 @@ export class ForgotPasswordFormComponent {
 
   constructor() {
     this.formdata = new FormGroup({
-      Email:new FormControl('', [Validators.required, Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')]),
+      Email:new FormControl('', [Validators.required, Validators.pattern(patters.EMAIL)]),
     });
   }
 

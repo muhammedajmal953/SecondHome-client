@@ -14,6 +14,7 @@ import { log } from 'console';
 import { Subscription } from 'rxjs';
 import { ChipsModule } from 'primeng/chips';
 import { Router } from '@angular/router';
+import { patters } from '../../../shared/constants/regexConstants';
 
 @Component({
   selector: 'app-add-hostel',
@@ -33,14 +34,14 @@ export class AddHostelComponent {
     this.hostelForm = this._fb.group({
       name: [
         '',
-        [Validators.required, Validators.pattern('^[a-zA-Z]+( [a-zA-Z]+)*$')],
+        [Validators.required, Validators.pattern(patters.TEXT_CONTENT)],
       ],
-      phone: ['', [Validators.required, Validators.pattern('^[5-9][0-9]{9}$')]],
+      phone: ['', [Validators.required, Validators.pattern(patters.PHONE)]],
       email: [
         '',
         [
           Validators.required,
-          Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$'),
+          Validators.pattern(patters.EMAIL),
         ],
       ],
       facilities: ['', this.facilityValidator.bind(this)],
@@ -58,10 +59,10 @@ export class AddHostelComponent {
       nearByAccess: ['', this.nearByAccessValidator.bind(this)],
       policies: [
         '',
-        [Validators.required, Validators.pattern('^[a-zA-Z]+( [a-zA-Z]+)*$')],
+        [Validators.required, Validators.pattern(patters.TEXT_CONTENT)],
       ],
       category: ['', Validators.required],
-      advance: ['', [Validators.required, Validators.pattern('^[1-9][0-9]*$')]],
+      advance: ['', [Validators.required, Validators.pattern(patters.TEXT_CONTENT)]],
     });
   }
 

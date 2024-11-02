@@ -146,12 +146,14 @@ export class CheckoutComponent implements OnInit {
   changeType(event:Event) {
     if (event.target) {
       const target = event.target as HTMLSelectElement
+      console.log(target.value);
+
       this.hostel$.rates.forEach((rate:{type:string,price:number,quantity:number}) => {
         if (rate.type === target.value) {
           this.rate = rate.price
-          if (!this.calcualatedValue) {
+
             this.calcualatedValue=this.rate
-          }
+
           this.bedType=rate.type
           this.Qty=rate.quantity
         }
@@ -259,7 +261,8 @@ export class CheckoutComponent implements OnInit {
     const bookingData = {
       hostelId: this.hostel$._id,
       userId: this.user._id,
-      checkInDate:this.checkInDate,
+      checkInDate: this.checkInDate,
+      vendorId:this.hostel$.owner,
       bedType: this.bedType,
       foodRatePerGuest: this.foodPrice,
       numberOfGuests: this.numberOfGuests,
