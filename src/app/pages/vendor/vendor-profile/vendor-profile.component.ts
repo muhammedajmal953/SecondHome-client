@@ -22,6 +22,9 @@ import { error } from 'console';
 export class VendorProfileComponent implements OnInit {
   user$!: Observable<UserDoc | null>;
 
+  walletHistory: any[] = []
+  historyView:boolean=false
+
   constructor(
     private _vendorService: VendorService,
     private _router: Router,
@@ -49,6 +52,8 @@ export class VendorProfileComponent implements OnInit {
       }
       , complete: () => { }
     });
+
+    this.getWalletBalace()
   }
 
   user!: UserDoc;
@@ -64,18 +69,23 @@ export class VendorProfileComponent implements OnInit {
   changePassword() {
     this._router.navigate(['/vendor/home/change-password']);
   }
-  walletBalance: any;
-  addMoney() {
-    throw new Error('Method not implemented.');
+  walletBalance!: number;
+
+  getWalletBalace() {
+    this._vendorService.getWalletBalance().subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.walletBalance = res.data.WalletBalance
+          this.walletHistory=res.data.transaction
+        }
+      }
+    })
   }
-  debit() {
-    throw new Error('Method not implemented.');
+
+  showModal() {
+    this.historyView=!this.historyView
   }
-  bookings: any;
-  editBooking(_t23: any) {
-    throw new Error('Method not implemented.');
-  }
-  cancelBooking(_t23: any) {
-    throw new Error('Method not implemented.');
+  closeHisory() {
+    this.historyView=false
   }
 }

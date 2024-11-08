@@ -57,7 +57,6 @@ export class HostelListingComponent implements OnInit {
     } else if (direction === 'decrement' && this.page > 1) {
       this.page--;
     }
-
     this.fetchHostels();
   }
 

@@ -43,9 +43,11 @@ export const jwtTokenInterceptor: HttpInterceptorFn = (req, next) => {
   if (isEpiredToken(token)) {
     console.warn('Access Token expired .Trying to refresh');
     localStorage.removeItem(`${role}`)
-
+    console.log(refreshToken);
     if (!refreshToken || isEpiredToken(refreshToken)) {
       console.warn('Refresh token expired or not available, redirecting to login.');
+
+
       void router.navigate([`/${role}/login`]);
       return EMPTY;
     }

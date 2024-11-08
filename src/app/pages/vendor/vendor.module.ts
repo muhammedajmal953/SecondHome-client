@@ -18,6 +18,7 @@ import { VendorProfileComponent } from './vendor-profile/vendor-profile.componen
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
 import { EditHostelComponent } from './edit-hostel/edit-hostel.component';
+import { ChatBoxComponent } from './chat-box/chat-box.component';
 
 
 const routes: Routes = [
@@ -76,6 +77,10 @@ const routes: Routes = [
       {
         path: 'edit-hostel',
         component:EditHostelComponent
+      },
+      {
+        path: 'chat',
+        component:ChatBoxComponent
       }
     ]
   },

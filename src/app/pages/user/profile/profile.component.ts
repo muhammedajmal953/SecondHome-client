@@ -25,7 +25,9 @@ import { OrderService } from '../../../services/order.service';
 export class ProfileComponent implements OnInit,OnDestroy{
   user!: UserDoc
   user$!: Observable<UserDoc | null>
-  destroy$=new Subscription()
+  destroy$ = new Subscription()
+  walletHistory: any[] = []
+  historyView:boolean=false
 
   constructor(private _userService: UserService,private _router:Router,private _store:Store,private _orderService:OrderService){}
   ngOnInit(): void {
@@ -56,6 +58,7 @@ export class ProfileComponent implements OnInit,OnDestroy{
     }
 
     this.fetchBookings()
+    this.getWalletBalace()
   }
 
 
@@ -81,17 +84,31 @@ export class ProfileComponent implements OnInit,OnDestroy{
     this._router.navigate(['/user/home/edit-profile'])
   }
   saveProfile() {
-  throw new Error('Method not implemented.');
+
   }
+
+  getWalletBalace() {
+    this._userService.getWalletBalance().subscribe({
+      next: (res) => {
+        if (res.success) {
+          console.log('ssfsd',res.data);
+          this.walletBalance = res.data.WalletBalance
+          this.walletHistory=res.data.transaction
+        }
+      }
+    })
+  }
+
   changePassword() {
   this._router.navigate(['/user/home/change-password'])
   }
   walletBalance: any;
-  addMoney() {
-  throw new Error('Method not implemented.');
+  showModal() {
+    this.historyView = !this.historyView
+    this.getWalletBalace()
   }
-  debit() {
-  throw new Error('Method not implemented.');
+  closeHisory() {
+    this.historyView=false
   }
   bookings:any;
   editBooking(_t23: any) {

@@ -13,7 +13,8 @@
         <button (click)="saveProfile()" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
           Saved
         </button>
-        <button (click)="changePassword()" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
+        <button (click)="changePassword()"
+          class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
           Change Password
         </button>
       </div>
@@ -21,38 +22,77 @@
 
     <!-- Wallet Section -->
     <div class="p-6  border-gray-200">
-      <h3 class="text-xl inline font-semibold text-[#2BAE66] mb-6">Wallet <img class="w-4 h-4 inline" src="https://www.svgrepo.com/show/128494/wallet.svg" alt=""></h3>
+      <h3 class="text-xl inline font-semibold text-[#2BAE66] mb-6">Wallet <img class="w-4 h-4 inline"
+          src="https://www.svgrepo.com/show/128494/wallet.svg" alt=""></h3>
       <div class=" items-center gap-4 space-y-2 ">
-        <input type="text" [(ngModel)]="walletBalance"  class="bg-gray-100 border border-gray-300 rounded-md py-2 px-4 w-full sm:w-auto block">
-        <button (click)="addMoney()" class="bg-green-500 me-1 hover:bg-green-600 text-white font-bold py-2 px-4 rounded w-full sm:w-auto">
-          ADD MONEY
-        </button>
-        <button (click)="debit()" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded w-full sm:w-auto">
-          DEBIT
+        <input type="text" [(ngModel)]="walletBalance"
+          class="bg-gray-100 border border-gray-300 rounded-md py-2 px-4 w-full sm:w-auto block">
+        <button (click)="showModal()"
+          class="bg-green-500 me-1 hover:bg-green-600 text-white font-bold py-2 px-4 rounded w-full sm:w-auto">
+          View History
         </button>
       </div>
-    </div>
-    </div>
 
-    <!-- Bookings Section -->
-    <div class="p-6 border-t border-gray-200">
-      <h3 class="text-xl font-semibold text-gray-800 mb-4">BOOKINGS</h3>
-      <div class="space-y-4">
-        <div *ngFor="let booking of bookings" class="flex flex-col sm:flex-row items-center justify-between bg-gray-50 p-4 rounded-lg">
-          <div class="flex items-center mb-4 sm:mb-0">
-            <img [src]="booking.image" alt="Booking Image" class="w-16 h-16 object-cover rounded-md mr-4">
-            <span class="font-semibold text-gray-700">{{ booking.status }}</span>
-          </div>
-          <div class="flex flex-col sm:flex-row gap-2">
-            <button (click)="editBooking(booking)" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
-              EDIT INFORMATION
+      <div *ngIf="historyView" class="fixed inset-0 flex items-center justify-center z-50 bg-gray-900 bg-opacity-50">
+        <div class="bg-white rounded-lg shadow-lg max-w-lg w-full p-6">
+          <div class="flex justify-between items-center border-b pb-3 mb-4">
+            <h4 class="text-lg font-semibold text-gray-800">Wallet History</h4>
+            Balance:{{walletBalance}}
+            <button (click)="closeHisory()" class="text-gray-500 hover:text-gray-700">
+              <span class="text-2xl">&times;</span>
             </button>
-            <button (click)="cancelBooking(booking)" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
-              Cancel Booking
+          </div>
+
+          <div class="space-y-2">
+            <!-- Example Wallet History Entries -->
+            <div *ngFor="let transaction of walletHistory" class="flex justify-between items-center text-gray-700">
+              <span>{{ transaction.date|date }}</span>
+
+              <span *ngIf="transaction.type==='credit'" class='text-green-500'>
+                {{ transaction.type|uppercase }}
+              </span>
+              <span *ngIf="transaction.type==='debit'" class='text-red-500'>
+                {{ transaction.type|uppercase }}
+              </span>
+              <span *ngIf="transaction.type==='credit'" class='text-green-500'>
+                Rs-{{ transaction.amount }}
+              </span>
+              <span *ngIf="transaction.type==='debit'" class='text-red-500'>
+                Rs-{{ transaction.amount }}
+              </span>
+            </div>
+          </div>
+
+          <div class="mt-6 text-right">
+            <button (click)="closeHisory()"
+              class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded">
+              Close
             </button>
           </div>
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- Bookings Section -->
+  <!-- <div class="p-6 border-t border-gray-200">
+    <h3 class="text-xl font-semibold text-gray-800 mb-4">BOOKINGS</h3>
+    <div class="space-y-4">
+      <div class="flex flex-col sm:flex-row items-center justify-between bg-gray-50 p-4 rounded-lg">
+        <div class="flex items-center mb-4 sm:mb-0">
+          <img [src]="" alt="Booking Image" class="w-16 h-16 object-cover rounded-md mr-4">
+          <span class="font-semibold text-gray-700"></span>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-2">
+          <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+            EDIT INFORMATION
+          </button>
+          <button class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
+            Cancel Booking
+          </button>
+        </div>
+      </div>
+    </div>
+  </div> -->
 
 </div>

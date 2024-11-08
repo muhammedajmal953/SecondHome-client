@@ -62,5 +62,8 @@ export class UserService {
     return this._http.get<ApiRes>(`${this.api}/getHostel/${id}`)
   }
 
-  
+  getWalletBalance() {
+    return this._http.get<ApiRes>(`${this.api}/wallet-balance`)
+  }
+
 }

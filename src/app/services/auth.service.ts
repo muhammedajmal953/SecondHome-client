@@ -11,7 +11,13 @@ export class AuthService {
  api:string=environments.api
   constructor(private _http: HttpClient) { }
 
+
+  
   refreshToken(role: string, refreshToken: string): Observable<ApiRes>{
-    return this._http.get<ApiRes>(`${this.api}/${role}/token`,{params:{refreshToken}})
+    if (role === 'user') {
+
+      return this._http.get<ApiRes>(`${this.api}/token/${refreshToken}`)
+    }
+    return this._http.get<ApiRes>(`${this.api}/${role}/token/${refreshToken}`)
   }
 }

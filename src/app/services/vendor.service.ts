@@ -79,4 +79,8 @@ export class VendorService {
     return this._http.put<ApiRes>(`${this.api}/confirm-cancel?id=${id}`,{})
   }
 
+  getWalletBalance() {
+    return this._http.get<ApiRes>(`${this.api}/wallet-balance`)
+  }
+
 }

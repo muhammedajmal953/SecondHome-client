@@ -40,23 +40,23 @@ export class CheckoutComponent implements OnInit {
     private _activatedRoute: ActivatedRoute,
     private _userService: UserService,
     private _store: Store,
-    private _orderService:OrderService
-  ) {}
-  foodPrice: number=0;
-  totalPrice: number=0;
+    private _orderService: OrderService
+  ) { }
+  foodPrice: number = 0;
+  totalPrice: number = 0;
   totalAmount!: number;
   hostel$: any;
-  checkInDate!: Date|null;
-  numberOfGuests: number=1;
+  checkInDate!: Date | null;
+  numberOfGuests: number = 1;
   user$!: Observable<UserDoc | null>
   user!: UserDoc
   rate: number = 0;
-  bedType!:string
-  calcualatedValue:number=this.rate
+  bedType!: string
+  calcualatedValue: number = this.rate
   Qty!: number;
   payment: string = 'fullmonth'
-  advance!:number
-  id!:string
+  advance!: number
+  id!: string
 
   ngOnInit(): void {
     this._activatedRoute.params.subscribe((params) => {
@@ -70,14 +70,14 @@ export class CheckoutComponent implements OnInit {
     this.user$.subscribe({
       next: res => {
         if (res) {
-          this.user=res
+          this.user = res
         }
       }
     })
     this.calculateTotalPrice()
   }
 
-  fetchHostel(id:string) {
+  fetchHostel(id: string) {
     this._userService.getHostel(id).subscribe({
       next: (res) => {
         if (res.success) {
@@ -106,12 +106,12 @@ export class CheckoutComponent implements OnInit {
   calculateTotalPrice() {
     this.totalPrice = (this.calcualatedValue * this.numberOfGuests)
 
-    this.totalAmount=this.totalPrice+ (this.foodPrice * this.numberOfGuests)
+    this.totalAmount = this.totalPrice + (this.foodPrice * this.numberOfGuests)
   }
 
 
- //selectingfood types
-  selectFood(event:Event) {
+  //selectingfood types
+  selectFood(event: Event) {
     const target = event.target as HTMLSelectElement
 
     this.foodPrice = Number(target.value)
@@ -120,7 +120,7 @@ export class CheckoutComponent implements OnInit {
 
 
   //selecting payment type
-  paymentType(event:Event) {
+  paymentType(event: Event) {
     const target = event.target as HTMLSelectElement
     const value = target.value
 
@@ -129,13 +129,13 @@ export class CheckoutComponent implements OnInit {
 
     if (value === 'fullMonth') {
       this.calcualatedValue = this.rate
-      this.advance=0
+      this.advance = 0
     } else {
       if (this.hostel$.advance) {
-        this.advance=this.hostel$.advance
-        this.calcualatedValue=this.hostel$.advance
+        this.advance = this.hostel$.advance
+        this.calcualatedValue = this.hostel$.advance
       } else {
-        this.calcualatedValue=this.rate
+        this.calcualatedValue = this.rate
       }
     }
     this.calculateTotalPrice()
@@ -143,19 +143,19 @@ export class CheckoutComponent implements OnInit {
 
 
 
-  changeType(event:Event) {
+  changeType(event: Event) {
     if (event.target) {
       const target = event.target as HTMLSelectElement
       console.log(target.value);
 
-      this.hostel$.rates.forEach((rate:{type:string,price:number,quantity:number}) => {
+      this.hostel$.rates.forEach((rate: { type: string, price: number, quantity: number }) => {
         if (rate.type === target.value) {
           this.rate = rate.price
 
-            this.calcualatedValue=this.rate
+          this.calcualatedValue = this.rate
 
-          this.bedType=rate.type
-          this.Qty=rate.quantity
+          this.bedType = rate.type
+          this.Qty = rate.quantity
         }
       })
     }
@@ -173,22 +173,22 @@ export class CheckoutComponent implements OnInit {
   }
 
   dateValidate() {
-    if (this.checkInDate&&new Date(this.checkInDate) <= new Date()) {
+    if (this.checkInDate && new Date(this.checkInDate) <= new Date()) {
       Swal.fire({
         icon: 'error',
         toast: true,
-        text:'select a valid date',
+        text: 'select a valid date',
         showConfirmButton: false,
-        timer:2000
+        timer: 2000
       })
-      this.checkInDate=null
+      this.checkInDate = null
     }
   }
 
 
   confirmBooking() {
     if (this.validateBooking()) {
-       this.initiatePayment()
+      this.initiatePayment()
     }
   }
 
@@ -199,7 +199,8 @@ export class CheckoutComponent implements OnInit {
       reciept: `reciept_${new Date().getTime()}`,
       hostId: this.hostel$._id,
       bedCount: this.numberOfGuests,
-      bedType:this.bedType
+      bedType: this.bedType
+
     }).subscribe({
       next: (res) => {
         if (res.success) {
@@ -209,13 +210,30 @@ export class CheckoutComponent implements OnInit {
         }
       }, error: err => {
         console.log(err);
-
+        Swal.fire({
+          icon: 'error',
+          toast: true,
+          text: err.error.message,
+          showConfirmButton: false,
+          timer: 2000
+        })
       }
     })
   }
 
 
-  openRazorPayModal(data: Record<string,unknown>) {
+  openRazorPayModal(data: Record<string, unknown>) {
+    if (this.totalAmount > 20000) {
+      Swal.fire({
+        icon: 'warning',
+        toast: true,
+        text: 'For testing, please keep amount below ₹20,000',
+        showConfirmButton: false,
+        timer: 3000
+      });
+      return;
+    }
+
     const options = {
       key: environments.RazorPay_id,
       amount: this.totalAmount * 100,
@@ -226,7 +244,7 @@ export class CheckoutComponent implements OnInit {
       prefill: {
         name: this.user.First_name,
         email: this.user.Email,
-        contact:this.user.Phone
+        contact: this.user.Phone
       },
       handler: (response: RazorpayResponse) => {
         this.handlePaymentSuccess(response)
@@ -256,18 +274,19 @@ export class CheckoutComponent implements OnInit {
       toast: true,
       text: 'Booking confirmed successfully!',
       showConfirmButton: false,
-      timer: 2000
+      timer: 2000,
+      position:'top-end'
     });
     const bookingData = {
       hostelId: this.hostel$._id,
       userId: this.user._id,
       checkInDate: this.checkInDate,
-      vendorId:this.hostel$.owner,
+      vendorId: this.hostel$.owner,
       bedType: this.bedType,
       foodRatePerGuest: this.foodPrice,
       numberOfGuests: this.numberOfGuests,
       totalAmount: this.totalAmount,
-      advancePerGuest: this.advance||0,
+      advancePerGuest: this.advance || 0,
       paymentDetails: {
         razorpay_payment_id: response.razorpay_payment_id,
         razorpay_order_id: response.razorpay_order_id,
@@ -298,24 +317,24 @@ export class CheckoutComponent implements OnInit {
     })
   }
 
-  validateBooking():boolean {
+  validateBooking(): boolean {
     if (!this.checkInDate) {
       Swal.fire({
         icon: 'error',
         toast: true,
-        text:'select a valid date',
+        text: 'select a valid date',
         showConfirmButton: false,
-        timer:2000
+        timer: 2000
       })
-     return false
+      return false
     }
     if (!this.rate) {
       Swal.fire({
         icon: 'error',
         toast: true,
-        text:'select a bed type',
+        text: 'select a bed type',
         showConfirmButton: false,
-        timer:2000
+        timer: 2000
       })
       return false
     }

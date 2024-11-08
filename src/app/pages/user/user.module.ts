@@ -19,6 +19,7 @@ import { ViewHostelComponent } from './view-hostel/view-hostel.component';
 import { WishlistComponent } from './wishlist/wishlist.component';
 import { CheckoutComponent } from './checkout/checkout.component';
 import { BookingSuccessfullComponent } from './booking-successfull/booking-successfull.component';
+import { ChatBoxComponent } from './chat-box/chat-box.component';
 
 
 const routes: Routes = [
@@ -81,6 +82,9 @@ const routes: Routes = [
       {
         path: 'hostels/booking-success/:id',
         component:BookingSuccessfullComponent
+      }, {
+        path: 'chat',
+        component:ChatBoxComponent
       }
     ]
   },
