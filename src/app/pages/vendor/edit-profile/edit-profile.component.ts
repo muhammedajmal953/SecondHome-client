@@ -32,7 +32,7 @@ interface User {
 @Component({
   selector: 'app-edit-profile',
   standalone: true,
-  imports: [ImageCropperComponent, CommonModule, ReactiveFormsModule],
+  imports: [ CommonModule, ReactiveFormsModule],
   templateUrl: './edit-profile.component.html',
   styleUrl: './edit-profile.component.css',
 })

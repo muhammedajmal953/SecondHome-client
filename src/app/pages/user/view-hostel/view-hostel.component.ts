@@ -134,4 +134,8 @@ export class ViewHostelComponent implements OnInit {
       }
     });
   }
+
+  openChat(vendorId:string) {
+    this._router.navigate([`/user/home/chat/${vendorId}`])
+  }
 }

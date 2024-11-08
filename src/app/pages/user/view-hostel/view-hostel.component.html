@@ -79,7 +79,7 @@
               </button>
 
               <!-- Contact Button -->
-              <button class="bg-gradient-to-r from-green-400 to-green-600 text-white py-2 px-6 font-semibold rounded-full shadow-lg transition-transform transform hover:scale-105 hover:shadow-2xl">
+              <button (click)="openChat(hostel$?.owner?._id)" class="bg-gradient-to-r from-green-400 to-green-600 text-white py-2 px-6 font-semibold rounded-full shadow-lg transition-transform transform hover:scale-105 hover:shadow-2xl">
                 Contact
               </button>
             </div>

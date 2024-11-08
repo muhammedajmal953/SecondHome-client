@@ -83,7 +83,7 @@ const routes: Routes = [
         path: 'hostels/booking-success/:id',
         component:BookingSuccessfullComponent
       }, {
-        path: 'chat',
+        path: 'chat/:vendorId',
         component:ChatBoxComponent
       }
     ]

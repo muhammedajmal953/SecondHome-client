@@ -1,4 +1,4 @@
-import { ApplicationConfig, provideZoneChangeDetection, isDevMode } from '@angular/core';
+import { ApplicationConfig, provideZoneChangeDetection, isDevMode, importProvidersFrom } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -14,6 +14,10 @@ import { UserEffects } from './state/user/user.effects';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { VendorEffects } from './state/vendor/vendor.effects';
 import { VendorReducer } from './state/vendor/vendor.reducer';
+import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
+import { environments } from './environment/environment';
+
+const config:SocketIoConfig={url:`${environments.api}`,options:{}}
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -38,6 +42,7 @@ export const appConfig: ApplicationConfig = {
     }, provideAnimationsAsync(),
     provideStore({user:userReducer,vendor:VendorReducer}),
     provideEffects([UserEffects,VendorEffects]),
-    provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() })
+    provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
+    importProvidersFrom(SocketIoModule.forRoot(config))
 ]
 };
