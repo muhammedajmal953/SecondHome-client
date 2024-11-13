@@ -7,7 +7,7 @@ import { UserDoc } from '../../../models/IUsers';
 import * as UserActions from '../../../state/user/user.actions';
 import * as UserSelectors from '../../../state/user/user.selector';
 import { Icon } from 'leaflet';
-import { IChat } from '../../../models/IChat';
+import { IChat, IChatResponse } from '../../../models/IChat';
 import { channel } from 'diagnostics_channel';
 import { ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -28,7 +28,8 @@ export class ChatBoxComponent implements OnInit{
   messages!: IChat
   vendorId!: string
   roomId!: string
-  messageContent!:string
+  messageContent!: string
+  vendor!:UserDoc
   constructor(private _chatService: ChatService, private _store: Store,private _activeRoute:ActivatedRoute) {
 
   }
@@ -56,9 +57,9 @@ export class ChatBoxComponent implements OnInit{
 
     this._chatService.joinRoom(this.roomId)
 
-    this._chatService.loadMessage(this.roomId).subscribe((msgs: IChat) => {
-      this.messages=msgs
-      console.log(msgs);
+    this._chatService.loadMessage(this.roomId).subscribe((msgs: IChatResponse) => {
+      this.messages=msgs?.chat
+      this.vendor=msgs.vendor
     })
 
     this._chatService.recieveMessages().subscribe((msg: unknown) => {
@@ -68,7 +69,7 @@ export class ChatBoxComponent implements OnInit{
 
 
   sendMessage() {
-    
+
     if (this.messageContent.trim()) {
       this._chatService.sendMessage(this.roomId, this.user?._id!, this.messageContent,this.user?._id!,this.vendorId)
     this.messageContent=''

@@ -16,21 +16,10 @@ import { OrderService } from '../../../services/order.service';
 })
 export class VendorHostelsComponent implements OnInit {
   bookings: any;
-  getTotalBookings() {
-    throw new Error('Method not implemented.');
-  }
-  getTodayCheckIns() {
-    throw new Error('Method not implemented.');
-  }
-  calculateTotalRevenue() {
-    throw new Error('Method not implemented.');
-  }
   deleteHostel(arg0: string | undefined) {
     throw new Error('Method not implemented.');
   }
-  getStatusClass(arg0: any) {
-    throw new Error('Method not implemented.');
-  }
+
   hostels: Partial<Hostels>[] = [];
   page: number = 1;
   totalAmount!:number

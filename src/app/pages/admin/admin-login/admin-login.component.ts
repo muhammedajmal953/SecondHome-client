@@ -48,7 +48,8 @@ export class AdminLoginComponent implements OnDestroy{
       if (this.formdata.valid) {
         let data: LoginUser = {
           Email: this.formdata.value.Email!,
-          Password: this.formdata.value.Password!
+          Password: this.formdata.value.Password!,
+          fcmToken:''
         }
 
         this.subscription=this._adminService.adminLogin(data).subscribe((res)=>{

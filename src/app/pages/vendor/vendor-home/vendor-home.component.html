@@ -31,7 +31,8 @@
   <h1 class="text-7xl text-red-500">Please wait while we verify your KYC</h1>
 </div>
 
-<div class="h-fit bg-[#fcf6f5] py-6 px-11" *ngIf="kycVerified&&user?.IsActive===true">
+<div class="h-fit bg-[#fcf6f5] py-6 px-11 " *ngIf="kycVerified&&user?.IsActive===true">
+<app-booking-notification [title]="title" [body]="body" *ngIf="showNotification" [pic]="pic" (changeShow)="showNotification=false"></app-booking-notification>
  <router-outlet></router-outlet>
 </div>
 

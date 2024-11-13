@@ -22,13 +22,13 @@ export class UserService {
   }
 
   verifyUser(email: string, otp: string): Observable<ApiRes>{
+    console.log(email, otp);
+
     return this._http.post<ApiRes>(`${this.api}/verify-otp`, {email, otp})
   }
 
-  loginWithGoogle(PROVIDER_ID: any) {
-    console.log(PROVIDER_ID);
-
-    return this._http.post<ApiRes>(`${this.api}/google-login`, {PROVIDER_ID})
+  loginWithGoogle(PROVIDER_ID: any,fcmToken:string|null) {
+    return this._http.post<ApiRes>(`${this.api}/google-login`, {PROVIDER_ID,fcmToken})
   }
 
   forgotPassword(email: string): Observable<ApiRes>{

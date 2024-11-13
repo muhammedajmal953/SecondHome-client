@@ -1,133 +1,99 @@
-<div class="container mx-auto px-4 py-8 max-w-4xl bg-white shadow-md rounded-lg">
-  <div class=" overflow-hidden flex justify-around">
-    <!-- Profile Header -->
-    <div class="p-6 text-center" *ngIf="user">
-      <img src="{{profileImage}}" alt="Profile Picture" class="w-24 h-24 rounded-full mx-auto mb-4">
-      <h2 class="text-2xl font-bold text-[#2BAE66]">{{ user.First_name }}</h2>
-      <p class="text-gray-600">{{ user.Email }}</p>
-      <p class="text-gray-600 mt-2">{{ user.Phone }}</p>
-      <div class="mt-4 space-x-2">
-        <button (click)="editProfile()" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
-          Edit
-        </button>
-        <button (click)="saveProfile()" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
-          Saved
-        </button>
-        <button (click)="changePassword()"
-          class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
-          Change Password
-        </button>
-      </div>
-    </div>
-
-    <!-- Wallet Section -->
-    <div class="p-6  border-gray-200">
-      <h3 class="text-xl inline font-semibold text-[#2BAE66] mb-6">Wallet <img class="w-4 h-4 inline"
-          src="https://www.svgrepo.com/show/128494/wallet.svg" alt=""></h3>
-      <div class=" items-center gap-4 space-y-2 ">
-        <input type="text" [(ngModel)]="walletBalance"
-          class="bg-gray-100 border border-gray-300 rounded-md py-2 px-4 w-full sm:w-auto block">
-        <button (click)="showModal()"
-          class="bg-green-500 me-1 hover:bg-green-600 text-white font-bold py-2 px-4 rounded w-full sm:w-auto">
-          View History
-        </button>
-      </div>
-
-      <div *ngIf="historyView" class="fixed inset-0 flex items-center justify-center z-50 bg-gray-900 bg-opacity-50">
-        <div class="bg-white rounded-lg shadow-lg max-w-lg w-full p-6">
-          <div class="flex justify-between items-center border-b pb-3 mb-4">
-            <h4 class="text-lg font-semibold text-gray-800">Wallet History</h4>
-            Balance:{{walletBalance}}
-            <button (click)="closeHisory()" class="text-gray-500 hover:text-gray-700">
-              <span class="text-2xl">&times;</span>
-            </button>
+<div class="min-h-screen bg-inherit py-8">
+  <div class="container mx-auto px-4 max-w-4xl">
+    <div class="flex flex-col md:flex-row">
+      <!-- Left Column - Profile and Wallet Section (Sticky on larger screens) -->
+      <div class="md:w-1/3 md:sticky top-0 self-start w-full mb-8 md:mb-0">
+        <div class="bg-white p-6 space-y-4" *ngIf="user">
+          <!-- Profile Section -->
+          <div class="text-center">
+            <img [src]="profileImage" alt="Profile Picture" class="w-24 h-24 rounded-full mx-auto ring-2 ring-gray-200">
+            <h2 class="mt-4 text-2xl font-bold text-[#2BAE66]">{{ user.First_name }}</h2>
+            <p class="text-gray-600">{{ user.Email }}</p>
+            <p class="text-gray-600">{{ user.Phone }}</p>
           </div>
-
+          <!-- Profile Buttons -->
           <div class="space-y-2">
-            <!-- Example Wallet History Entries -->
-            <div *ngFor="let transaction of walletHistory" class="flex justify-between items-center text-gray-700">
-              <span>{{ transaction.date|date }}</span>
+            <button (click)="editProfile()" class="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded transition duration-200">Edit</button>
+            <button (click)="saveProfile()" class="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded transition duration-200">Saved</button>
+            <button (click)="changePassword()" class="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded transition duration-200">Change Password</button>
+          </div>
+        </div>
 
-              <span *ngIf="transaction.type==='credit'" class='text-green-500'>
-                {{ transaction.type|uppercase }}
-              </span>
-              <span *ngIf="transaction.type==='debit'" class='text-red-500'>
-                {{ transaction.type|uppercase }}
-              </span>
-              <span *ngIf="transaction.type==='credit'" class='text-green-500'>
-                Rs-{{ transaction.amount }}
-              </span>
-              <span *ngIf="transaction.type==='debit'" class='text-red-500'>
-                Rs-{{ transaction.amount }}
-              </span>
+        <!-- Wallet Section -->
+        <div class="bg-white p-6 border-t border-b border-gray-200 mt-4 md:mt-0">
+          <h3 class="flex items-center text-xl font-semibold text-[#2BAE66] mb-4">
+            Wallet
+            <img class="w-4 h-4 ml-2" src="https://www.svgrepo.com/show/128494/wallet.svg" alt="wallet icon">
+          </h3>
+          <div class="space-y-3">
+            <input type="text" [(ngModel)]="walletBalance" class="w-full bg-gray-100 border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
+            <button (click)="showModal()" class="w-full md:w-auto bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-6 rounded transition duration-200">View History</button>
+          </div>
+          <!-- Wallet History Modal -->
+          <div *ngIf="historyView" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+            <div class="bg-white rounded-lg shadow-xl max-w-lg w-full m-4">
+              <div class="p-6">
+                <div class="flex justify-between items-center border-b pb-3">
+                  <h4 class="text-lg font-semibold text-gray-800">Wallet History</h4>
+                  <div class="text-gray-600">Balance: {{walletBalance}}</div>
+                  <button (click)="closeHisory()" class="text-gray-500 hover:text-gray-700 text-2xl leading-none">×</button>
+                </div>
+                <!-- Transaction List -->
+                <div class="py-4 space-y-3">
+                  <div *ngFor="let transaction of walletHistory" class="flex justify-between items-center py-2">
+                    <span class="text-gray-600">{{ transaction.date | date }}</span>
+                    <span [ngClass]="transaction.type === 'credit' ? 'text-green-500' : 'text-red-500'">{{ transaction.type | uppercase }}</span>
+                    <span [ngClass]="transaction.type === 'credit' ? 'text-green-500' : 'text-red-500'">Rs-{{ transaction.amount }}</span>
+                  </div>
+                </div>
+                <!-- Modal Footer -->
+                <div class="mt-6 text-right">
+                  <button (click)="closeHisory()" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded transition duration-200">Close</button>
+                </div>
+              </div>
             </div>
           </div>
+        </div>
+      </div>
 
-          <div class="mt-6 text-right">
-            <button (click)="closeHisory()"
-              class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded">
-              Close
-            </button>
+      <!-- Right Column - Bookings Section (Scrollable) -->
+      <div class="md:w-2/3 w-full overflow-y-auto md:h-[calc(100vh-2rem)]">
+        <div class="p-6">
+          <h3 class="text-xl font-semibold text-gray-800 mb-6">BOOKINGS</h3>
+          <div class="space-y-4">
+            <div *ngFor="let booking of bookings; let i = index" class="bg-gray-50 rounded-lg p-4 transition duration-200 hover:shadow-md">
+              <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                <!-- Booking Details -->
+                <div class="flex items-center space-x-4">
+                  <img [src]="booking.hostelDetails[0].photos[0]" alt="Hostel" class="w-16 h-16 object-cover rounded-md">
+                  <div>
+                    <h4 class="font-semibold text-gray-800">{{ booking.hostelDetails[0].name }}</h4>
+                    <p class="text-gray-600">{{ booking.bedType }}</p>
+                  </div>
+                </div>
+                <!-- Booking Actions -->
+                <div class="flex gap-2">
+                  <button *ngIf="booking.isActive && !booking.isCancelled" (click)="openModal(i)" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded transition duration-200">Cancel Booking</button>
+                  <span *ngIf="booking.isActive && booking.isCancelled" class="text-red-500 font-semibold">Waiting For Cancel Approval</span>
+                  <span *ngIf="!booking.isActive && booking.isCancelled" class="text-rose-500 font-semibold">Booking Cancelled</span>
+                </div>
+              </div>
+              <!-- Cancellation Modal -->
+              <dialog [id]="'my_modal_5' + i" class="modal modal-bottom sm:modal-middle">
+                <div class="bg-white rounded-lg shadow-lg p-6 max-w-md mx-auto">
+                  <h3 class="text-2xl font-semibold text-gray-800 mb-4">Reason to Cancel the Booking</h3>
+                  <p class="text-gray-600 mb-4">Please let us know why you are canceling this Booking to help us improve our service.</p>
+                  <textarea [id]="'reason' + i" class="w-full h-24 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent resize-none" placeholder="Type your reason here..."></textarea>
+                  <div class="mt-6 flex justify-end space-x-2">
+                    <button class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded transition duration-200" (click)="cancelBooking(booking._id, i)">Confirm</button>
+                    <button class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded transition duration-200" (click)="closeModal(i)">Close</button>
+                  </div>
+                </div>
+              </dialog>
+            </div>
           </div>
         </div>
       </div>
     </div>
-
-   
   </div>
-
-  <!-- Bookings Section -->
-  <div class="p-6 border-t border-gray-200">
-    <h3 class="text-xl font-semibold text-gray-800 mb-4">BOOKINGS</h3>
-    <div class="space-y-4">
-      <div *ngFor="let booking of bookings;index as i"
-        class="flex flex-col sm:flex-row items-center justify-between bg-gray-50 p-4 rounded-lg">
-        <div class="flex items-center mb-4 sm:mb-0">
-          <img [src]="booking.hostelDetails[0].photos[0]" alt="Booking Image"
-            class="w-16 h-16 object-cover rounded-md mr-4">
-
-          <div>
-            <h4>{{booking.hostelDetails[0].name}}</h4>
-            <span class="font-semibold text-gray-700">{{ booking.bedType }}</span>
-          </div>
-        </div>
-        <div class="flex flex-col sm:flex-row gap-2">
-          <button (click)="openModal(i)" *ngIf="booking.isActive&&!booking.isCancelled"
-            class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
-            Cancel Booking
-          </button>
-          <button *ngIf="booking.isActive===true && booking.isCancelled===true"
-            class=" text-red-500 font-bold py-2 px-4 rounded">
-            Waiting For Cancel Aproval
-          </button>
-          <button *ngIf="!booking.isActive===true && booking.isCancelled===true"
-            class=" text-rose-500 font-bold py-2 px-4 rounded">
-            Booking Cancelled
-          </button>
-
-        </div>
-        <dialog id="my_modal_5{{i}}" class="modal modal-bottom sm:modal-middle bg-gray-800 bg-opacity-90">
-          <div class="modal-box bg-white rounded-lg shadow-lg p-6">
-            <h3 class="text-2xl font-semibold text-gray-800 mb-4">Reason to Cancel the Booking</h3>
-            <p class="text-gray-600 mb-4">Please let us know why you are canceling this Booking to help us improve our
-              service.</p>
-
-            <textarea id="reason{{i}}"
-              class="w-full h-24 p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500 transition duration-200 resize-none mb-6"
-              placeholder="Type your reason here..."></textarea>
-
-            <div class="modal-action flex justify-end space-x-2">
-              <button class="btn btn-success px-4 py-2 rounded-lg text-white font-medium"
-                (click)="cancelBooking(booking._id,i);$event.preventDefault()">Confirm</button>
-              <button
-                class="btn px-4 py-2 rounded-lg text-gray-600 border  border-gray-300 hover:bg-gray-100 transition duration-200"
-                (click)="closeModal(i)">Close</button>
-            </div>
-          </div>
-        </dialog>
-
-      </div>
-    </div>
-  </div>
-
 </div>

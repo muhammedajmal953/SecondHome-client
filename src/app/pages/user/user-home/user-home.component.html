@@ -27,7 +27,9 @@
 </header>
 
 <div class=" h-fit bg-[#fcf6f5] py-6">
+  <app-booking-notification [title]="title" [body]="body" *ngIf="showNotification" [pic]="pic" (changeShow)="showNotification=false"></app-booking-notification>
  <router-outlet  *ngIf="user?.IsActive===true" ></router-outlet>
+
  <div class="flex justify-center text-center items-center h-screen bg-[#fcf6f5]" *ngIf="user?.IsActive===false">
   <h1 class="text-7xl text-red-500">Admin blocked you</h1>
 </div>

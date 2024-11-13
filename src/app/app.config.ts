@@ -16,6 +16,9 @@ import { VendorEffects } from './state/vendor/vendor.effects';
 import { VendorReducer } from './state/vendor/vendor.reducer';
 import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
 import { environments } from './environment/environment';
+import { initializeApp, provideFirebaseApp } from '@angular/fire/app'
+import { provideMessaging, getMessaging } from '@angular/fire/messaging';
+import { FIREBASE_OPTIONS } from '@angular/fire/compat';
 
 const config:SocketIoConfig={url:`${environments.api}`,options:{}}
 
@@ -43,6 +46,9 @@ export const appConfig: ApplicationConfig = {
     provideStore({user:userReducer,vendor:VendorReducer}),
     provideEffects([UserEffects,VendorEffects]),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
-    importProvidersFrom(SocketIoModule.forRoot(config))
+    importProvidersFrom(SocketIoModule.forRoot(config)),
+    provideFirebaseApp(() => initializeApp(environments.firebaseConfig)),
+    provideMessaging(() => getMessaging()),
+    { provide: FIREBASE_OPTIONS, useValue:environments.firebaseConfig }
 ]
 };

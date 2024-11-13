@@ -309,7 +309,7 @@ export class CheckoutComponent implements OnInit {
         Swal.fire({
           icon: 'error',
           toast: true,
-          text: 'Failed to save booking',
+          text: err.error.message,
           showConfirmButton: false,
           timer: 2000
         });

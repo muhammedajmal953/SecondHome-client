@@ -7,6 +7,9 @@ import { Store } from '@ngrx/store';
 import * as UserActions from '../../../state/user/user.actions';
 import * as UserSelectors from '../../../state/user/user.selector';
 import Swal from 'sweetalert2';
+import { FcmOptions } from '@angular/fire/messaging';
+import { FcmService } from '../../../services/fcm.service';
+import { BookingNotificationComponent } from "../../../components/booking-notification/booking-notification.component";
 
 
 @Component({
@@ -15,8 +18,8 @@ import Swal from 'sweetalert2';
   imports: [
     RouterModule,
     CommonModule,
-
-  ],
+    BookingNotificationComponent
+],
   templateUrl: './user-home.component.html',
   styleUrl: './user-home.component.css'
 })
@@ -24,9 +27,13 @@ export class UserHomeComponent implements OnInit,OnDestroy {
   toggleShow: boolean = false
   user$: Observable<UserDoc | null>
   user: UserDoc | null = null
-  private subscription=new Subscription()
+  private subscription = new Subscription()
+  title!: string
+  body!: string
+  pic!: string
+  showNotification!:boolean
 
-  constructor(private store: Store) {
+  constructor(private store: Store,private _fcmService:FcmService) {
     this.user$=this.store.select(UserSelectors.selectUser)
   };
   toggleCollapse() {
@@ -57,6 +64,15 @@ export class UserHomeComponent implements OnInit,OnDestroy {
         timer: 1500,
         toast: true,
       });
+    })
+
+    this._fcmService.receiveMessage().subscribe(
+      (message) => {
+        console.log(message);
+        this.body = message.notification.body
+        this.title = message.notification.title
+        this.pic = message.notification.image
+        this.showNotification=true
     })
   }
 

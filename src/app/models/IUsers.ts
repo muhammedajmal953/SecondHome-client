@@ -11,7 +11,8 @@ export interface RegisterUser {
 
 export interface LoginUser{
   Email: string|null;
-  Password: string|null;
+  Password: string | null;
+  fcmToken: string | null;
 }
 
 export interface UserDoc{
@@ -22,9 +23,10 @@ export interface UserDoc{
   Token: string;
   Phone: number;
   Gender: 'Male' | 'Female' | 'Others';
-  IsActive: boolean;
+  IsActive: boolean; 
   isKYCVerified: true;
   lisence: string
+  Avatar:string
 }
 
 

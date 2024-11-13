@@ -14,6 +14,7 @@ import { UserService } from '../../../services/user.service';
 import { CommonModule } from '@angular/common';
 import { HeaderNameComponent } from '../../../components/header-name/header-name.component';
 import { patters } from '../../../shared/constants/regexConstants';
+import { FcmService } from '../../../services/fcm.service';
 
 @Component({
   selector: 'app-user-sign-up',
@@ -24,8 +25,9 @@ import { patters } from '../../../shared/constants/regexConstants';
 })
 export class UserSignUpComponent {
   formData: FormGroup;
+  fcmToken!: string | null;
 
-  constructor(private _userService: UserService, private _router: Router) {
+  constructor(private _userService: UserService, private _router: Router,private _fcmService:FcmService) {
     this.formData = new FormGroup(
       {
         Email: new FormControl('', [
@@ -42,9 +44,7 @@ export class UserSignUpComponent {
         ]),
         Password: new FormControl('', [
           Validators.required,
-          Validators.pattern(
-            patters.PASSWORD
-          ),
+          Validators.pattern(patters.PASSWORD),
         ]),
         ConfirmPassword: new FormControl('', [Validators.required]),
         Gender: new FormControl('', [Validators.required]),
@@ -52,6 +52,7 @@ export class UserSignUpComponent {
           Validators.required,
           Validators.pattern(patters.PHONE),
         ]),
+        fcmToken:new FormControl('')
       },
       { validators: this.passwordsMatchValidator }
     );
@@ -65,6 +66,24 @@ export class UserSignUpComponent {
 
   onSubmit(): void {
     if (this.formData.valid) {
+      this._fcmService.requestPermission().subscribe(
+        (token) => {
+          if (token) {
+            this.fcmToken = token;
+            this.formData.get('fcmToken')?.setValue(token)
+            console.log('Fcm Token:', this.formData.value);
+          } else {
+            console.log('No FCM token received.');
+          }
+        },
+        (error) => {
+          console.error('Fcm vendor token', error);
+        },
+        () => {}
+      );
+
+
+
       this._userService.userRegister(this.formData.value).subscribe({
         next: (res: ApiRes) => {
           const email = this.formData.value.Email;
@@ -93,7 +112,7 @@ export class UserSignUpComponent {
             toast: true,
           });
         },
-        complete:()=>{}
+        complete: () => {},
       });
       console.log(this.formData.value);
     } else {

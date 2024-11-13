@@ -1,3 +1,4 @@
+import { UserDoc } from "./IUsers"
 
 export interface IChat{
   userId: string,
@@ -8,4 +9,10 @@ export interface IChat{
     sender: string,
     content:string
   }[]
+  user:any
+}
+
+export interface IChatResponse{
+  chat: IChat
+  vendor:UserDoc
 }

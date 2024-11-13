@@ -26,8 +26,8 @@ export class VendorService {
     return this._http.post<ApiRes>(`${this.api}/login`, vendor)
   }
 
-  googleAuthVendor(PROVIDER_ID: any) {
-    return this._http.post<ApiRes>(`${this.api}/google-login`, {PROVIDER_ID})
+  googleAuthVendor(PROVIDER_ID: any,fcmToken:string|null) {
+    return this._http.post<ApiRes>(`${this.api}/google-login`, {PROVIDER_ID,fcmToken})
   }
 
   vendorForgotPassword(email: string): Observable<ApiRes> {

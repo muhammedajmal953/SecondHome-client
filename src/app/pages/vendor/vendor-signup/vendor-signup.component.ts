@@ -14,6 +14,7 @@ import Swal from 'sweetalert2';
 import { CommonModule } from '@angular/common';
 import { HeaderNameComponent } from '../../../components/header-name/header-name.component';
 import { patters } from '../../../shared/constants/regexConstants';
+import { FcmService } from '../../../services/fcm.service';
 @Component({
   selector: 'app-vendor-signup',
   standalone: true,
@@ -23,8 +24,9 @@ import { patters } from '../../../shared/constants/regexConstants';
 })
 export class VendorSignupComponent {
   formData: FormGroup;
+  fcmToken!:string|null
 
-  constructor(private _vendorService: VendorService, private _router: Router) {
+  constructor(private _vendorService: VendorService, private _router: Router,private _fcmService:FcmService) {
     this.formData = new FormGroup(
       {
         Email: new FormControl('', [
@@ -51,6 +53,7 @@ export class VendorSignupComponent {
           Validators.required,
           Validators.pattern(patters.PHONE),
         ]),
+        fcmToken:new FormControl('')
       },
       { validators: this.passwordsMatchValidator }
     );
@@ -64,6 +67,23 @@ export class VendorSignupComponent {
 
   onSubmit(): void {
     if (this.formData.valid) {
+
+      this._fcmService.requestPermission().subscribe(
+        (token) => {
+          if (token) {
+            this.fcmToken = token;
+            this.formData.get('fcmToken')?.setValue(token)
+            console.log('Fcm Token:', this.formData.value);
+          } else {
+            console.log('No FCM token received.');
+          }
+        },
+        (error) => {
+          console.error('Fcm vendor token', error);
+        },
+        () => {}
+      );
+
       this._vendorService.vendorRegister(this.formData.value).subscribe({
         next: (res: ApiRes) => {
           const email = this.formData.value.Email;
