@@ -74,6 +74,7 @@
                 <!-- Booking Actions -->
                 <div class="flex gap-2">
                   <button *ngIf="booking.isActive && !booking.isCancelled" (click)="openModal(i)" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded transition duration-200">Cancel Booking</button>
+                  <button *ngIf="booking.isActive && !booking.isCancelled" (click)="viewBookingDetails(booking._id)" class=" btn btn-ghost text-green-500 font-semibold py-2 px-4 rounded transition duration-200">Cancel Booking</button>
                   <span *ngIf="booking.isActive && booking.isCancelled" class="text-red-500 font-semibold">Waiting For Cancel Approval</span>
                   <span *ngIf="!booking.isActive && booking.isCancelled" class="text-rose-500 font-semibold">Booking Cancelled</span>
                 </div>

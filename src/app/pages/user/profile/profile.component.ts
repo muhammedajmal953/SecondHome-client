@@ -150,4 +150,9 @@ export class ProfileComponent implements OnInit,OnDestroy{
     const modal:any = document.getElementById(`my_modal_5${i}`)
     modal?.close()
   }
+
+  viewBookingDetails(id:string) {
+    this._router.navigate([`/user/home/bookingDetails/${id}`])
+  }
+
 }

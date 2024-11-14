@@ -66,4 +66,8 @@ export class UserService {
     return this._http.get<ApiRes>(`${this.api}/wallet-balance`)
   }
 
+  getBookingDetails(id:string) {
+    return this._http.get<ApiRes>(`${this.api}/bookingDetails/${id}`)
+  }
+  
 }

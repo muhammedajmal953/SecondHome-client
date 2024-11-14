@@ -15,10 +15,10 @@ import Swal from 'sweetalert2';
 import { LoginUser } from '../../../models/IUsers';
 import { HeaderNameComponent } from '../../../components/header-name/header-name.component';
 import { CommonModule } from '@angular/common';
-import { Subject, takeUntil } from 'rxjs';
+import { retry, Subject, takeUntil } from 'rxjs';
 import { patters } from '../../../shared/constants/regexConstants';
 import { FcmService } from '../../../services/fcm.service';
-import { error } from 'console';
+
 
 @Component({
   selector: 'app-user-login',
@@ -37,6 +37,7 @@ export class UserLoginComponent implements OnInit, OnDestroy {
   formdata;
   destroy$ = new Subject<void>();
   fcmToken!: string | null
+
 
   constructor(
     private _userServices: UserService,
@@ -194,4 +195,6 @@ export class UserLoginComponent implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
+
+
 }

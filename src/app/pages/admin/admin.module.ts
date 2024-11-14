@@ -9,45 +9,45 @@ import { VendorManagementComponent } from './vendor-management/vendor-management
 import { authGuard } from '../../guards/auth.guard';
 import { HostelManagementComponent } from './hostel-management/hostel-management.component';
 import { BookingPaymentComponent } from './booking-payment/booking-payment.component';
-
+import { HomeComponent } from './home/home.component';
 
 const routes: Routes = [
   {
     path: '',
     component: AdminLoginComponent,
-    canActivate:[loginGuard]
+    canActivate: [loginGuard],
   },
   {
     path: 'home',
     component: AdminDashboardComponent,
-    canActivate:[authGuard],
+    canActivate: [authGuard],
     children: [
       {
+        path: '',
+        component: HomeComponent,
+      },
+      {
         path: 'users',
-        component:UserManagementComponent
+        component: UserManagementComponent,
       },
       {
         path: 'vendors',
-        component:VendorManagementComponent
+        component: VendorManagementComponent,
       },
       {
         path: 'hostels',
-        component:HostelManagementComponent
+        component: HostelManagementComponent,
       },
       {
         path: 'bookings',
-        component:BookingPaymentComponent
-      }
-    ]
+        component: BookingPaymentComponent,
+      },
+    ],
   },
 ];
 
-
 @NgModule({
   declarations: [],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes)
-  ]
+  imports: [CommonModule, RouterModule.forChild(routes)],
 })
-export class AdminModule { }
+export class AdminModule {}

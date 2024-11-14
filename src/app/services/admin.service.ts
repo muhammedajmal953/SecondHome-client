@@ -55,4 +55,8 @@ export class AdminService {
     return this._http.get<ApiRes>(`${this.api}/admin/getAllBookings/${page}`)
   }
 
+  getAllDatas(): Observable<ApiRes>{
+    return this._http.get<ApiRes>(`${this.api}/admin/admin-dashboard`)
+  }
+
 }

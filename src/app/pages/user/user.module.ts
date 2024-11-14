@@ -20,6 +20,7 @@ import { WishlistComponent } from './wishlist/wishlist.component';
 import { CheckoutComponent } from './checkout/checkout.component';
 import { BookingSuccessfullComponent } from './booking-successfull/booking-successfull.component';
 import { ChatBoxComponent } from './chat-box/chat-box.component';
+import { BookingDetailsComponent } from './booking-details/booking-details.component';
 
 
 const routes: Routes = [
@@ -85,7 +86,12 @@ const routes: Routes = [
       }, {
         path: 'chat/:vendorId',
         component:ChatBoxComponent
+      },
+      {
+        path: 'bookingDetails/:id',
+        component:BookingDetailsComponent
       }
+
     ]
   },
   {
