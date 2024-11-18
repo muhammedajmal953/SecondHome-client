@@ -11,11 +11,9 @@ import * as UserSelectors from '../../../state/user/user.selector';
 import { CommonModule } from '@angular/common';
 import { error } from 'console';
 import { OrderService } from '../../../services/order.service';
-import { environments } from '../../../environment/environment';
+import { environments } from '../../../../environment/environment';
 
 declare var Razorpay: any;
-
-
 
 export interface RazorpayResponse {
   razorpay_payment_id: string;
@@ -26,62 +24,58 @@ export interface RazorpayResponse {
 @Component({
   selector: 'app-checkout',
   standalone: true,
-  imports: [
-    FormsModule,
-    CommonModule
-  ],
+  imports: [FormsModule, CommonModule],
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.css',
 })
 export class CheckoutComponent implements OnInit {
-
   constructor(
     private _router: Router,
     private _activatedRoute: ActivatedRoute,
     private _userService: UserService,
     private _store: Store,
     private _orderService: OrderService
-  ) { }
+  ) {}
   foodPrice: number = 0;
   totalPrice: number = 0;
   totalAmount!: number;
   hostel$: any;
   checkInDate!: Date | null;
   numberOfGuests: number = 1;
-  user$!: Observable<UserDoc | null>
-  user!: UserDoc
+  user$!: Observable<UserDoc | null>;
+  user!: UserDoc;
   rate: number = 0;
-  bedType!: string
-  calcualatedValue: number = this.rate
+  bedType!: string;
+  calcualatedValue: number = this.rate;
   Qty!: number;
-  payment: string = 'fullmonth'
-  advance!: number
-  id!: string
+  payment: string = 'fullmonth';
+  advance!: number;
+  id!: string;
 
   ngOnInit(): void {
     this._activatedRoute.params.subscribe((params) => {
-      this.fetchHostel(params['id'])
-    })
+      this.fetchHostel(params['id']);
+    });
 
-    this._store.dispatch(UserActions.loadUserActions())
+    this._store.dispatch(UserActions.loadUserActions());
 
-    this.user$ = this._store.select(UserSelectors.selectUser)
+    this.user$ = this._store.select(UserSelectors.selectUser);
 
     this.user$.subscribe({
-      next: res => {
+      next: (res) => {
         if (res) {
-          this.user = res
+          this.user = res;
         }
-      }
-    })
-    this.calculateTotalPrice()
+      },
+    });
+    this.calculateTotalPrice();
   }
 
   fetchHostel(id: string) {
     this._userService.getHostel(id).subscribe({
       next: (res) => {
         if (res.success) {
-          this.hostel$ = res.data
+          this.hostel$ = res.data;
         }
       },
       error: (err) => {
@@ -97,79 +91,75 @@ export class CheckoutComponent implements OnInit {
       },
       complete: () => {
         console.log('request completed');
-
-      }
-    })
+      },
+    });
   }
 
   //calculate Total Price
   calculateTotalPrice() {
-    this.totalPrice = (this.calcualatedValue * this.numberOfGuests)
+    this.totalPrice = this.calcualatedValue * this.numberOfGuests;
 
-    this.totalAmount = this.totalPrice + (this.foodPrice * this.numberOfGuests)
+    this.totalAmount = this.totalPrice + this.foodPrice * this.numberOfGuests;
   }
-
 
   //selectingfood types
   selectFood(event: Event) {
-    const target = event.target as HTMLSelectElement
+    const target = event.target as HTMLSelectElement;
 
-    this.foodPrice = Number(target.value)
-    this.calculateTotalPrice()
+    this.foodPrice = Number(target.value);
+    this.calculateTotalPrice();
   }
-
 
   //selecting payment type
   paymentType(event: Event) {
-    const target = event.target as HTMLSelectElement
-    const value = target.value
+    const target = event.target as HTMLSelectElement;
+    const value = target.value;
 
     console.log(value);
 
-
     if (value === 'fullMonth') {
-      this.calcualatedValue = this.rate
-      this.advance = 0
+      this.calcualatedValue = this.rate;
+      this.advance = 0;
     } else {
       if (this.hostel$.advance) {
-        this.advance = this.hostel$.advance
-        this.calcualatedValue = this.hostel$.advance
+        this.advance = this.hostel$.advance;
+        this.calcualatedValue = this.hostel$.advance;
       } else {
-        this.calcualatedValue = this.rate
+        this.calcualatedValue = this.rate;
       }
     }
-    this.calculateTotalPrice()
+    this.calculateTotalPrice();
   }
-
-
 
   changeType(event: Event) {
     if (event.target) {
-      const target = event.target as HTMLSelectElement
+      const target = event.target as HTMLSelectElement;
       console.log(target.value);
 
-      this.hostel$.rates.forEach((rate: { type: string, price: number, quantity: number }) => {
-        if (rate.type === target.value) {
-          this.rate = rate.price
+      this.hostel$.rates.forEach(
+        (rate: { type: string; price: number; quantity: number }) => {
+          if (rate.type === target.value) {
+            this.rate = rate.price;
 
-          this.calcualatedValue = this.rate
+            this.calcualatedValue = this.rate;
 
-          this.bedType = rate.type
-          this.Qty = rate.quantity
+            this.bedType = rate.type;
+            this.Qty = rate.quantity;
+          }
         }
-      })
+      );
     }
-    this.calculateTotalPrice()
+    this.calculateTotalPrice();
   }
 
   incrementGuest() {
-    this.numberOfGuests++
-    this.calculateTotalPrice()
+    this.numberOfGuests++;
+    this.calculateTotalPrice();
   }
 
   decrementGuest() {
-    this.numberOfGuests--
-    this.calculateTotalPrice()
+    this.numberOfGuests--;
+    this.calculateTotalPrice();
   }
 
   dateValidate() {
@@ -179,48 +169,46 @@ export class CheckoutComponent implements OnInit {
         toast: true,
         text: 'select a valid date',
         showConfirmButton: false,
-        timer: 2000
-      })
-      this.checkInDate = null
+        timer: 2000,
+      });
+      this.checkInDate = null;
     }
   }
 
-
   confirmBooking() {
     if (this.validateBooking()) {
-      this.initiatePayment()
+      this.initiatePayment();
     }
   }
 
   private initiatePayment() {
-    this._orderService.createOrder({
-      amount: this.totalAmount * 100,
-      currency: 'INR',
-      reciept: `reciept_${new Date().getTime()}`,
-      hostId: this.hostel$._id,
-      bedCount: this.numberOfGuests,
-      bedType: this.bedType
-
-    }).subscribe({
-      next: (res) => {
-        if (res.success) {
-
-
-          this.openRazorPayModal(res.data)
-        }
-      }, error: err => {
-        console.log(err);
-        Swal.fire({
-          icon: 'error',
-          toast: true,
-          text: err.error.message,
-          showConfirmButton: false,
-          timer: 2000
-        })
-      }
-    })
+    this._orderService
+      .createOrder({
+        amount: this.totalAmount * 100,
+        currency: 'INR',
+        reciept: `reciept_${new Date().getTime()}`,
+        hostId: this.hostel$._id,
+        bedCount: this.numberOfGuests,
+        bedType: this.bedType,
+      })
+      .subscribe({
+        next: (res) => {
+          if (res.success) {
+            this.openRazorPayModal(res.data);
+          }
+        },
+        error: (err) => {
+          console.log(err);
+          Swal.fire({
+            icon: 'error',
+            toast: true,
+            text: err.error.message,
+            showConfirmButton: false,
+            timer: 2000,
+          });
+        },
+      });
   }
-
 
   openRazorPayModal(data: Record<string, unknown>) {
     if (this.totalAmount > 20000) {
@@ -229,7 +217,7 @@ export class CheckoutComponent implements OnInit {
         toast: true,
         text: 'For testing, please keep amount below ₹20,000',
         showConfirmButton: false,
-        timer: 3000
+        timer: 3000,
       });
       return;
     }
@@ -244,10 +232,10 @@ export class CheckoutComponent implements OnInit {
       prefill: {
         name: this.user.First_name,
         email: this.user.Email,
-        contact: this.user.Phone
+        contact: this.user.Phone,
       },
       handler: (response: RazorpayResponse) => {
-        this.handlePaymentSuccess(response)
+        this.handlePaymentSuccess(response);
       },
       modal: {
         ondismiss: () => {
@@ -256,16 +244,16 @@ export class CheckoutComponent implements OnInit {
             toast: true,
             text: 'Failed to Payment please book again',
             showConfirmButton: false,
-            timer: 2000
+            timer: 2000,
           });
-        }
+        },
       },
       confirm_close: true,
       escape: true,
-      animation: true
-    }
-    const razorpayInstance = new Razorpay(options)
-    razorpayInstance.open()
+      animation: true,
+    };
+    const razorpayInstance = new Razorpay(options);
+    razorpayInstance.open();
   }
 
   handlePaymentSuccess(response: RazorpayResponse) {
@@ -275,7 +263,7 @@ export class CheckoutComponent implements OnInit {
       text: 'Booking confirmed successfully!',
       showConfirmButton: false,
       timer: 2000,
-      position:'top-end'
+      position: 'top-end',
     });
     const bookingData = {
       hostelId: this.hostel$._id,
@@ -290,9 +278,9 @@ export class CheckoutComponent implements OnInit {
       paymentDetails: {
         razorpay_payment_id: response.razorpay_payment_id,
         razorpay_order_id: response.razorpay_order_id,
-        razorpay_signature: response.razorpay_signature
-      }
-    }
+        razorpay_signature: response.razorpay_signature,
+      },
+    };
 
     this._orderService.saveBooking(bookingData).subscribe({
       next: (res) => {
@@ -301,9 +289,11 @@ export class CheckoutComponent implements OnInit {
           toast: true,
           text: 'Booking confirmed successfully!',
           showConfirmButton: false,
-          timer: 2000
+          timer: 2000,
         });
-        this._router.navigate([`/user/home/hostels/booking-success/${res.data._id}`]);
+        this._router.navigate([
+          `/user/home/hostels/booking-success/${res.data._id}`,
+        ]);
       },
       error: (err) => {
         Swal.fire({
@@ -311,10 +301,10 @@ export class CheckoutComponent implements OnInit {
           toast: true,
           text: err.error.message,
           showConfirmButton: false,
-          timer: 2000
+          timer: 2000,
         });
-      }
-    })
+      },
+    });
   }
 
   validateBooking(): boolean {
@@ -324,9 +314,9 @@ export class CheckoutComponent implements OnInit {
         toast: true,
         text: 'select a valid date',
         showConfirmButton: false,
-        timer: 2000
-      })
-      return false
+        timer: 2000,
+      });
+      return false;
     }
     if (!this.rate) {
       Swal.fire({
@@ -334,10 +324,10 @@ export class CheckoutComponent implements OnInit {
         toast: true,
         text: 'select a bed type',
         showConfirmButton: false,
-        timer: 2000
-      })
-      return false
+        timer: 2000,
+      });
+      return false;
     }
-    return true
+    return true;
   }
 }

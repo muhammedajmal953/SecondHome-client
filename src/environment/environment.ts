@@ -1,15 +1,16 @@
 
 
 export const environments = {
+  production: false,
+  
   api: `http://localhost:5000`,
-
 
   googleApiKey: 'AIzaSyDjRR2q2ai0Xa3-D26pnN2ZdEoibW_IJYQ',
 
   RazorPay_id: 'rzp_test_JOXsnyoqeaGjGC',
 
   RazorPay_secret: 'fWWaWp94fg8ufppDox8sPeAJ',
-  
+
   firebaseConfig : {
     apiKey: "AIzaSyBAYWe3qbkL133AZymViQNsa21RkDtxx9Q",
     authDomain: "second-home-d4155.firebaseapp.com",

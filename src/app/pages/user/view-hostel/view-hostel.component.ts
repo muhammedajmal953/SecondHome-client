@@ -5,11 +5,8 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { UserService } from '../../../services/user.service';
 import { ToFirstCapitalPipe } from '../../../pipe/to-first-capital.pipe';
 import Swal from 'sweetalert2';
-import { environments } from '../../../environment/environment';
-import {
-  DomSanitizer,
-  SafeResourceUrl,
-} from '@angular/platform-browser';
+import { environments } from '../../../../environment/environment';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { HostelService } from '../../../services/hostel.service';
 import { Hostels } from '../../../models/IHostel';
@@ -79,7 +76,7 @@ export class ViewHostelComponent implements OnInit {
           this.protectedUrl = this._sanitizer.bypassSecurityTrustResourceUrl(
             this.googleUrl
           );
-          console.log('latitude',this.hostel$.address.latitude);
+          console.log('latitude', this.hostel$.address.latitude);
 
           this.directionsUrl = `https://www.google.com/maps/dir/?api=1&origin=Current+Location&destination=${this.hostel$.address.latitude},${this.hostel$.address.longtitude}`;
 
@@ -145,7 +142,7 @@ export class ViewHostelComponent implements OnInit {
   }
 
   sameCategoryHostels() {
-    this._hostelService.getAllHostel(1, '',{},'').subscribe({
+    this._hostelService.getAllHostel(1, '', {}, '').subscribe({
       next: (res) => {
         if (res.success) {
           if (res.data) {
@@ -154,9 +151,8 @@ export class ViewHostelComponent implements OnInit {
                 this.similarHostel.push(hostel);
               }
             });
-          } 
+          }
         }
-
       },
     });
   }
