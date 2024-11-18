@@ -17,8 +17,8 @@ export class HostelService {
     return this._http.post<ApiRes>(`${this.api}/vendor/addHostel`,formData)
   }
 
-  getAllHostel(page:number,searchQuery:string): Observable<ApiRes>{
-    return this._http.get<ApiRes>(`${this.api}/getAllHostel/${page}?searchQuery=${searchQuery}`)
+  getAllHostel(page:number,searchQuery:string,filter:any,sort:string): Observable<ApiRes>{
+    return this._http.post<ApiRes>(`${this.api}/getAllHostel/${page}?searchQuery=${searchQuery}`,{sort,filter})
   }
 
   getHostel(id: string) {

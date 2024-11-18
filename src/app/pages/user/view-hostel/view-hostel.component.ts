@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { UserService } from '../../../services/user.service';
@@ -8,10 +8,11 @@ import Swal from 'sweetalert2';
 import { environments } from '../../../environment/environment';
 import {
   DomSanitizer,
-  SafeHtml,
   SafeResourceUrl,
 } from '@angular/platform-browser';
 import { GoogleMapsModule } from '@angular/google-maps';
+import { HostelService } from '../../../services/hostel.service';
+import { Hostels } from '../../../models/IHostel';
 
 @Component({
   selector: 'app-view-hostel',
@@ -34,6 +35,7 @@ export class ViewHostelComponent implements OnInit {
   rate!: number;
   Qty!: number;
   bedType!: string;
+  similarHostel: Hostels[] = [];
 
   rateDetails!: {
     price: number;
@@ -49,7 +51,8 @@ export class ViewHostelComponent implements OnInit {
     private _router: Router,
     private _userService: UserService,
     private _activeRoute: ActivatedRoute,
-    private _sanitizer: DomSanitizer
+    private _sanitizer: DomSanitizer,
+    private _hostelService: HostelService
   ) {}
 
   ngOnInit(): void {
@@ -63,7 +66,7 @@ export class ViewHostelComponent implements OnInit {
       next: (res) => {
         if (res.success) {
           this.hostel$ = res.data;
-          this.rateDetails=this.hostel$.rates[0]
+          this.rateDetails = this.hostel$.rates[0];
           this.rate = this.rateDetails.price;
           this.Qty = this.rateDetails.quantity;
           this.bedType = this.rateDetails.type;
@@ -76,11 +79,14 @@ export class ViewHostelComponent implements OnInit {
           this.protectedUrl = this._sanitizer.bypassSecurityTrustResourceUrl(
             this.googleUrl
           );
+          console.log('latitude',this.hostel$.address.latitude);
+
           this.directionsUrl = `https://www.google.com/maps/dir/?api=1&origin=Current+Location&destination=${this.hostel$.address.latitude},${this.hostel$.address.longtitude}`;
 
           this.lat = Number(this.hostel$.address.latitude);
           this.lng = Number(this.hostel$.address.longitude);
         }
+        this.sameCategoryHostels();
       },
       error: (err) => {
         console.log(err);
@@ -106,15 +112,14 @@ export class ViewHostelComponent implements OnInit {
   changeType(event: Event) {
     if (event.target) {
       const target = event.target as HTMLSelectElement;
-      this.hostel$.rates.forEach((element:any )=> {
+      this.hostel$.rates.forEach((element: any) => {
         if (element._id === target.value) {
-          this.rateDetails = element
+          this.rateDetails = element;
           this.rate = this.rateDetails.price;
           this.Qty = this.rateDetails.quantity;
           this.bedType = this.rateDetails.type;
         }
       });
-     ;
     }
   }
 
@@ -125,9 +130,9 @@ export class ViewHostelComponent implements OnInit {
   }
 
   changeRateDetails(id: string) {
-    this.hostel$.rates.forEach((element:any )=> {
+    this.hostel$.rates.forEach((element: any) => {
       if (element._id === id) {
-        this.rateDetails = element
+        this.rateDetails = element;
         this.rate = this.rateDetails.price;
         this.Qty = this.rateDetails.quantity;
         this.bedType = this.rateDetails.type;
@@ -135,7 +140,24 @@ export class ViewHostelComponent implements OnInit {
     });
   }
 
-  openChat(vendorId:string) {
-    this._router.navigate([`/user/home/chat/${vendorId}`])
+  openChat(vendorId: string) {
+    this._router.navigate([`/user/home/chat/${vendorId}`]);
+  }
+
+  sameCategoryHostels() {
+    this._hostelService.getAllHostel(1, '',{},'').subscribe({
+      next: (res) => {
+        if (res.success) {
+          if (res.data) {
+            res.data.forEach((hostel: Hostels) => {
+              if (hostel.category === this.hostel$.category) {
+                this.similarHostel.push(hostel);
+              }
+            });
+          } 
+        }
+
+      },
+    });
   }
 }

@@ -62,7 +62,7 @@ export class AddHostelComponent {
         [Validators.required, Validators.pattern(patters.TEXT_CONTENT)],
       ],
       category: ['', Validators.required],
-      advance: ['', [Validators.required, Validators.pattern(patters.TEXT_CONTENT)]],
+      advance: ['', [Validators.required, Validators.min(1)]],
     });
   }
 

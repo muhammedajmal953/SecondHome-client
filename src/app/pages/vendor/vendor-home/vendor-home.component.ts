@@ -66,12 +66,18 @@ export class VendorHomeComponent implements OnInit, OnDestroy {
 
     this._fcmService.receiveMessage().subscribe(
       (message) => {
-        console.log(message);
+        console.log('Vendor notification', message.notification);
         this.body = message.notification.body
         this.title = message.notification.title
         this.pic = message.notification.image
         this.showNotification = true
-     
+        Swal.fire({
+          toast: true,
+          title: this.title,
+          text: this.body,
+          imageUrl: this.pic,
+          position:'top-right'
+        })
     })
   }
 

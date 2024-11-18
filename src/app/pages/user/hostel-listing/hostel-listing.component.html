@@ -1,5 +1,5 @@
 <!-- Main Container -->
-<div class="min-h-screen bg-inherit p-8">
+<div class="min-h-screen bg-inherit p-8 ">
   <!-- Header / Title -->
   <div class="bg-green-200 p-6 rounded-lg text-center">
     <h1 class="text-3xl font-bold text-[#2BAE66]">Hostels </h1>
@@ -29,7 +29,7 @@
     </ol>
   </nav>
   <!-- Filters Section -->
-  <div class="mt-8 sticky top-0 bg-white p-4 rounded-lg shadow-md flex flex-wrap gap-4 justify-between z-10">
+  <div class="mt-8 sticky top-20 bg-white p-4 rounded-lg shadow-md flex flex-wrap gap-4 justify-between z-10">
      <label class="input input-bordered flex items-center gap-2">
       <input type="text" class="grow  border-white rounded-md" placeholder="Search" (input)="searchButton($event)" />
       <svg
@@ -44,12 +44,13 @@
       </svg>
     </label>
 
-    <div class="flex  items-center justify-between">
+    <div class="flex  items-center justify-between" (change)="sort($event)">
       <select  class="select select-success" >
         <option disabled selected>Sort-by</option>
         <option value="low">Price Low to High</option>
         <option value="high">Price High to low</option>
-        <option value="popular">Most Popular</option>
+        <!-- <option value="AtoZ">Aa to Zz</option>
+        <option value="ZtoA">Zz to Aa</option> -->
         <option value="newly Added">Recently Added</option>
       </select>
 
@@ -65,18 +66,18 @@
       <h2 class="text-xl font-semibold mb-4">Filter Options</h2>
 
 
-      <form action="" class="space-y-4">
+      <form action="" class="space-y-4" [formGroup]="filterForm" (ngSubmit)="filter()">
         <!-- Rooms Shared By -->
         <div class="form-control">
           <label class="label">
             <span class="label-text">Rooms Shared By</span>
           </label>
-          <select class="select select-success w-full">
+          <select class="select select-success w-full" formControlName="bedtype">
             <option disabled selected>Choose Option</option>
-            <option value="private">Private</option>
-            <option value="2 share">2 Share</option>
-            <option value="4 share">4 Share</option>
-            <option value="6 share">6 Share</option>
+            <option value="Private">Private</option>
+            <option value="2 share">2 share</option>
+            <option value="4 share">4 share</option>
+            <option value="6 share">6 share</option>
           </select>
         </div>
 
@@ -85,11 +86,11 @@
           <label class="label">
             <span class="label-text">Category</span>
           </label>
-          <select class="select select-success w-full">
+          <select class="select select-success w-full" formControlName="category">
             <option disabled selected>Choose Category</option>
-            <option>Men</option>
-            <option>Women</option>
-            <option>Mixed</option>
+            <option value="MEN">MEN</option>
+            <option value="WOMEN">WOMEN</option>
+            <option value="MIXED">MIXED</option>
           </select>
         </div>
         <!-- Buttons -->
@@ -101,50 +102,45 @@
     </div>
 
     <!-- Listings Column -->
-    <div class="flex flex-wrap md:flex-nowrap flex-col md:flex-row  gap-6">
-      <!-- Hostel Card 1 -->
-      <div class="p-4 w-full h-fit bg-white rounded-lg shadow-md mb-4 "  *ngFor="let hostel of hostels">
-        <div class="h-48 w-full bg-gray-200 rounded-md overflow-hidden">
-          <img src="{{hostel.photos[0]}}" alt="Hostel Image" class="object-cover h-full w-72" />
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <!-- Hostel Card -->
+      <div *ngFor="let hostel of hostels" class="bg-white rounded-lg shadow-lg transform transition-transform hover:-translate-y-1 hover:shadow-xl">
+        <div class="h-48 w-full bg-gray-200 rounded-t-lg overflow-hidden">
+          <img src="{{hostel.photos[0]}}" alt="Hostel Image" class="object-cover h-full w-full hover:scale-105 transition-transform duration-300" />
         </div>
-        <div class="mt-4">
-          <h3 class="text-xl font-semibold">{{hostel.name}}</h3>
-          <p class="text-sm text-gray-500">₹ {{hostel.rates[0].price}} / month</p>
-          <div class="flex items-center mt-2">
-            <span class="text-yellow-500">★★★★☆</span>
-            <span class="ml-2 text-sm text-gray-500">(4.5/5)</span>
+        <div class="p-4">
+          <h3 class="text-lg font-semibold text-gray-800 truncate">{{hostel.name}}</h3>
+          <p class="text-sm text-gray-500 mt-1">₹ {{hostel.rates[0].price}} / month</p>
+          <div class="flex items-center mt-2 space-x-1">
+            <span class="text-yellow-400">&#9733;&#9733;&#9733;&#9733;&#9734;</span>
+            <span class="text-sm text-gray-500">(4.5/5)</span>
           </div>
-          <div class="mt-2 flex items-center space-x-4 text-green-500">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M21 13h-6v-2h6v2zm-8-5v10h-2v-10h2zm2 3h6v2h-6v-2zm-12 5v-10h2v10h-2zm2-12v-2h14v2h-14z"></path>
-            </svg>
-            <span>WiFi</span>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M21 13h-6v-2h6v2zm-8-5v10h-2v-10h2zm2 3h6v2h-6v-2zm-12 5v-10h2v10h-2zm2-12v-2h14v2h-14z"></path>
-            </svg>
-            <span>Parking</span>
+          <div class="mt-3 flex items-center space-x-4 text-green-600">
+            <div class="flex items-center space-x-1">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M21 13h-6v-2h6v2zm-8-5v10h-2v-10h2zm2 3h6v2h-6v-2zm-12 5v-10h2v10h-2zm2-12v-2h14v2h-14z"></path>
+              </svg>
+              <span>WiFi</span>
+            </div>
+            <div class="flex items-center space-x-1">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M21 13h-6v-2h6v2zm-8-5v10h-2v-10h2zm2 3h6v2h-6v-2zm-12 5v-10h2v10h-2zm2-12v-2h14v2h-14z"></path>
+              </svg>
+              <span>Parking</span>
+            </div>
           </div>
           <div class="mt-4 flex justify-between items-center">
-            <button class="btn btn-success text-white py-2 px-4 rounded-lg hover:bg-green-600" (click)="showHostel(hostel._id)">Book now</button>
-            <button class="btn btn-outline text-red-600" (click)="addToWishlist(hostel._id)">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+            <button class="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg transition-colors duration-300" (click)="showHostel(hostel._id)">Book now</button>
+            <button class="text-red-600 hover:text-red-800 transition-colors duration-300" (click)="addToWishlist(hostel._id)">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
               </svg>
-              Wishlist
             </button>
           </div>
         </div>
       </div>
     </div>
+
   </div>
 
   <nav class="flex items-center justify-center gap-2 p-4">

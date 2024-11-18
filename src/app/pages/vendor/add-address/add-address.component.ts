@@ -25,6 +25,8 @@ import { patters } from '../../../shared/constants/regexConstants';
 export class AddAddressComponent {
   onSubmit() {
     try {
+      console.log('clicked');
+
       if (this.addressRateForm.valid) {
         let formdata = new FormData();
 
@@ -89,6 +91,12 @@ export class AddAddressComponent {
         });
       }
       this.addressRateForm.markAllAsTouched();
+       Object.keys(this.addressRateForm.controls).forEach(controlName => {
+      const control = this.addressRateForm.get(controlName);
+      if (control && control.invalid) {
+        console.log(`${controlName} is invalid:`, control.errors);
+      }
+    });
     } catch (error: any) {
       console.log(error);
       Swal.fire({

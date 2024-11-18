@@ -67,7 +67,7 @@ export class VendorService {
     return this._http.get<ApiRes>(`${this.api}/getAllHostels/${page}?searchQuery=${searchQuery}`)
   }
 
-  editHostel(formData: any, id: string): Observable<ApiRes>{
+  editHostel(formData: FormData, id: string): Observable<ApiRes>{
     return this._http.put<ApiRes>(`${this.api}/editHostel/${id}`,formData)
   }
 
@@ -82,5 +82,10 @@ export class VendorService {
   getWalletBalance() {
     return this._http.get<ApiRes>(`${this.api}/wallet-balance`)
   }
+
+  getBookingDetails(id:string) {
+    return this._http.get<ApiRes>(`${this.api}/bookingDetails/${id}`)
+  }
+
 
 }

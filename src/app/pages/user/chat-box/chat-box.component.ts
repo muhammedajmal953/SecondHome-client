@@ -29,7 +29,9 @@ export class ChatBoxComponent implements OnInit{
   vendorId!: string
   roomId!: string
   messageContent!: string
-  vendor!:UserDoc
+  vendor!: UserDoc
+  isMenuOpen: boolean = false;
+  isSidebarOpen: boolean = false;
   constructor(private _chatService: ChatService, private _store: Store,private _activeRoute:ActivatedRoute) {
 
   }
@@ -77,4 +79,11 @@ export class ChatBoxComponent implements OnInit{
   }
 
 
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
+
+  toggleSidebar() {
+    this.isSidebarOpen = !this.isSidebarOpen;
+  }
 }

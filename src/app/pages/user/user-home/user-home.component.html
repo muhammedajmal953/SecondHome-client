@@ -1,38 +1,104 @@
-
-
-
-<header class="relative flex flex-wrap sm:justify-start sm:flex-nowrap w-full bg-[#fcf6f5] shadow-md text-sm py-4 dark:bg-neutral-800">
-  <nav class="max-w-[85rem] w-full mx-auto px-4 sm:flex sm:items-center sm:justify-between">
-<div class="flex items-center justify-between">
-  <a class="flex-none text-xl font-semibold dark:text-white focus:outline-none focus:opacity-80" href="#" aria-label="Brand">
-    <h2 class="text-[#2BAE66]  ps-6 text-xl md:text-3xl sm:text-2xl max-[500px]:text-start font-bold font-serif ">SecondHome</h2>
-  </a>
-  <div class="sm:hidden">
-    <button (click)="toggleCollapse()" type="button" class="hs-collapse-toggle relative size-7 flex justify-center items-center gap-x-2 rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-transparent dark:border-neutral-700 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10" id="hs-navbar-example-collapse" aria-expanded="false" aria-controls="hs-navbar-example" aria-label="Toggle navigation" data-hs-collapse="#hs-navbar-example">
-      <svg *ngIf="!toggleShow" class="hs-collapse-open:hidden shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" x2="21" y1="6" y2="6"/><line x1="3" x2="21" y1="12" y2="12"/><line x1="3" x2="21" y1="18" y2="18"/></svg>
-      <svg *ngIf="toggleShow" class="hs-collapse-open:block hidden shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-      <span class="sr-only">Toggle navigation</span>
-    </button>
-  </div>
-</div>
-<div id="hs-navbar-example" [ngClass]="{'hidden': !toggleShow ,'block': toggleShow}" class="hidden hs-collapse overflow-hidden transition-all duration-300 basis-full grow sm:block " aria-labelledby="hs-navbar-example-collapse">
-  <div class="flex flex-col gap-5 mt-5 sm:flex-row sm:items-center sm:justify-end sm:mt-0 sm:ps-5">
-    <a class="font-medium text-blue-500 focus:outline-none cursor-pointer"  aria-current="page">Home  </a>
-    <a class="font-medium text-gray-600 hover:text-gray-400 focus:outline-none focus:text-gray-400 dark:text-neutral-400 dark:hover:text-neutral-500 dark:focus:text-neutral-500" routerLink="/user/home/profile">Account</a>
-    <a class="font-medium text-gray-600 hover:text-gray-400 focus:outline-none focus:text-gray-400 dark:text-neutral-400 dark:hover:text-neutral-500 dark:focus:text-neutral-500" routerLink="/user/home/hostels">Hostels</a>
-    <a class="font-medium text-gray-600 hover:text-gray-400 focus:outline-none focus:text-gray-400 dark:text-neutral-400 dark:hover:text-neutral-500 dark:focus:text-neutral-500 cursor-pointer" (click)="logout()">Logout</a>
-  </div>
-</div>
-</nav>
+<section>
+  <header
+  class="sticky top-0 z-50 flex flex-wrap w-full bg-[#fcf6f5] shadow-md text-sm py-4 dark:bg-neutral-800 sm:justify-start sm:flex-nowrap">
+  <nav class="max-w-[85rem] w-full mx-auto px-4 flex items-center justify-between sm:items-center">
+    <div class="flex items-center justify-between">
+      <a class="flex-none text-xl font-semibold dark:text-white focus:outline-none focus:opacity-80" routerLink="/user/home"
+        aria-label="Brand">
+        <h2 class="text-[#2BAE66] text-xl md:text-3xl sm:text-2xl max-[500px]:text-start font-bold font-serif">
+          SecondHome</h2>
+      </a>
+      <button (click)="toggleCollapse()" type="button"
+        class="sm:hidden hs-collapse-toggle relative size-7 flex justify-center items-center gap-x-2 rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-transparent dark:border-neutral-700 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10"
+        aria-expanded="false" aria-controls="hs-navbar-example" aria-label="Toggle navigation"
+        data-hs-collapse="#hs-navbar-example">
+        <svg *ngIf="!toggleShow" class="hs-collapse-open:hidden shrink-0 w-6 h-6" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24">
+          <line x1="3" x2="21" y1="6" y2="6" />
+          <line x1="3" x2="21" y1="12" y2="12" />
+          <line x1="3" x2="21" y1="18" y2="18" />
+        </svg>
+        <svg *ngIf="toggleShow" class="hs-collapse-open:block hidden shrink-0 w-6 h-6" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24">
+          <path d="M18 6 6 18" />
+          <path d="m6 6 12 12" />
+        </svg>
+      </button>
+    </div>
+    <div id="hs-navbar-example" [ngClass]="{'hidden': !toggleShow ,'block': toggleShow}"
+      class="hidden hs-collapse overflow-hidden transition-all duration-300 basis-full grow sm:block">
+      <div class="flex flex-col gap-5 mt-5 sm:flex-row sm:items-center sm:justify-end sm:mt-0 sm:pl-5">
+        <a class="font-medium text-blue-500 focus:outline-none cursor-pointer" aria-current="page" routerLink="/user/home">Home</a>
+        <a class="font-medium text-gray-600 hover:text-gray-400 focus:outline-none dark:text-neutral-400 dark:hover:text-neutral-500"
+          routerLink="/user/home/profile">Account</a>
+        <a class="font-medium text-gray-600 hover:text-gray-400 focus:outline-none dark:text-neutral-400 dark:hover:text-neutral-500"
+          routerLink="/user/home/hostels">Hostels</a>
+        <a class="font-medium text-gray-600 hover:text-gray-400 focus:outline-none dark:text-neutral-400 dark:hover:text-neutral-500 cursor-pointer"
+          (click)="logout()">Logout</a>
+      </div>
+    </div>
+  </nav>
 </header>
 
-<div class=" h-fit bg-[#fcf6f5] py-6">
-  <app-booking-notification [title]="title" [body]="body" *ngIf="showNotification" [pic]="pic" (changeShow)="showNotification=false"></app-booking-notification>
- <router-outlet  *ngIf="user?.IsActive===true" ></router-outlet>
+<div class="h-fit bg-[#fcf6f5] py-6 min-h-screen">
+  <!-- <app-booking-notification [title]="title" [body]="body" *ngIf="showNotification" [pic]="pic"
+    (changeShow)="showNotification=false"></app-booking-notification> -->
+  <router-outlet *ngIf="user?.IsActive===true"></router-outlet>
 
- <div class="flex justify-center text-center items-center h-screen bg-[#fcf6f5]" *ngIf="user?.IsActive===false">
-  <h1 class="text-7xl text-red-500">Admin blocked you</h1>
+  <div class="flex justify-center items-center text-center h-screen bg-[#fcf6f5]" *ngIf="user?.IsActive===false">
+    <h1 class="text-7xl text-red-500">Admin blocked you</h1>
+  </div>
 </div>
+
+<footer class="bg-gradient-to-r from-[#2BAE66] to-[#1D8F57] text-white py-10">
+  <div class="max-w-screen-xl mx-auto px-6">
+    <div class="flex flex-col md:flex-row justify-between items-center space-y-8 md:space-y-0">
+      <!-- Logo & Description -->
+      <div class="text-center md:text-left md:max-w-sm">
+        <h3 class="text-4xl font-bold text-white mb-3">SecondHome</h3>
+        <p class="text-base text-gray-100 leading-relaxed">
+          Your trusted platform for finding the best hostels around the world. Comfort meets affordability.
+        </p>
+      </div>
+
+      <!-- Links -->
+      <div class="flex flex-col md:flex-row items-center gap-6 md:gap-12">
+        <a href="#" class="text-white hover:text-gray-300 font-medium text-base transition duration-200">About Us</a>
+        <a href="#" class="text-white hover:text-gray-300 font-medium text-base transition duration-200">Privacy
+          Policy</a>
+        <a href="#" class="text-white hover:text-gray-300 font-medium text-base transition duration-200">Terms of
+          Service</a>
+        <a href="#" class="text-white hover:text-gray-300 font-medium text-base transition duration-200">Contact Us</a>
+      </div>
+
+      <!-- Social Icons -->
+      <div class="flex gap-6 text-2xl">
+        <a href="#" class="text-white hover:text-gray-300 transition duration-200">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+            <path
+              d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2zm0 18c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8z" />
+          </svg>
+        </a>
+        <a href="#" class="text-white hover:text-gray-300 transition duration-200">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+            <path
+              d="M22.225 0H1.773C.793 0 0 .792 0 1.773v20.453c0 .981.793 1.773 1.773 1.773h20.453c.981 0 1.773-.792 1.773-1.773V1.773C24 .792 23.207 0 22.225 0zm-3.063 18.444a4.406 4.406 0 0 1-4.406 4.406h-9.218A4.406 4.406 0 0 1 5.555 18.444V5.555A4.406 4.406 0 0 1 9.773 1.147h4.454a4.406 4.406 0 0 1 4.218 4.408v12.889z" />
+          </svg>
+        </a>
+        <a href="#" class="text-white hover:text-gray-300 transition duration-200">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+            <path
+              d="M12 2c-5.523 0-10 4.477-10 10s4.477 10 10 10 10-4.477 10-10-4.477-10-10-10zm1 14h-2v-4h2v4zm-1-6.5c-.828 0-1.5-.672-1.5-1.5s.672-1.5 1.5-1.5 1.5.672 1.5 1.5-.672 1.5-1.5 1.5z" />
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+  <!-- Bottom Footer Text -->
+  <div class="mt-10 text-center text-sm text-gray-300">
+    <p>&copy; 2024 SecondHome. All Rights Reserved.</p>
 </div>
-
-
+</footer>
+</section>

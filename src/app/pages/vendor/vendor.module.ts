@@ -19,6 +19,7 @@ import { EditProfileComponent } from './edit-profile/edit-profile.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
 import { EditHostelComponent } from './edit-hostel/edit-hostel.component';
 import { ChatBoxComponent } from './chat-box/chat-box.component';
+import { BookingDetailsComponent } from './booking-details/booking-details.component';
 
 
 const routes: Routes = [
@@ -81,6 +82,10 @@ const routes: Routes = [
       {
         path: 'chat',
         component:ChatBoxComponent
+      },
+      {
+        path: 'booking-details/:id',
+        component:BookingDetailsComponent
       }
     ]
   },

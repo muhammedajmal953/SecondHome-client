@@ -155,4 +155,7 @@ export class ProfileComponent implements OnInit,OnDestroy{
     this._router.navigate([`/user/home/bookingDetails/${id}`])
   }
 
+  viewWishList() {
+    this._router.navigate([`/user/home/wishlist`])
+  }
 }

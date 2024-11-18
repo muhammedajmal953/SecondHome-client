@@ -6,6 +6,7 @@ import { Hostels } from '../../../models/IHostel';
 import { VendorService } from '../../../services/vendor.service';
 import Swal from 'sweetalert2';
 import { OrderService } from '../../../services/order.service';
+import { retry } from 'rxjs';
 
 @Component({
   selector: 'app-vendor-hostels',
@@ -22,10 +23,10 @@ export class VendorHostelsComponent implements OnInit {
 
   hostels: Partial<Hostels>[] = [];
   page: number = 1;
-  totalAmount!:number
+  totalAmount!: number;
   searchQuery: string = '';
-  activeTab: any='hostels';
-  constructor(private _router: Router, private _vendorService: VendorService,private _orderService:OrderService) {}
+  activeTab: any = 'hostels';
+  constructor(private _router: Router, private _vendorService: VendorService) {}
   ngOnInit(): void {
     this._vendorService.getAllHostels(this.page, this.searchQuery).subscribe({
       next: (res) => {
@@ -46,7 +47,7 @@ export class VendorHostelsComponent implements OnInit {
       complete: () => {},
     });
 
-    this.fetchBookings()
+    this.fetchBookings();
   }
   addHostel() {
     this._router.navigate(['/vendor/home/add-hostel']);
@@ -62,11 +63,14 @@ export class VendorHostelsComponent implements OnInit {
     this._vendorService.vendorBookings(1).subscribe({
       next: (res) => {
         if (res.success) {
-          this.bookings = res.data
-          this.totalAmount=this.bookings.reduce((acc:number,cur:any)=>acc+=cur.totalAmount,0)
+          this.bookings = res.data;
+          this.totalAmount = this.bookings.reduce(
+            (acc: number, cur: any) => (acc += cur.totalAmount),
+            0
+          );
         }
       },
-      error: err => {
+      error: (err) => {
         Swal.fire({
           position: 'top',
           icon: 'error',
@@ -74,13 +78,13 @@ export class VendorHostelsComponent implements OnInit {
           showConfirmButton: false,
           timer: 1500,
           toast: true,
-        })
+        });
       },
-      complete:()=>{}
+      complete: () => {},
     });
   }
 
-  approveCancelation(bookingId:string,i:number) {
+  approveCancelation(bookingId: string, i: number) {
     this._vendorService.cancelConform(bookingId).subscribe({
       next: (res) => {
         Swal.fire({
@@ -90,15 +94,16 @@ export class VendorHostelsComponent implements OnInit {
           showConfirmButton: false,
           timer: 1500,
           toast: true,
-        })
-
-        this.bookings.forEach((element:any) => {
-          if (element._id  === bookingId) {
-              element.isActive=false
-            }
         });
-        this.closeModal(i)
-      }, error: (error) => {
+
+        this.bookings.forEach((element: any) => {
+          if (element._id === bookingId) {
+            element.isActive = false;
+          }
+        });
+        this.closeModal(i);
+      },
+      error: (error) => {
         Swal.fire({
           position: 'top',
           icon: 'error',
@@ -106,18 +111,32 @@ export class VendorHostelsComponent implements OnInit {
           showConfirmButton: false,
           timer: 1500,
           toast: true,
-        })
-      }
-    })
+        });
+      },
+    });
   }
 
-  openModal(i:any) {
-    const modal:any = document.getElementById(`my_modal_5${i}`)
-    modal.showModal()
+  openModal(i: any) {
+    const modal: any = document.getElementById(`my_modal_5${i}`);
+    modal.showModal();
   }
 
   closeModal(i: any) {
-    const modal:any = document.getElementById(`my_modal_5${i}`)
-    modal?.close()
+    const modal: any = document.getElementById(`my_modal_5${i}`);
+    modal?.close();
+  }
+
+  showDetails(id: string) {
+    this._router.navigate([`/vendor/home/booking-details/${id}`]);
+  }
+
+  activeBookings() {
+    let activebookings = 0;
+    this.hostels.forEach((hostel) => {
+      if (hostel.isActive === true) {
+        activebookings++;
+      }
+    });
+    return activebookings
   }
 }

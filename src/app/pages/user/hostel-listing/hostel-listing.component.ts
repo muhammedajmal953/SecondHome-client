@@ -2,7 +2,7 @@ import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { UserService } from '../../../services/user.service';
 import { HostelService } from '../../../services/hostel.service';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { WishlistService } from '../../../services/wishlist.service';
@@ -11,24 +11,30 @@ import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 @Component({
   selector: 'app-hostel-listing',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule,FormsModule,ReactiveFormsModule],
   templateUrl: './hostel-listing.component.html',
   styleUrl: './hostel-listing.component.css',
 })
 export class HostelListingComponent implements OnInit {
   constructor(
-    private _userService: UserService,
     private _hostelService: HostelService,
     private _router: Router,
     @Inject(PLATFORM_ID) private platform_id: string,
-    private _wishlistServices:WishlistService
-  ) {}
+    private _wishlistServices: WishlistService
+  ) {
+    this.filterForm = new FormGroup({
+      bedtype: new FormControl(),
+      category: new FormControl(),
+    });
+  }
 
+  filterForm!: FormGroup;
   hostels: any[] = [];
   searchQuery: string = '';
   page: number = 1;
   count!: number;
-  private _searchSubject=new Subject<string>()
+  sortValue:string=''
+  private _searchSubject = new Subject<string>();
 
   ngOnInit(): void {
     let storedPage: string;
@@ -39,16 +45,15 @@ export class HostelListingComponent implements OnInit {
     if (storedPage!) {
       this.page = +storedPage;
     }
-    this.fetchHostels();
+    this.fetchHostels(this.sortValue,this.filterForm.value);
 
-    this._searchSubject.pipe(
-      debounceTime(300),
-      distinctUntilChanged()
-    ).subscribe((searchTerm) => {
-      this.searchQuery = searchTerm
-      this.page = 1
-      this.fetchHostels()
-    })
+    this._searchSubject
+      .pipe(debounceTime(300), distinctUntilChanged())
+      .subscribe((searchTerm) => {
+        this.searchQuery = searchTerm;
+        this.page = 1;
+        this.fetchHostels(this.sortValue,this.filterForm.value);
+      });
   }
 
   changePage(direction: 'increment' | 'decrement') {
@@ -57,12 +62,12 @@ export class HostelListingComponent implements OnInit {
     } else if (direction === 'decrement' && this.page > 1) {
       this.page--;
     }
-    this.fetchHostels();
+    this.fetchHostels(this.sortValue,this.filterForm.value);
   }
 
-  fetchHostels() {
+  fetchHostels(sort:string,filter:Record<string,unknown>) {
     localStorage.setItem('uhp', this.page.toString());
-    this._hostelService.getAllHostel(this.page, this.searchQuery).subscribe({
+    this._hostelService.getAllHostel(this.page, this.searchQuery,filter,sort).subscribe({
       next: (res) => {
         if (res.success) {
           this.hostels = res.data;
@@ -89,10 +94,10 @@ export class HostelListingComponent implements OnInit {
   }
 
   searchButton(searchTerm: Event) {
-    const target = searchTerm.target as HTMLInputElement
+    const target = searchTerm.target as HTMLInputElement;
 
-    const value=target.value
-      this._searchSubject.next(value)
+    const value = target.value;
+    this._searchSubject.next(value);
   }
 
   showHostel(id: string) {
@@ -110,10 +115,11 @@ export class HostelListingComponent implements OnInit {
             position: 'top',
             showConfirmButton: false,
             width: 'full',
-            timer:1500
-          })
+            timer: 1500,
+          });
         }
-      }, error: (err) => {
+      },
+      error: (err) => {
         Swal.fire({
           icon: 'error',
           toast: true,
@@ -121,13 +127,27 @@ export class HostelListingComponent implements OnInit {
           position: 'top',
           showConfirmButton: false,
           width: 'full',
-          timer:1500
-        })
-      }, complete: () => {
+          timer: 1500,
+        });
+      },
+      complete: () => {
         console.log('wish list adding completed');
-      }
-    })
+      },
+    });
   }
 
+  sort(event: Event) {
+    const target = event.target as HTMLSelectElement
+    const sortValue = target.value
+    this.sortValue=sortValue
+    this.fetchHostels(this.sortValue,this.filterForm.value)
 
+  }
+
+  filter() {
+
+
+    this.fetchHostels(this.sortValue,this.filterForm.value)
+    console.log(this.filterForm.value);
+  }
 }

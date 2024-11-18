@@ -103,12 +103,12 @@
             <label for="{{type}}" class="block text-green-500 mb-1">{{type}} Rate</label>
             <input id="{{type}}Rate" type="number"
               class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500"
-              formControlName="rate" placeholder="Rate" />
+              formControlName="price" placeholder="Rate" />
             <p class="text-red-500"
-              *ngIf="addressRateForm.get('rates')?.get(type)?.get('rate')?.hasError('required')&&addressRateForm.get('rates')?.get(type)?.get('rate')?.touched">
+              *ngIf="addressRateForm.get('rates')?.get(type)?.get('price')?.hasError('required')&&addressRateForm.get('rates')?.get(type)?.get('price')?.touched">
               rate is required</p>
             <p class="text-red-500"
-              *ngIf="addressRateForm.get('rates')?.get(type)?.get('rate')?.hasError('min')&&addressRateForm.get('rates')?.get(type)?.get('rate')?.touched">
+              *ngIf="addressRateForm.get('rates')?.get(type)?.get('price')?.hasError('min')&&addressRateForm.get('rates')?.get(type)?.get('price')?.touched">
               Rate is required and must be greater than 0.
             </p>
             <label for="{{type}}" class="block text-green-500 mb-1">{{type}} Quantity</label>

@@ -55,6 +55,12 @@
                 {{ transaction.type|uppercase }}
               </span>
               <span *ngIf="transaction.type==='credit'" class='text-green-500'>
+                {{ transaction.description }}
+              </span>
+              <span *ngIf="transaction.type==='debit'" class='text-red-500'>
+                {{ transaction.description }}
+              </span>
+              <span *ngIf="transaction.type==='credit'" class='text-green-500'>
                 Rs-{{ transaction.amount }}
               </span>
               <span *ngIf="transaction.type==='debit'" class='text-red-500'>

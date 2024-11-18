@@ -26,7 +26,7 @@
         <div class="flex items-center justify-between">
           <div>
             <p class="text-sm text-gray-500">Active Bookings</p>
-            <p class="text-2xl font-bold text-gray-800"></p>
+            <p class="text-2xl font-bold text-gray-800">{{activeBookings()}}</p>
           </div>
           <div class="p-3 bg-green-100 rounded-xl">
             <i class="fas fa-calendar text-green-600 text-xl"></i>
@@ -202,7 +202,7 @@
                 </span>
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                <button *ngIf="!booking.isCancelled && booking.isActive"
+                <button (click)="showDetails(booking._id)" *ngIf="!booking.isCancelled && booking.isActive"
                   class="text-emerald-600 hover:text-emerald-900">
                   View Details
                 </button>

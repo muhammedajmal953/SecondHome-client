@@ -30,12 +30,12 @@ export class EditHostelComponent implements OnInit {
   nearbyPlaces: string[] = [];
   categories: string[] = ['MEN', 'WOMEN', 'MIXED'];
   hostelForm: FormGroup;
-  bedTypes:  { type: string; price: number,quantity:number }[] = [];
+  bedTypes: { type: string; price: number; quantity: number }[] = [];
   photoUrls: string[] = [];
   existingPhotos: string[] = [];
   bedTypeGroup: { [key: string]: FormGroup } = {};
-  selectedFiles: File[] = []
-  id!:string
+  selectedFiles: File[] = [];
+  id!: string;
 
   constructor(
     private _fb: FormBuilder,
@@ -47,7 +47,7 @@ export class EditHostelComponent implements OnInit {
     this.bedTypes.forEach((item) => {
       this.bedTypeGroup[item.type] = this._fb.group({
         price: ['', [Validators.required, Validators.min(1)]],
-        quantity:['',[Validators.required,Validators.min(1)]]
+        quantity: ['', [Validators.required, Validators.min(1)]],
       });
     });
     this.hostelForm = this._fb.group({
@@ -56,13 +56,7 @@ export class EditHostelComponent implements OnInit {
         [Validators.required, Validators.pattern(patters.TEXT_CONTENT)],
       ],
       phone: ['', [Validators.required, Validators.pattern(patters.PHONE)]],
-      email: [
-        '',
-        [
-          Validators.required,
-          Validators.pattern(patters.EMAIL),
-        ],
-      ],
+      email: ['', [Validators.required, Validators.pattern(patters.EMAIL)]],
       facilities: [[], this.facilityValidator.bind(this)],
       nearByAccess: [[], this.nearByAccessValidator.bind(this)],
       policies: [
@@ -71,10 +65,7 @@ export class EditHostelComponent implements OnInit {
       ],
       category: ['', Validators.required],
       advance: ['', [Validators.required, Validators.pattern(patters.RATE)]],
-      foodRate: [
-        '',
-        [Validators.required, Validators.pattern(patters.RATE)],
-      ],
+      foodRate: ['', [Validators.required, Validators.pattern(patters.RATE)]],
       rates: this._fb.group(this.bedTypeGroup),
       photos: [[], [this.mimeTypeValidator(this.photoUrls)]],
     });
@@ -82,7 +73,7 @@ export class EditHostelComponent implements OnInit {
 
   ngOnInit(): void {
     this._activeRoute.queryParams.subscribe((query) => {
-      this.id=query['id']
+      this.id = query['id'];
       this.fetchHostel(query['id']);
     });
   }
@@ -106,19 +97,28 @@ export class EditHostelComponent implements OnInit {
           this.nearbyPlaces = [...hostel.nearbyPlaces];
           this.photoUrls = hostel.photos;
           this.existingPhotos = hostel.photos;
-          hostel.rates.forEach((item: { type: string; price: number ,quantity:number}) => {
-            this.bedTypes.push(item);
-            this.bedTypeGroup[item.type] = this._fb.group({
-              price: [item.price, [Validators.required, Validators.min(1)]],
-              quantity:[item.quantity,[Validators.required,Validators.min(1)]]
-            });
-          });
+          hostel.rates.forEach(
+            (item: { type: string; price: number; quantity: number }) => {
+              this.bedTypes.push(item);
+              this.bedTypeGroup[item.type] = this._fb.group({
+                price: [item.price, [Validators.required, Validators.min(1)]],
+                quantity: [
+                  item.quantity,
+                  [Validators.required, Validators.min(1)],
+                ],
+              });
+            }
+          );
 
-          this.hostelForm.setControl('rates', this._fb.group(this.bedTypeGroup));
+          this.hostelForm.setControl(
+            'rates',
+            this._fb.group(this.bedTypeGroup)
+          );
           this.hostelForm.get('facilities')?.updateValueAndValidity();
           this.hostelForm.get('nearByAccess')?.updateValueAndValidity();
         }
-      }, error: (error) => {
+      },
+      error: (error) => {
         Swal.fire({
           position: 'top',
           icon: 'error',
@@ -127,28 +127,49 @@ export class EditHostelComponent implements OnInit {
           timer: 1500,
           toast: true,
         });
-      }, complete: () => {
-
-
-      }
+      },
+      complete: () => {},
     });
   }
 
   onSubmit(event: Event) {
     console.log('clicked');
-    event.preventDefault()
+    event.preventDefault();
 
     if (this.hostelForm.valid) {
-      console.log(this.hostelForm.value.rates);
+      console.log('existing images', this.existingPhotos);
 
       let formData = new FormData();
 
-      formData = {
-        ...this.hostelForm.value,
-        facilities:[...this.facilities],
-        nearbyPlaces:[ ...this.nearbyPlaces],
-        existingPhotos: this.existingPhotos
-      };
+      // Append simple form values
+      formData.append('name', this.hostelForm.get('name')?.value);
+      formData.append('phone', this.hostelForm.get('phone')?.value);
+      formData.append('email', this.hostelForm.get('email')?.value);
+      formData.append('category', this.hostelForm.get('category')?.value);
+      formData.append('advance', this.hostelForm.get('advance')?.value);
+      formData.append('foodRate', this.hostelForm.get('foodRate')?.value);
+      formData.append('policies', this.hostelForm.get('policies')?.value);
+
+      // Add facilities and nearby places
+      formData.append('facilities',this.facilities.join(','));
+      formData.append('nearbyPlaces', this.nearbyPlaces.join(','));
+
+      // Add rates dynamically
+      Object.keys(this.hostelForm.get('rates')?.value).forEach((bedType) => {
+        const rateData = this.hostelForm.get('rates')?.get(bedType)?.value;
+        formData.append(`rates[${bedType}][price]`, rateData.price);
+        formData.append(`rates[${bedType}][quantity]`, rateData.quantity);
+      });
+
+      // Add existing photos
+      formData.append('existingPhotos', this.existingPhotos.join(','));
+
+      // Add new photos if selected
+      this.selectedFiles.forEach((file) => {
+        formData.append('photos', file, file.name);
+      });
+
+      console.log('FormData to be sent:', formData);
 
       this._vendorService.editHostel(formData, this.id).subscribe({
         next: (res) => {
@@ -159,18 +180,18 @@ export class EditHostelComponent implements OnInit {
               toast: true,
               timer: 1500,
               position: 'top',
-              text:res.message
-            })
-            this._router.navigate(['/vendor/home'])
+              text: res.message,
+            });
+            this._router.navigate(['/vendor/home']);
           } else {
             Swal.fire({
               icon: 'error',
               showConfirmButton: false,
               toast: true,
               timer: 1500,
-              text:res.message
-              })
-            }
+              text: res.message,
+            });
+          }
         },
         error: (err) => {
           Swal.fire({
@@ -178,11 +199,12 @@ export class EditHostelComponent implements OnInit {
             showConfirmButton: false,
             toast: true,
             timer: 1500,
-            text:err.error.message
-            })
-        },complete:()=>{}
-      })
+            text: err.error.message,
+          });
+        },
+      });
     }
+
     this.hostelForm.markAllAsTouched();
     this.checkFormValidity();
   }
@@ -193,7 +215,9 @@ export class EditHostelComponent implements OnInit {
       this.facilities.push(newFacility);
       this.hostelForm.get('facilities')?.reset();
       this.hostelForm.get('facilities')?.updateValueAndValidity();
-      this.hostelForm.get('facilities')?.setErrors(this.facilityValidator(this.hostelForm.get('facilities')!));
+      this.hostelForm
+        .get('facilities')
+        ?.setErrors(this.facilityValidator(this.hostelForm.get('facilities')!));
     }
   }
   removeFacility(facility: string) {
@@ -201,7 +225,9 @@ export class EditHostelComponent implements OnInit {
     if (index >= 0) {
       this.facilities.splice(index, 1);
       this.hostelForm.get('facilities')?.updateValueAndValidity();
-      this.hostelForm.get('facilities')?.setErrors(this.facilityValidator(this.hostelForm.get('facilities')!));
+      this.hostelForm
+        .get('facilities')
+        ?.setErrors(this.facilityValidator(this.hostelForm.get('facilities')!));
     }
   }
 
@@ -212,7 +238,11 @@ export class EditHostelComponent implements OnInit {
       this.hostelForm.get('nearByAccess')?.reset();
       this.hostelForm.get('nearByAccess')?.reset();
       this.hostelForm.get('nearByAccess')?.updateValueAndValidity();
-      this.hostelForm.get('nearByAccess')?.setErrors(this.nearByAccessValidator(this.hostelForm.get('nearByAccess')!));
+      this.hostelForm
+        .get('nearByAccess')
+        ?.setErrors(
+          this.nearByAccessValidator(this.hostelForm.get('nearByAccess')!)
+        );
     }
   }
   removeNearAcess(item: string) {
@@ -221,7 +251,11 @@ export class EditHostelComponent implements OnInit {
       this.nearbyPlaces.splice(index, 1);
       this.hostelForm.get('nearByAccess')?.reset();
       this.hostelForm.get('nearByAccess')?.updateValueAndValidity();
-      this.hostelForm.get('nearByAccess')?.setErrors(this.nearByAccessValidator(this.hostelForm.get('nearByAccess')!));
+      this.hostelForm
+        .get('nearByAccess')
+        ?.setErrors(
+          this.nearByAccessValidator(this.hostelForm.get('nearByAccess')!)
+        );
     }
   }
 
@@ -268,31 +302,32 @@ export class EditHostelComponent implements OnInit {
     const files = target.files;
 
     if (files) {
-      Array.from(files).forEach(file => {
-        const fileUrl = URL.createObjectURL(file)
-        this.photoUrls.push(fileUrl)
-        this.selectedFiles.push(file)
-      })
-      this.hostelForm.patchValue({
-        photos: this.selectedFiles
+      Array.from(files).forEach((file) => {
+        const fileUrl = URL.createObjectURL(file);
+        this.photoUrls.push(fileUrl);
+        this.selectedFiles.push(file);
+        console.log('photos added');
       });
-
-    this.hostelForm.get('photos')?.updateValueAndValidity();
     }
     this.hostelForm.get('photos')?.markAsTouched();
   }
-  mimeTypeValidator(existingPhotos: string[]): ValidatorFn  {
+  mimeTypeValidator(existingPhotos: string[]): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const files = control.value;
-      if (files&&Array.isArray(control.value)) {
-        const validMimes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
+      if (files && Array.isArray(control.value)) {
+        const validMimes = [
+          'image/jpeg',
+          'image/png',
+          'image/jpg',
+          'image/webp',
+        ];
         for (const file of files) {
           if (!validMimes.includes(file.type)) {
             return { mimeType: true };
           }
         }
         const totalFileCount = this.photoUrls.length + files.length;
-        if (totalFileCount > 5||totalFileCount<=0) {
+        if (totalFileCount > 5 || totalFileCount <= 0) {
           return { exceedLimit: true };
         }
       }
@@ -300,17 +335,16 @@ export class EditHostelComponent implements OnInit {
     };
   }
   removePhoto(url: string, event: Event) {
-    event.preventDefault()
-    this.photoUrls = this.photoUrls.filter(item => item !== url)
-    this.existingPhotos=this.existingPhotos.filter(item=>item!==url)
+    event.preventDefault();
+    this.photoUrls = this.photoUrls.filter((item) => item !== url);
+    this.existingPhotos = this.existingPhotos.filter((item) => item !== url);
 
-    this.selectedFiles = this.selectedFiles.filter(file => URL.createObjectURL(file) === url)
+    this.selectedFiles = this.selectedFiles.filter(
+      (file) => URL.createObjectURL(file) === url
+    );
 
     this.hostelForm.patchValue({
-      photos:this.selectedFiles
-    })
-
+      photos: this.selectedFiles,
+    });
   }
-
-
 }

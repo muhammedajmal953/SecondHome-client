@@ -19,6 +19,7 @@ import { CommonModule } from '@angular/common';
 })
 export class ChatBoxComponent implements OnInit {
   vendor$!: Observable<UserDoc | null>;
+  demoProfile:string='https://www.iconpacks.net/icons/5/free-no-profile-picture-icon-15257-thumb.png'
   constructor(private _chatService: ChatService, private store: Store) {
     this.vendor$ = this.store.select(VendorSelector.selectVendor);
   }
@@ -28,7 +29,8 @@ export class ChatBoxComponent implements OnInit {
   messageContent: string = '';
   messages!: IChat;
   vendor!: UserDoc;
-  user$!:UserDoc
+  user$!: UserDoc
+  name!:string
 
   ngOnInit(): void {
     this.store.dispatch(VendorActions.loadVendor());
@@ -61,7 +63,7 @@ export class ChatBoxComponent implements OnInit {
   enterIntoChat(roomId: string,user:UserDoc) {
     console.log('CHAT CLICKED');
     this.user$=user
-
+    this.name=this.user$.First_name
     this._chatService.joinRoom(roomId);
     this._chatService.loadMessage(roomId).subscribe({
       next: (msgs: IChatResponse) => {
