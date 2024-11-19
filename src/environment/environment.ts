@@ -2,8 +2,8 @@
 
 export const environments = {
   production: false,
-  
-  api: `http://localhost:5000`,
+
+  api: `https://thethirdeye.shop`,
 
   googleApiKey: 'AIzaSyDjRR2q2ai0Xa3-D26pnN2ZdEoibW_IJYQ',
 
