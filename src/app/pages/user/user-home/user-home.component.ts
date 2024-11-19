@@ -7,9 +7,8 @@ import { Store } from '@ngrx/store';
 import * as UserActions from '../../../state/user/user.actions';
 import * as UserSelectors from '../../../state/user/user.selector';
 import Swal from 'sweetalert2';
-import { FcmOptions } from '@angular/fire/messaging';
 import { FcmService } from '../../../services/fcm.service';
-import { BookingNotificationComponent } from "../../../components/booking-notification/booking-notification.component";
+
 
 
 @Component({
@@ -18,7 +17,6 @@ import { BookingNotificationComponent } from "../../../components/booking-notifi
   imports: [
     RouterModule,
     CommonModule,
-    BookingNotificationComponent
 ],
   templateUrl: './user-home.component.html',
   styleUrl: './user-home.component.css'
