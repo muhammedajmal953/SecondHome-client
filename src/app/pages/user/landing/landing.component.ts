@@ -44,4 +44,8 @@ export class LandingComponent {
   toHostels() {
     this._router.navigate(['/user/home/hostels']);
   }
+
+  toBooking(id:string) {
+    this._router.navigate([`/user/home/hostelDetails/${id}`])
+  }
 }

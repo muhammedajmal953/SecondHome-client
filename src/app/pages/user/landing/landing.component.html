@@ -30,7 +30,7 @@
     <h1 class="text-[#2BAE66] text-4xl font-bold text-center mb-10">Recently Added Hostels</h1>
     <div class="flex flex-wrap gap-x-3 justify-center">
       <div *ngFor="let hostel of hostels$" class="h-fit">
-        <app-hostel-card [hosteDetails]="hostel"></app-hostel-card>
+        <app-hostel-card [hosteDetails]="hostel" (triggerButton)="toBooking(hostel._id)"></app-hostel-card>
      </div>
     </div>
 
