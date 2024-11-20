@@ -1,9 +1,7 @@
 <section class="justify-center min-h-screen w-full text-white bg-[#273142]">
-  <!-- Header Section - Stack on mobile -->
+  <!-- Header Section -->
   <div class="flex flex-col sm:flex-row items-center justify-between p-4 gap-4">
     <h1 class="text-2xl sm:text-4xl font-bold">Vendor Management</h1>
-
-    <!-- Search Bar - Full width on mobile -->
     <div class="relative w-full sm:w-auto min-w-[250px]">
       <div class="absolute inset-y-0 start-0 flex items-center ps-3.5">
         <svg class="shrink-0 size-4 text-white" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -24,18 +22,18 @@
     </div>
   </div>
 
-  <!-- Table Container with horizontal scroll -->
+  <!-- Table -->
   <div class="px-4 w-full overflow-x-auto">
     <div class="min-w-full inline-block align-middle">
       <div class="rounded-lg border border-gray-200 shadow-md overflow-hidden">
         <table class="min-w-full divide-y divide-gray-200">
           <thead class="bg-gray-700">
             <tr>
-              <th scope="col" class="px-4 sm:px-6 py-3 text-start text-xs font-medium text-gray-300 uppercase">ID</th>
-              <th scope="col" class="px-4 sm:px-6 py-3 text-start text-xs font-medium text-gray-300 uppercase">Name</th>
-              <th scope="col" class="px-4 sm:px-6 py-3 text-start text-xs font-medium text-gray-300 uppercase hidden sm:table-cell">Email</th>
-              <th scope="col" class="px-4 sm:px-6 py-3 text-start text-xs font-medium text-gray-300 uppercase hidden md:table-cell">Phone</th>
-              <th scope="col" class="px-4 sm:px-6 py-3 text-end text-xs font-medium text-gray-300 uppercase">Action</th>
+              <th class="px-4 sm:px-6 py-3 text-start text-xs font-medium text-gray-300 uppercase">ID</th>
+              <th class="px-4 sm:px-6 py-3 text-start text-xs font-medium text-gray-300 uppercase">Name</th>
+              <th class="px-4 sm:px-6 py-3 text-start text-xs font-medium text-gray-300 uppercase hidden sm:table-cell">Email</th>
+              <th class="px-4 sm:px-6 py-3 text-start text-xs font-medium text-gray-300 uppercase hidden md:table-cell">Phone</th>
+              <th class="px-4 sm:px-6 py-3 text-end text-xs font-medium text-gray-300 uppercase">Action</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-200">
@@ -45,7 +43,14 @@
               <td class="px-4 sm:px-6 py-4 text-sm hidden sm:table-cell">{{user.Email}}</td>
               <td class="px-4 sm:px-6 py-4 text-sm hidden md:table-cell">{{user.Phone}}</td>
               <td class="px-4 sm:px-6 py-4 text-end">
-                <button *ngIf="user.IsActive"
+                <!-- KYC Verification Button -->
+                <button *ngIf="!user.isKYCVerified"
+                        (click)="giveApproval(user._id,user.lisence)"
+                        class="px-3 py-2 text-sm font-semibold rounded-lg text-white
+                               bg-yellow-600 hover:bg-yellow-700 transition-colors">
+                  Verify
+                </button>
+                <button *ngIf="user.isKYCVerified&&user.IsActive"
                         (click)="blockUser(user._id)"
                         class="px-3 py-2 text-sm font-semibold rounded-lg text-white
                                bg-red-700 hover:bg-red-800 transition-colors">
@@ -65,31 +70,21 @@
     </div>
   </div>
 
-  <!-- Pagination - Centered and responsive -->
-  <nav class="flex items-center justify-center gap-2 p-4">
-    <button (click)="changePage('decrement')"
-            class="p-2 rounded-lg text-white hover:bg-white/10 transition-colors
-                   disabled:opacity-50 disabled:pointer-events-none">
-      <svg class="size-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-      </svg>
-    </button>
-
-    <div class="flex items-center gap-2">
-      <span class="min-w-[38px] h-9 flex justify-center items-center border
-                   border-gray-700 text-white rounded-lg">
-        {{page}}
-      </span>
-      <span class="text-gray-400">of</span>
-      <span class="text-gray-400"></span>
+  <!-- Modal -->
+  <div *ngIf="showModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+    <div class="bg-white text-gray-900 rounded-lg shadow-lg max-w-lg w-full p-6">
+      <h2 class="text-2xl font-semibold mb-4">Verify Vendor</h2>
+      <img [src]="lisence" alt="License Image" class="w-full h-64 object-contain rounded-md mb-4" />
+      <div class="flex justify-end gap-4">
+        <button (click)="verifyUser()"
+                class="px-4 py-2 text-sm font-bold rounded-lg text-white bg-green-600 hover:bg-green-700">
+          Approve
+        </button>
+        <button (click)="closeModal()"
+                class="px-4 py-2 text-sm font-bold rounded-lg text-white bg-red-600 hover:bg-red-700">
+          Cancel
+        </button>
+      </div>
     </div>
-
-    <button (click)="changePage('increment')"
-            class="p-2 rounded-lg text-white hover:bg-white/10 transition-colors
-                   disabled:opacity-50 disabled:pointer-events-none">
-      <svg class="size-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-      </svg>
-    </button>
-  </nav>
+  </div>
 </section>
