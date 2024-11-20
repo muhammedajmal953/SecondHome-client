@@ -27,8 +27,8 @@ export class HostelReviewsComponent implements OnInit{
   hostelId!:string
   reviews:any
   reviewForm!: FormGroup;
-averageRating: any;
-totalReviews: any;
+averageRating!: number;
+totalReviews!: number;
   constructor(
     private _userService: UserService,
     private _activatedRoute: ActivatedRoute,
@@ -106,7 +106,10 @@ totalReviews: any;
     this._userService.getReview(id).subscribe({
       next: (res) => {
         if (res.success) {
-          this.reviews=res.data.reviews
+          this.reviews = res.data.reviews
+
+          this.averageRating = (this.reviews.reduce((acc: any, cur: any) => acc += cur.rating, 0)) / this.reviews.length
+          this.totalReviews=this.reviews.length
         }
       },
       error: (err) => {
