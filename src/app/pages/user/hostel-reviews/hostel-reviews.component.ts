@@ -116,9 +116,10 @@ export class HostelReviewsComponent implements OnInit {
         });
     }
 
-    this.reviewForm.get('rating')?.setValue(0);
-    this.reviewForm.get('review')?.setValue('');
-    this.reviewForm.updateValueAndValidity();
+    this.reviewForm.reset({
+      rating: 0,
+      review: ''
+    });
   }
 
   fetchReview(id: string) {
