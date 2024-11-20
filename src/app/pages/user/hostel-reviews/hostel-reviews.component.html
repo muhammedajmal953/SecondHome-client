@@ -1,9 +1,9 @@
 <div class="container mx-auto p-4 max-w-4xl">
   <!-- Hostel Details -->
   <div class="bg-gray-100 rounded-lg shadow-lg p-6 mb-8">
-    <h1 class="text-3xl font-bold mb-2">Hostel Name</h1>
+    <h1 class="text-3xl font-bold mb-2">{{hostelData.name}}</h1>
     <p class="text-gray-600 mb-4">
-      Location: <span class="font-semibold">City, Country</span>
+      Location: <span class="font-semibold">{{hostelData.address.city}}, {{hostelData.address.state}}</span>
     </p>
     <div class="flex items-center space-x-2">
       <div class="flex text-yellow-400">
