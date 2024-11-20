@@ -40,7 +40,7 @@
               type="button"
               (click)="setRating(star)"
               class="focus:outline-none"
-              
+
             >
               <svg
                 [class.text-yellow-400]="star <= (reviewForm.get('rating')?.value || 0)"
@@ -88,7 +88,7 @@
   <!-- Reviews List -->
   <div class="bg-white rounded-lg shadow-lg p-6">
     <h2 class="text-2xl font-bold mb-6">Reviews</h2>
-    <div *ngIf="reviews.length === 0" class="text-center text-gray-500 py-8">
+    <div *ngIf="reviews&&reviews.length === 0" class="text-center text-gray-500 py-8">
       No reviews yet. Be the first to write one!
     </div>
     <div class="space-y-6">
