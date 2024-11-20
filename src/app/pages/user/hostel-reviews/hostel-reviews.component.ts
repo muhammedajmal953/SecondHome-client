@@ -79,7 +79,7 @@ export class HostelReviewsComponent implements OnInit{
       const { rating, review } = this.reviewForm.value;
       const newReview = {
         rating,
-        comment: review,
+        review,
       };
 
       this._userService.addReview(newReview, this.user!._id, this.hostelId).subscribe({
