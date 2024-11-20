@@ -90,7 +90,9 @@ totalReviews!: number;
       this._userService.addReview(newReview, this.user!._id, this.hostelId).subscribe({
         next: (res)=>{
           if (res.success) {
-            this.reviews=res.data.reviews
+            this.reviews = res.data.reviews
+            this.averageRating = Math.floor((this.reviews.reduce((acc: any, cur: any) => acc += cur.rating, 0)) / this.reviews.length)
+            this.totalReviews=this.reviews.length
           }
         }
       })
