@@ -21,6 +21,7 @@ import { CheckoutComponent } from './checkout/checkout.component';
 import { BookingSuccessfullComponent } from './booking-successfull/booking-successfull.component';
 import { ChatBoxComponent } from './chat-box/chat-box.component';
 import { BookingDetailsComponent } from './booking-details/booking-details.component';
+import { HostelReviewsComponent } from './hostel-reviews/hostel-reviews.component';
 
 
 const routes: Routes = [
@@ -90,6 +91,10 @@ const routes: Routes = [
       {
         path: 'bookingDetails/:id',
         component:BookingDetailsComponent
+      },
+      {
+        path: 'hostelDetails/reviews/:id',
+        component:HostelReviewsComponent
       }
 
     ]

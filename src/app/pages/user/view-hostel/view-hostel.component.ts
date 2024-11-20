@@ -39,6 +39,8 @@ export class ViewHostelComponent implements OnInit {
     type: string;
     quantity: number;
   };
+  numberOfStars: number = 0
+  numberOfReviews:number=0
 
   lat: number = 11.2602402;
   lng: number = 76.034563;
@@ -82,6 +84,10 @@ export class ViewHostelComponent implements OnInit {
 
           this.lat = Number(this.hostel$.address.latitude);
           this.lng = Number(this.hostel$.address.longitude);
+          const count=this.hostel$.reviews.reviews.length
+
+          this.numberOfReviews = count
+          this.numberOfStars=this.hostel$.reviews.reviews.reduce((acc:number,cur:any)=>acc+=cur.rating,0)
         }
         this.sameCategoryHostels();
       },

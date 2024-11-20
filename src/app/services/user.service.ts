@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, retry } from 'rxjs';
 import { ApiRes } from '../models/IApiRes';
 import { LoginUser, RegisterUser } from '../models/IUsers';
 import { HttpClient } from '@angular/common/http';
@@ -71,5 +71,13 @@ export class UserService {
 
   getBookingDetails(id: string) {
     return this._http.get<ApiRes>(`${this.api}/bookingDetails/${id}`);
+  }
+
+  addReview(reviewData: any, userId: string, hostelId: string) {
+    return this._http.post<ApiRes>(`${this.api}/add-review/${hostelId}?userId=${userId}`,{reviewData})
+  }
+
+  getReview(id: string) {
+    return this._http.get<ApiRes>(`${this.api}/get-reviews/${id}`)
   }
 }
