@@ -27,6 +27,8 @@ export class HostelReviewsComponent implements OnInit{
   hostelId!:string
   reviews:any
   reviewForm!: FormGroup;
+averageRating: any;
+totalReviews: any;
   constructor(
     private _userService: UserService,
     private _activatedRoute: ActivatedRoute,
