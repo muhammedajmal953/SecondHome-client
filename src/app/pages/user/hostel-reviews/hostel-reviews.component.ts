@@ -70,6 +70,8 @@ export class HostelReviewsComponent implements OnInit{
   }
   setRating(rating: number) {
     this.reviewForm.get('rating')?.setValue(rating)
+
+    this.reviewForm.updateValueAndValidity()
   }
 
   onSubmit() {
