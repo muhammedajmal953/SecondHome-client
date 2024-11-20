@@ -108,7 +108,7 @@ totalReviews!: number;
         if (res.success) {
           this.reviews = res.data.reviews
 
-          this.averageRating = (this.reviews.reduce((acc: any, cur: any) => acc += cur.rating, 0)) / this.reviews.length
+          this.averageRating = Math.floor((this.reviews.reduce((acc: any, cur: any) => acc += cur.rating, 0)) / this.reviews.length)
           this.totalReviews=this.reviews.length
         }
       },
