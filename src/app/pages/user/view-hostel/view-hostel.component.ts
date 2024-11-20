@@ -162,4 +162,8 @@ export class ViewHostelComponent implements OnInit {
       },
     });
   }
+
+  viewReviews(id:string) {
+    this._router.navigate([`/user/home/hostelDetails/reviews/${id}`])
+  }
 }
