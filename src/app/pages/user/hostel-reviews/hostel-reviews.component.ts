@@ -33,7 +33,7 @@ export class HostelReviewsComponent implements OnInit{
     private store: Store
   ) {
     this.reviewForm = new FormGroup({
-      rating:new FormControl(5,[Validators.required,Validators.min(1)]),
+      rating:new FormControl(0,[Validators.required,Validators.min(1)]),
       review:new FormControl('',[Validators.required,Validators.pattern(patters.TEXT_CONTENT)])
     });
     this.user$=this.store.select(UserSelectors.selectUser)
@@ -87,8 +87,6 @@ export class HostelReviewsComponent implements OnInit{
           }
         }
       })
-
-
     }
   }
 
