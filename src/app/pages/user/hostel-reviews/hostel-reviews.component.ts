@@ -82,6 +82,9 @@ export class HostelReviewsComponent implements OnInit{
         review,
       };
 
+      console.log();
+
+
       this._userService.addReview(newReview, this.user!._id, this.hostelId).subscribe({
         next: (res)=>{
           if (res.success) {
