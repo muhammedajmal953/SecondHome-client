@@ -142,12 +142,19 @@
               <i class="fas fa-edit"></i>
               Edit
             </button>
-            <button
-              (click)="deleteHostel(hostel._id)"
+            <button *ngIf="hostel.isActive===true"
+              (click)="deleteHostel(hostel._id!)"
               class="flex-1 flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg transition-colors"
             >
               <i class="fas fa-trash"></i>
               Delete
+            </button>
+            <button *ngIf="hostel.isActive===false"
+              (click)="unDeleteHostel(hostel._id!)"
+              class="flex-1 flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg transition-colors"
+            >
+              <i class="fas fa-trash"></i>
+              unDelete
             </button>
           </div>
         </div>

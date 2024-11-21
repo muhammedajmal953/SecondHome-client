@@ -92,4 +92,6 @@ export class VendorHomeComponent implements OnInit, OnDestroy {
   closeNotification() {
     this.showNotification=false
   }
+
+
 }

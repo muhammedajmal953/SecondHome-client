@@ -91,4 +91,11 @@ export class VendorService {
   getBookingDetails(id: string) {
     return this._http.get<ApiRes>(`${this.api}/bookingDetails/${id}`);
   }
+
+  deleteHostel(id:string) {
+    return this._http.put<ApiRes>(`${this.api}/deleteHostel`, {id});
+  }
+  unDeleteHostel(id:string) {
+    return this._http.put<ApiRes>(`${this.api}/unDeleteHostel`, {id});
+  }
 }

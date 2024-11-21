@@ -17,9 +17,7 @@ import { retry } from 'rxjs';
 })
 export class VendorHostelsComponent implements OnInit {
   bookings: any;
-  deleteHostel(arg0: string | undefined) {
-    throw new Error('Method not implemented.');
-  }
+
 
   hostels: Partial<Hostels>[] = [];
   page: number = 1;
@@ -138,5 +136,85 @@ export class VendorHostelsComponent implements OnInit {
       }
     });
     return activebookings
+  }
+
+  deleteHostel(id:string) {
+
+      next: () => {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Are You Sure?',
+          text: 'Delete the Hostel',
+          toast:true,
+          showCancelButton: true,
+          confirmButtonText: 'Yes,Delete',
+          cancelButtonText: 'No, cancel',
+          buttonsStyling: true,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this._vendorService.deleteHostel(id).subscribe({
+              next: (res) => {
+                if (res.success) {
+                  Swal.fire({
+                    icon: 'success',
+                    toast: true,
+                    text: res.message,
+                    showConfirmButton: false,
+                    timer: 1500,
+                    position:'top',
+                  });
+                  this.hostels.forEach((hostel) => {
+                    if (hostel?._id === id) {
+                      hostel.isActive = false;
+                    }
+                  });
+                }
+              },
+              complete: () => {
+
+              }
+            });
+          }
+        });
+      }
+
+  }
+
+  unDeleteHostel(id:string) {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Are You Sure?',
+      text: 'Un Delete the Hostel',
+      toast:true,
+      showCancelButton: true,
+      confirmButtonText: 'Yes,un Delete',
+      cancelButtonText: 'No, cancel',
+      buttonsStyling: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this._vendorService.unDeleteHostel(id).subscribe({
+          next: (res) => {
+            if (res.success) {
+              Swal.fire({
+                icon: 'success',
+                toast: true,
+                text: res.message,
+                showConfirmButton: false,
+                timer: 1500,
+                position:'top',
+              });
+              this.hostels.forEach((hostel) => {
+                if (hostel?._id === id) {
+                  hostel.isActive = true;
+                }
+              });
+            }
+          },
+          complete: () => {
+
+          }
+        });
+      }
+    });
   }
 }
