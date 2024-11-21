@@ -28,13 +28,13 @@
 </nav>
 </header>
 
+<div class="h-fit bg-[#fcf6f5] py-6 px-11 min-h-screen" *ngIf="user?.isKYCVerified&&user?.IsActive===true">
+ <router-outlet></router-outlet>
+</div>
 <div class="flex justify-center text-center min-h-screen items-center h-screen bg-[#fcf6f5]" *ngIf="!user?.isKYCVerified">
   <h1 class="text-7xl text-red-500">Please wait while we verify your KYC</h1>
 </div>
 
-<div class="h-fit bg-[#fcf6f5] py-6 px-11 min-h-screen" *ngIf="user?.isKYCVerified&&user?.IsActive===true">
- <router-outlet></router-outlet>
-</div>
 
 <div class="flex justify-center text-center items-center h-screen bg-[#fcf6f5]" *ngIf="user?.IsActive===false">
   <h1 class="text-7xl text-red-500">Admin blocked you</h1>
