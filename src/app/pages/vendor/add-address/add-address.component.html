@@ -12,6 +12,8 @@
           <p class="text-red-500"
             *ngIf="addressRateForm.get('street')?.hasError('required') && addressRateForm.get('street')?.touched">Street
             is required.</p>
+          <p class="text-red-500"
+            *ngIf="addressRateForm.get('street')?.hasError('pattern') && addressRateForm.get('street')?.touched">Must be a valid text.</p>
         </div>
         <div>
           <label for="street" class="block text-green-500 mb-1">Live Location</label>

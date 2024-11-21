@@ -133,7 +133,7 @@ export class AddAddressComponent {
 
     this.addressRateForm = this._fb.group({
       city: ['', [Validators.required, Validators.pattern(patters.PLACE)]],
-      street: ['', [Validators.required,Validators.pattern(patters.PLACE)]],
+      street: ['', [Validators.required,Validators.pattern(patters.TEXT_CONTENT)]],
       state: ['', [Validators.required, Validators.pattern(patters.PLACE)]],
       district: ['', [Validators.required, Validators.pattern(patters.PLACE)]],
       pincode: [
