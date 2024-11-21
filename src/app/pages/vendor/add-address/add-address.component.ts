@@ -77,10 +77,6 @@ export class AddAddressComponent {
           icon:'error',
           title: 'Please Add the Nessesery details',
           text: 'please goto home and add the nessesery hostel details',
-        }).then((isconfirm) => {
-          if (isconfirm.isConfirmed) {
-            this._router.navigate(['/vendor/home'])
-          }
         })
       }
 
