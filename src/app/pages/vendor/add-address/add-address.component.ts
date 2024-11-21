@@ -172,7 +172,7 @@ export class AddAddressComponent {
           'image/jpg',
           'image/webp',
         ];
-        if (!validMimes.includes(file.type)) {
+        if (!validMimes.includes(file.type)||file.size>(1* 1024 * 1024)) {
           return { mimeType: true };
         }
       }
