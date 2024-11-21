@@ -13,7 +13,9 @@ export class HostelService {
   constructor(private _http: HttpClient) {}
 
   addHostel(formData: any): Observable<ApiRes> {
-    return this._http.post<ApiRes>(`${this.api}/vendor/addHostel`, formData);
+    const response = this._http.post<ApiRes>(`${this.api}/vendor/addHostel`, formData);
+    console.log('add hostel response',response);
+    return response
   }
 
   getAllHostel(
