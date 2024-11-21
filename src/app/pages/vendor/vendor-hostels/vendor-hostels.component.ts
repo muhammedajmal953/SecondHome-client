@@ -140,7 +140,7 @@ export class VendorHostelsComponent implements OnInit {
 
   deleteHostel(id:string) {
 
-      next: () => {
+
         Swal.fire({
           icon: 'warning',
           title: 'Are You Sure?',
@@ -176,7 +176,7 @@ export class VendorHostelsComponent implements OnInit {
             });
           }
         });
-      }
+      
 
   }
 
