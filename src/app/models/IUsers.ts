@@ -23,8 +23,8 @@ export interface UserDoc{
   Token: string;
   Phone: number;
   Gender: 'Male' | 'Female' | 'Others';
-  IsActive: boolean; 
-  isKYCVerified: true;
+  IsActive: boolean;
+  isKYCVerified: boolean;
   lisence: string
   Avatar:string
 }
