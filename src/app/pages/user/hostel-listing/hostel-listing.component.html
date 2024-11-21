@@ -102,10 +102,10 @@
     </div>
 
     <!-- Listings Column -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 ">
       <!-- Hostel Card -->
       <div *ngFor="let hostel of hostels" class="bg-white rounded-lg shadow-lg transform transition-transform hover:-translate-y-1 hover:shadow-xl">
-        <div class="h-48 w-full bg-gray-200 rounded-t-lg overflow-hidden">
+        <div class="h-fit w-full bg-gray-200 rounded-t-lg overflow-hidden">
           <img src="{{hostel.photos[0]}}" alt="Hostel Image" class="object-cover h-full w-full hover:scale-105 transition-transform duration-300" />
         </div>
         <div class="p-4">
