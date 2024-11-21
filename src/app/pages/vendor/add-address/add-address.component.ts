@@ -23,9 +23,66 @@ import { patters } from '../../../shared/constants/regexConstants';
   styleUrl: './add-address.component.css',
 })
 export class AddAddressComponent {
+
+  hostelForm1;
+  addressRateForm: FormGroup;
+  bedTypes: string[] = [];
+
+  constructor(
+    private _fb: FormBuilder,
+    private _hostelService: HostelService,
+    private _router: Router
+  ) {
+    const bedTypeGroup: { [key: string]: FormGroup } = {};
+    const hostelFormData = localStorage.getItem('hostelForm1');
+    if (hostelFormData) {
+      this.hostelForm1 = JSON.parse(hostelFormData); // Parse string into object
+      this.bedTypes = this.hostelForm1.selectedBedTypes;
+      console.log(this.hostelForm1);
+    } else {
+      console.log('No hostelForm1 found in localStorage');
+    }
+
+    this.bedTypes.forEach((item) => {
+      bedTypeGroup[item] = this._fb.group({
+        price: ['', [Validators.required, Validators.min(1)]],
+        quantity: ['', [Validators.required, Validators.min(1)]],
+      });
+    });
+
+    this.addressRateForm = this._fb.group({
+      city: ['', [Validators.required, Validators.pattern(patters.PLACE)]],
+      street: ['', [Validators.required,Validators.pattern(patters.TEXT_CONTENT)]],
+      state: ['', [Validators.required, Validators.pattern(patters.PLACE)]],
+      district: ['', [Validators.required, Validators.pattern(patters.PLACE)]],
+      pincode: [
+        '',
+        [Validators.required, Validators.pattern(patters.PINCODE)],
+      ],
+      foodRate: [
+        '',
+        [Validators.required, Validators.pattern(patters.RATE)],
+      ],
+      rates: this._fb.group(bedTypeGroup),
+      photos: ['', [Validators.required, this.mimeTypeValidator]],
+      latitude:['',[Validators.required]],
+      longtitude:['',[Validators.required]]
+    });
+  }
+
   onSubmit() {
     try {
-      console.log('clicked');
+      if (!Object.values(this.hostelForm1)) {
+        Swal.fire({
+          icon:'error',
+          title: 'Please Add the Nessesery details',
+          text: 'please goto home and add the nessesery hostel details',
+        }).then((isconfirm) => {
+          if (isconfirm.isConfirmed) {
+            this._router.navigate(['/vendor/home'])
+          }
+        })
+      }
 
       if (this.addressRateForm.valid) {
         let formdata = new FormData();
@@ -104,51 +161,6 @@ export class AddAddressComponent {
         text: error?.error?.message,
       });
     }
-  }
-  hostelForm1;
-  addressRateForm: FormGroup;
-  bedTypes: string[] = [];
-
-  constructor(
-    private _fb: FormBuilder,
-    private _hostelService: HostelService,
-    private _router: Router
-  ) {
-    const bedTypeGroup: { [key: string]: FormGroup } = {};
-    const hostelFormData = localStorage.getItem('hostelForm1');
-    if (hostelFormData) {
-      this.hostelForm1 = JSON.parse(hostelFormData); // Parse string into object
-      this.bedTypes = this.hostelForm1.selectedBedTypes;
-      console.log(this.hostelForm1);
-    } else {
-      console.log('No hostelForm1 found in localStorage');
-    }
-
-    this.bedTypes.forEach((item) => {
-      bedTypeGroup[item] = this._fb.group({
-        price: ['', [Validators.required, Validators.min(1)]],
-        quantity: ['', [Validators.required, Validators.min(1)]],
-      });
-    });
-
-    this.addressRateForm = this._fb.group({
-      city: ['', [Validators.required, Validators.pattern(patters.PLACE)]],
-      street: ['', [Validators.required,Validators.pattern(patters.TEXT_CONTENT)]],
-      state: ['', [Validators.required, Validators.pattern(patters.PLACE)]],
-      district: ['', [Validators.required, Validators.pattern(patters.PLACE)]],
-      pincode: [
-        '',
-        [Validators.required, Validators.pattern(patters.PINCODE)],
-      ],
-      foodRate: [
-        '',
-        [Validators.required, Validators.pattern(patters.RATE)],
-      ],
-      rates: this._fb.group(bedTypeGroup),
-      photos: ['', [Validators.required, this.mimeTypeValidator]],
-      latitude:['',[Validators.required]],
-      longtitude:['',[Validators.required]]
-    });
   }
 
   onFileSelect($event: Event) {
