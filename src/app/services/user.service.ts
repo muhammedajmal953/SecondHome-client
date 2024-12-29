@@ -15,7 +15,7 @@ export class UserService {
   userRegister(user: RegisterUser) {
     return this._http.post<ApiRes>(`${this.api}/sign-up`, user);
   }
-  
+
   userLogin(user: LoginUser) {
     return this._http.post<ApiRes>(`${this.api}/login`, user);
   }
@@ -63,6 +63,7 @@ export class UserService {
   }
 
   getHostel(id: string): Observable<ApiRes> {
+    console.log('id:',id,);
     return this._http.get<ApiRes>(`${this.api}/getHostel/${id}`);
   }
 

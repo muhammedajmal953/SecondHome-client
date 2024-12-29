@@ -61,11 +61,12 @@ export class ViewHostelComponent implements OnInit {
   }
 
   fetchHostel(id: string) {
-    console.log('hostel id',id);
 
     this._userService.getHostel(id).subscribe({
       next: (res) => {
         if (res.success) {
+          console.log(res.data);
+
           this.hostel$ = res.data;
           this.rateDetails = this.hostel$.rates[0];
           this.rate = this.rateDetails.price;
