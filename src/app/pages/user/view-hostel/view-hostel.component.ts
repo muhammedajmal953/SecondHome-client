@@ -61,6 +61,8 @@ export class ViewHostelComponent implements OnInit {
   }
 
   fetchHostel(id: string) {
+    console.log('hostel id',id);
+
     this._userService.getHostel(id).subscribe({
       next: (res) => {
         if (res.success) {
