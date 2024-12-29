@@ -15,7 +15,7 @@ import { BookingNotificationComponent } from "../../../components/booking-notifi
 @Component({
   selector: 'app-vendor-home',
   standalone: true,
-  imports: [CommonModule, RouterModule, BookingNotificationComponent],
+  imports: [CommonModule, RouterModule],
   templateUrl: './vendor-home.component.html',
   styleUrl: './vendor-home.component.css',
 })

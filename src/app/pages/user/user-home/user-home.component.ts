@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { UserDoc } from '../../../models/IUsers';
 import { Observable, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
@@ -8,6 +8,7 @@ import * as UserActions from '../../../state/user/user.actions';
 import * as UserSelectors from '../../../state/user/user.selector';
 import Swal from 'sweetalert2';
 import { FcmService } from '../../../services/fcm.service';
+
 
 
 
@@ -31,7 +32,7 @@ export class UserHomeComponent implements OnInit,OnDestroy {
   pic!: string
   showNotification!:boolean
 
-  constructor(private store: Store,private _fcmService:FcmService) {
+  constructor(private store: Store,private _fcmService:FcmService,private _router:Router) {
     this.user$=this.store.select(UserSelectors.selectUser)
   };
   toggleCollapse() {
@@ -62,6 +63,10 @@ export class UserHomeComponent implements OnInit,OnDestroy {
         timer: 1500,
         toast: true,
       });
+      if (error.error.message === 'Please login') {
+        localStorage.removeItem('user')
+        this._router.navigate(['/user'])
+      }
     })
 
     this._fcmService.receiveMessage().subscribe(

@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../../services/user.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   FormControl,
   FormGroup,
@@ -15,7 +15,6 @@ import * as UserSelectors from '../../../state/user/user.selector';
 import { UserDoc } from '../../../models/IUsers';
 import { Observable } from 'rxjs';
 import Swal from 'sweetalert2';
-
 @Component({
   selector: 'app-hostel-reviews',
   standalone: true,
@@ -35,7 +34,8 @@ export class HostelReviewsComponent implements OnInit {
   constructor(
     private _userService: UserService,
     private _activatedRoute: ActivatedRoute,
-    private store: Store
+    private store: Store,
+    private _router:Router
   ) {
     this.reviewForm = new FormGroup({
       rating: new FormControl(0, [Validators.required, Validators.min(1)]),
@@ -112,7 +112,12 @@ export class HostelReviewsComponent implements OnInit {
               );
               this.totalReviews = this.reviews.length;
             }
-          },
+          }, error: (err) => {
+            if (err.error.message === 'Please login') {
+              localStorage.removeItem('user')
+              this._router.navigate(['/user'])
+            }
+          }
         });
     }
 

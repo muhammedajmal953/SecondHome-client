@@ -6,6 +6,7 @@ import { getDailyData, getMonthlyData, getYearlyData } from '../../../shared/hel
 import { CommonModule } from '@angular/common';
 import { UserDoc } from '../../../models/IUsers';
 import { Hostels } from '../../../models/IHostel';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -25,7 +26,7 @@ export class HomeComponent implements OnInit{
   totalRevenew:number=0
   totalHostels:number=0
   topSellingHostels!:Hostels[]
-  constructor(private _adminService:AdminService){}
+  constructor(private _adminService:AdminService,private _router:Router){}
 
   ngOnInit(): void {
     this.getsales()
@@ -101,6 +102,12 @@ export class HomeComponent implements OnInit{
 
           console.log(this.topSellingHostels);
 
+        }
+      },
+      error: (err) => {
+        if (err.error.message === 'Please login') {
+          localStorage.removeItem('admin')
+          this._router.navigate(['/admin'])
         }
       }
     })

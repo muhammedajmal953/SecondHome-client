@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AdminService } from '../../../services/admin.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-booking-payment',
@@ -16,7 +17,7 @@ import { AdminService } from '../../../services/admin.service';
 export class BookingPaymentComponent implements OnInit{
   searchText!: string;
 
-  constructor(private _adminService:AdminService){}
+  constructor(private _adminService:AdminService,private _router:Router){}
 
   ngOnInit(): void {
     this._adminService.getAllBookings(1).subscribe({
@@ -25,6 +26,11 @@ export class BookingPaymentComponent implements OnInit{
           console.log(res.data);
 
           this.bookings=res.data
+        }
+      }, error: (err)=>{
+        if (err.error.message === 'Please login') {
+          localStorage.removeItem('admin')
+          this._router.navigate(['/admin'])
         }
       }
     })

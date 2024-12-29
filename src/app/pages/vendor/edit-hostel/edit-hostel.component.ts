@@ -127,6 +127,11 @@ export class EditHostelComponent implements OnInit {
           timer: 1500,
           toast: true,
         });
+
+        if (error.error.message === 'Please login') {
+          localStorage.removeItem('vendor')
+          this._router.navigate(['/vendor'])
+        }
       },
       complete: () => {},
     });

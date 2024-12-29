@@ -16,7 +16,7 @@ export class ChangePasswordComponent implements OnDestroy{
 
   private subscription$:Subscription=new Subscription()
 
-  constructor(private _router: Router, private _userService: UserService) { }
+  constructor(private _router: Router, private _userService: UserService,private router:Router) { }
 
   submitForm(event:Event) {
     if (event) {
@@ -52,6 +52,11 @@ export class ChangePasswordComponent implements OnDestroy{
             showConfirmButton: false,
             timer:1500
           })
+
+          if (res.error.message === 'Please login') {
+            localStorage.removeItem('user')
+            this.router.navigate(['/user'])
+          }
         }
       })
 

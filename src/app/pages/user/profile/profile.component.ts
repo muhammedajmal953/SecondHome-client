@@ -47,7 +47,13 @@ export class ProfileComponent implements OnInit,OnDestroy{
         timer: 1500,
         toast: true,
       });
+      if (error.error.message === 'Please login') {
+        localStorage.removeItem('user')
+        this._router.navigate(['/user'])
+      }
     })
+
+
     if (this.user?.IsActive === false) {
       Swal.fire({
         icon: 'error',

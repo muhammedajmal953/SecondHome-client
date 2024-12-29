@@ -4,6 +4,7 @@ import { HostelCardComponent } from "../../../components/hostel-card/hostel-card
 import { Hostels } from '../../../models/IHostel';
 import { WishlistService } from '../../../services/wishlist.service';
 import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-wishlist',
@@ -19,7 +20,7 @@ export class WishlistComponent implements OnInit{
   hostels$!: Hostels[]
 
 
-  constructor(private _wishlistService: WishlistService) { }
+  constructor(private _wishlistService: WishlistService,private _router:Router) { }
 
   ngOnInit(): void {
     this._wishlistService.getAllWishList(1).subscribe({
@@ -38,6 +39,11 @@ export class WishlistComponent implements OnInit{
           icon: 'warning',
           text: err.error.message,
         })
+        if (err.error.message === 'Please login') {
+          localStorage.removeItem('user')
+          this._router.navigate(['/user'])
+        }
+
       },
       complete: () => {
         console.log('wishlist completed');

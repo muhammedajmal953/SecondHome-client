@@ -11,7 +11,7 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-vendor-change-password',
   standalone: true,
-  imports: [HeaderNameComponent, CahangePasswordFormComponent, ResetPasswordComponent],
+  imports: [HeaderNameComponent, ResetPasswordComponent],
   templateUrl: './vendor-change-password.component.html',
   styleUrl: './vendor-change-password.component.css'
 })
@@ -51,10 +51,15 @@ export class VendorChangePasswordComponent implements OnDestroy{
             position: 'top',
             icon: 'error',
             text: error.error.message,
-            showConfirmButton: false, 
+            showConfirmButton: false,
             timer: 1500,
             toast: true,
           })
+
+          if (error.error.message === 'Please login') {
+            localStorage.removeItem('vendor')
+            this._router.navigate(['/vendor'])
+          }
         }
       )
     } else {

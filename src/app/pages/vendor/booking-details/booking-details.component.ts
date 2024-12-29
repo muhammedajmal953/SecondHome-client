@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { VendorService } from '../../../services/vendor.service';
@@ -14,7 +14,7 @@ import { VendorService } from '../../../services/vendor.service';
   styleUrl: './booking-details.component.css',
 })
 export class BookingDetailsComponent implements OnInit {
-  constructor(private _activatedRoute: ActivatedRoute,private _vendorService:VendorService){}
+  constructor(private _activatedRoute: ActivatedRoute,private _vendorService:VendorService,private _router:Router){}
   id!: string
   booking!:any
   ngOnInit(): void {
@@ -36,6 +36,11 @@ export class BookingDetailsComponent implements OnInit {
       },
       error:(err)=> {
         console.log(err);
+
+        if (err.error.message === 'Please login') {
+          localStorage.removeItem('vendor')
+          this._router.navigate(['/vendor'])
+        }
       },
       complete:()=> {},
     })

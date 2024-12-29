@@ -34,7 +34,8 @@ export class CheckoutComponent implements OnInit {
     private _activatedRoute: ActivatedRoute,
     private _userService: UserService,
     private _store: Store,
-    private _orderService: OrderService
+    private _orderService: OrderService,
+
   ) {}
   foodPrice: number = 0;
   totalPrice: number = 0;
@@ -88,6 +89,11 @@ export class CheckoutComponent implements OnInit {
           timer: 1500,
           toast: true,
         });
+
+        if (err.error.message === 'Please login') {
+          localStorage.removeItem('user')
+          this._router.navigate(['/user'])
+        }
       },
       complete: () => {
         console.log('request completed');

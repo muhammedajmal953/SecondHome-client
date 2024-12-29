@@ -49,6 +49,11 @@ export class VendorProfileComponent implements OnInit {
           toast: true,
           text:error.error.message
         })
+
+        if (error.error.message === 'Please login') {
+          localStorage.removeItem('vendor')
+          this._router.navigate(['/vendor'])
+        }
       }
       , complete: () => { }
     });

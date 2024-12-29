@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { AdminService } from '../../../services/admin.service';
 import Swal from 'sweetalert2';
 import { Hostels } from '../../../models/IHostel';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-hostel-management',
@@ -22,7 +23,8 @@ export class HostelManagementComponent implements OnInit {
 
   constructor(
     private _hostelService: HostelService,
-    private _adminService: AdminService
+    private _adminService: AdminService,
+    private _router:Router
   ) {}
   ngOnInit(): void {
     this.fetchHostels();
@@ -43,6 +45,11 @@ export class HostelManagementComponent implements OnInit {
           timer: 1500,
           toast: true,
         });
+
+        if (error.error.message === 'Please login') {
+          localStorage.removeItem('vendor')
+          this._router.navigate(['/vendor'])
+        }
       },
       complete: () => {
 

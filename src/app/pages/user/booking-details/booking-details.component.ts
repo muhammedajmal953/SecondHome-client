@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { UserService } from '../../../services/user.service';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+
 
 
 @Component({
@@ -14,7 +15,7 @@ import autoTable from 'jspdf-autotable';
   styleUrl: './booking-details.component.css',
 })
 export class BookingDetailsComponent implements OnInit {
-  constructor(private _activatedRoute: ActivatedRoute,private _userService:UserService){}
+  constructor(private _activatedRoute: ActivatedRoute,private _userService:UserService,private router:Router){}
   id!: string
   booking!:any
   ngOnInit(): void {
@@ -36,6 +37,10 @@ export class BookingDetailsComponent implements OnInit {
       },
       error:(err)=> {
         console.log(err);
+        if (err.error.message === 'Please login') {
+          localStorage.removeItem('user')
+          this.router.navigate(['/user'])
+        }
       },
       complete:()=> {},
     })

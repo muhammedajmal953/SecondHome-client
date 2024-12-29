@@ -74,6 +74,10 @@ export class VendorManagementComponent implements OnInit, OnDestroy {
               title: error.error.message,
             });
             console.error('Error fetching users:', error);
+            if (error.error.message === 'Please login') {
+              localStorage.removeItem('admin')
+              this._router.navigate(['/admin'])
+            }
           }
         );
     }
@@ -122,6 +126,10 @@ export class VendorManagementComponent implements OnInit, OnDestroy {
                 timer: 1500,
                 toast: true,
               });
+              if (error.error.message === 'Please login') {
+                localStorage.removeItem('admin')
+                this._router.navigate(['/admin'])
+              }
             }
           );
       } else {
@@ -173,6 +181,10 @@ export class VendorManagementComponent implements OnInit, OnDestroy {
                 timer: 1500,
                 toast: true,
               });
+              if (error.error.message === 'Please login') {
+                localStorage.removeItem('admin')
+                this._router.navigate(['/admin'])
+              }
             }
           );
       }
@@ -233,6 +245,11 @@ export class VendorManagementComponent implements OnInit, OnDestroy {
               timer: 1500,
               toast: true,
             });
+
+            if (error.error.message === 'Please login') {
+              localStorage.removeItem('admin')
+              this._router.navigate(['/admin'])
+            }
           }
         );
     }

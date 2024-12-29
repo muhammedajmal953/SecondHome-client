@@ -52,6 +52,11 @@ export class UserManagementComponent implements OnInit,OnDestroy {
         }
       }, (error) => {
         console.error('Error fetching users:', error);
+
+        if (error.error.message === 'Please login') {
+          localStorage.removeItem('admin')
+          this._router.navigate(['/admin'])
+        }
       });
    }
   }
