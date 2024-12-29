@@ -18,14 +18,14 @@ export const authGuard: CanActivateFn = async (route, state) => {
     const token = localStorage.getItem(`${role}`);
     const refreshToken = localStorage.getItem(`${role}Refresh`);
 
-   
-    if (!refreshToken || isEpiredToken(refreshToken)) {
+
+    if (!refreshToken || isEpiredToken(role,refreshToken)) {
       await router.navigate([`/${role}`]);
       return false;
     }
 
 
-    if (isEpiredToken(token!)) {
+    if (isEpiredToken(role,token!)) {
       try {
         const res = await lastValueFrom(_authService.refreshToken(role, refreshToken));
         localStorage.setItem(`${role}`, res.data.accessToken);

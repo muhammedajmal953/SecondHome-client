@@ -1,18 +1,33 @@
+import { inject } from "@angular/core";
+import { AuthService } from "../../services/auth.service";
+import { map } from "leaflet";
+import { Router } from "@angular/router";
 
-export function isEpiredToken(token: string): boolean {
+export function isEpiredToken(role:string,token: string): boolean {
   try {
-    if (!token) return true;
+    const authService = inject(AuthService)
+    const router=inject(Router)
 
-    const payload = JSON.parse(atob(token.split('.')[1]));
+    let status:boolean=false
 
-    if (payload?.exp) {
-      const expireTime = payload.exp * 1000;
-      return expireTime <= Date.now();
-    }
+    authService.tokenValidate(role, token).subscribe({
+      next: (res) => {
+        if (res.success) {
+          status=false
+        }
+      }, error: (err) => {
+        if (err) {
+          status=true
+          localStorage.removeItem(role)
+          localStorage.removeItem(`${role}Refresh`)
+          router.navigate([`${role}/login`])
+        }
+      }
+    })
 
-    return true;
+    return status
   } catch (error) {
     console.error('Invalid token format:', error);
-    return true;  
+    return true;
   }
 }

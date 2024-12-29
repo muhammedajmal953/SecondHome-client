@@ -57,8 +57,6 @@ export class UserLoginComponent implements OnInit, OnDestroy {
     });
   }
   ngOnInit(): void {
-
-
     this._authservice.authState.pipe(takeUntil(this.destroy$)).subscribe(
       (user) => {
         this._fcmService.requestPermission().subscribe((token) => {

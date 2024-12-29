@@ -9,8 +9,15 @@ import { environments } from '../../environment/environment';
 })
 export class AuthService {
   api: string = environments.api;
-  constructor(private _http: HttpClient) {}
+  constructor(private _http: HttpClient) { }
 
+
+  tokenValidate(role: string, token: string): Observable<ApiRes> {
+    if (role === 'user') {
+      return this._http.get<ApiRes>(`${this.api}/token-validate`);
+    }
+    return this._http.get<ApiRes>(`${this.api}/${role}/token-validate`);
+  }
   refreshToken(role: string, refreshToken: string): Observable<ApiRes> {
     if (role === 'user') {
       return this._http.get<ApiRes>(`${this.api}/token/${refreshToken}`);

@@ -25,7 +25,7 @@ export const jwtTokenInterceptor: HttpInterceptorFn = (req, next) => {
     }
 
 
-    console.log(`Role detected: ${role}`);
+
 
     if (req.url.includes('login') || req.url.includes('signup')|| req.url.includes('refresh-token')) {
       return next(req);
@@ -40,11 +40,11 @@ export const jwtTokenInterceptor: HttpInterceptorFn = (req, next) => {
     return next(req);
   }
 
-  if (isEpiredToken(token)) {
+  if (isEpiredToken(role,token)) {
     console.warn('Access Token expired .Trying to refresh');
     localStorage.removeItem(`${role}`)
     console.log(refreshToken);
-    if (!refreshToken || isEpiredToken(refreshToken)) {
+    if (!refreshToken || isEpiredToken(role,refreshToken)) {
       console.warn('Refresh token expired or not available, redirecting to login.');
 
 

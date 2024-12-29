@@ -16,8 +16,8 @@ export const loginGuard: CanActivateFn = async (route, state) => {
     const refreshToken = localStorage.getItem(`${role}Refresh`);
 
 
-    if (refreshToken && !isEpiredToken(refreshToken)) {
-      if (isEpiredToken(token!)) {
+    if (refreshToken && !isEpiredToken(role,refreshToken)) {
+      if (isEpiredToken(role,token!)) {
 
         try {
           const res = await lastValueFrom(_authService.refreshToken(role, refreshToken));

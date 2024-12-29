@@ -15,6 +15,7 @@ export class UserService {
   userRegister(user: RegisterUser) {
     return this._http.post<ApiRes>(`${this.api}/sign-up`, user);
   }
+  
   userLogin(user: LoginUser) {
     return this._http.post<ApiRes>(`${this.api}/login`, user);
   }
