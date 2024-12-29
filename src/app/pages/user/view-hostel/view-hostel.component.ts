@@ -101,11 +101,6 @@ export class ViewHostelComponent implements OnInit {
           timer: 1500,
           toast: true,
         });
-
-        if (err.error.message === 'Please login') {
-          localStorage.removeItem('user')
-          this._router.navigate(['/user'])
-        }
       },
       complete: () => {
         console.log('request completed');
